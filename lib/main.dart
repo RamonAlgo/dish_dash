@@ -1,20 +1,26 @@
+import 'package:dish_dash/Components/platoCard.dart';
+import 'package:dish_dash/pagines/pagina_inicial_client.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MainApp());
-}
+void main() => runApp(MyApp());
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
+    return MaterialApp(
+      title: 'DishDash',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      debugShowCheckedModeBanner: false,
+      home: PantallaPrincipal(),
     );
+  }
+}
+
+class PantallaPrincipal extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return PaginaInicialClient();
   }
 }
