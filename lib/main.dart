@@ -1,4 +1,3 @@
-import 'package:dish_dash/Components/platoCard.dart';
 import 'package:dish_dash/pagines/pagina_inicial_client.dart';
 import 'package:flutter/material.dart';
 
