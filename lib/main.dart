@@ -1,4 +1,5 @@
 import 'package:dish_dash/pagines/pagina_inicial_client.dart';
+import 'package:dish_dash/pagines/pagina_menu_client.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -20,6 +21,6 @@ class MyApp extends StatelessWidget {
 class PantallaPrincipal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return PaginaInicialClient();
+    return PaginaMenuClient();
   }
 }
