@@ -9,7 +9,7 @@ class PaginaInicialClient extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Plat> platos = [
       Plat(
-        imageUrl: 'assets/images/pizzamargarita.png',
+        imageUrl: 'images/pizzamargarita.png',
         nombrePlato: 'Pizza Margarita',
         descripcion: 'Pizza Margarita',
       ),

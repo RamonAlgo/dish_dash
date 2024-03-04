@@ -27,10 +27,10 @@ class PlatoCard extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               nombrePlato,
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.headline6?.copyWith(color: Colors.green),
             ),
           ),
-          Expanded( // Hace que la imagen ocupe todo el espacio disponible hasta los botones
+          Expanded(
             child: Image.asset(
               imageUrl,
               width: double.infinity,
@@ -42,6 +42,7 @@ class PlatoCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
                 descripcion,
+                style: TextStyle(color: Colors.grey), // Puedes ajustar este color según tu preferencia
               ),
             ),
           Row(
@@ -53,6 +54,10 @@ class PlatoCard extends StatelessWidget {
                   onPressed: () {
                     // Implementar funcionalidad para mostrar ingredientes
                   },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.green, // Fondo del botón
+                    onPrimary: Colors.white, // Color del texto
+                  ),
                   child: const Text('Info'),
                 ),
               ),
@@ -62,6 +67,10 @@ class PlatoCard extends StatelessWidget {
                   onPressed: () {
                     // Implementar funcionalidad para realizar un pedido
                   },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.green, // Fondo del botón
+                    onPrimary: Colors.white, // Color del texto
+                  ),
                   child: const Text('Demanar'),
                 ),
               ),
@@ -71,33 +80,4 @@ class PlatoCard extends StatelessWidget {
       ),
     );
   }
-}
-
-void main() {
-  runApp(
-    MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Menú'),
-        ),
-        body: GridView.builder(
-          padding: const EdgeInsets.all(10),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4, // Ajusta esto para que la tarjeta tenga más espacio
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-            childAspectRatio: 1, // Ajusta la proporción para que la imagen y el texto se muestren correctamente
-          ),
-          itemCount: 6, // Ajusta según la cantidad de elementos que desees mostrar
-          itemBuilder: (context, index) {
-            return PlatoCard(
-              imageUrl: 'images/plato${index + 1}.png', // Asegúrate de que la ruta coincide con la estructura de tu proyecto
-              nombrePlato: 'Nom del plat ${index +1 }',
-              descripcion: 'Descripció del plat $index',
-            );
-          },
-        ),
-      ),
-    ),
-  );
 }

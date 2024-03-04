@@ -9,7 +9,7 @@ class PaginaMenuClient extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Plat> platos = [
       Plat(
-        imageUrl: 'assets/images/menuinfantil.png',
+        imageUrl: 'images/menuinfantil.png',
         nombrePlato: 'Menú Infantil ',
         descripcion: 'Pizza Margarita',
       ),
