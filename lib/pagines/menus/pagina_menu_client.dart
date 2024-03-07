@@ -1,6 +1,7 @@
 import 'package:dish_dash/Clases/Plat.dart';
+import 'package:dish_dash/Components/menuCard.dart';
 import 'package:flutter/material.dart';
-import 'package:dish_dash/Components/platoCard.dart';
+
 
 class PaginaMenuClient extends StatelessWidget {
   const PaginaMenuClient({super.key});
@@ -12,29 +13,35 @@ class PaginaMenuClient extends StatelessWidget {
         imageUrl: 'images/menuinfantil.png',
         nombrePlato: 'Menú Infantil ',
         descripcion: 'Pizza Margarita',
+        ingredientes: ['Tomate', 'Queso', 'Piña'],
       ),
       Plat(
-        imageUrl: 'assets/images/menuadult.png',
+        imageUrl: 'images/menuinfantil.png',
         nombrePlato: 'Menú adult ',
-        descripcion: 'Menú adult',
-      ),Plat(
-        imageUrl: 'assets/images/menudenit.png',
+        descripcion: ' ',
+        ingredientes: ['Inclou:\n1 Beguda(Begudes amb alcohol no incloses)\n1Entrant(Secció entrants)\n1Primer Plat(Secció Primers plats)\n1 Segon Plat'],
+      ),
+      Plat(
+        imageUrl: 'images/menuinfantil.png',
         nombrePlato: 'Menú de nit ',
         descripcion: 'Menú de nit',
-      ),Plat(
-        imageUrl: 'assets/images/menudegustacio.png',
+        ingredientes: ['Tomate', 'Queso', 'Piña'],
+      ),
+      Plat(
+        imageUrl: 'images/menuinfantil.png',
         nombrePlato: 'Menú degustació',
         descripcion: 'Menú degustació',
+        ingredientes: ['Tomate', 'Queso', 'Piña'],
       ),
     ];
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Menús'),
+        title: const Text('Menús'),
       ),
       body: GridView.builder(
         padding: const EdgeInsets.all(8.0),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           crossAxisSpacing: 8.0,
           mainAxisSpacing: 8.0,
@@ -42,10 +49,11 @@ class PaginaMenuClient extends StatelessWidget {
         itemCount: platos.length,
         itemBuilder: (context, index) {
           final plato = platos[index];
-          return PlatoCard(
+          return menuCard(
             imageUrl: plato.imageUrl,
             nombrePlato: plato.nombrePlato,
             descripcion: plato.descripcion,
+            ingredientes: plato.ingredientes,
           );
         },
       ),

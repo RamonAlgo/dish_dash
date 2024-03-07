@@ -1,6 +1,6 @@
-import 'package:dish_dash/pagines/pagina_menu_client.dart';
+import 'package:dish_dash/pagina_login.dart';
+import 'package:dish_dash/pagines/carrito/rebut_client.dart';
 import 'package:flutter/material.dart';
-import 'package:dish_dash/pagines/pagina_inicial_client.dart';
 
 void main() => runApp(MyApp());
 
@@ -24,8 +24,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: PaginaMenuClient(), 
+      home: PaginaLogin(), 
     );
   }
 }
-

@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class PlatoCard extends StatelessWidget {
+class menuCard extends StatelessWidget {
   final String imageUrl;
   final String nombrePlato;
   final String descripcion;
-  final List<String> ingredientes; 
+  final List<String> ingredientes; // Nuevo parámetro para los ingredientes
 
-  const PlatoCard({
+  const menuCard({
     Key? key,
     required this.imageUrl,
     required this.nombrePlato,
     this.descripcion = "",
-    required this.ingredientes, 
+    required this.ingredientes, // Inicializar en el constructor
   }) : super(key: key);
 
   @override
@@ -61,7 +61,7 @@ class PlatoCard extends StatelessWidget {
                     foregroundColor: Colors.white,
                     backgroundColor: Colors.green,
                   ),
-                  child: const Text('Info'),
+                  child: const Text('Continguts'),
                 ),
               ),
               Padding(

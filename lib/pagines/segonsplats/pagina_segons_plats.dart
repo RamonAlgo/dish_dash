@@ -1,15 +1,11 @@
-import 'package:dish_dash/pagines/begudes/pagina_begudes.dart';
-import 'package:dish_dash/pagines/carrito/rebut_client.dart';
 import 'package:dish_dash/pagines/menus/pagina_menu_client.dart';
-import 'package:dish_dash/pagines/postres/pagina_postres.dart';
 import 'package:dish_dash/pagines/primersplats/pagina_primers_plats.dart';
-import 'package:dish_dash/pagines/segonsplats/pagina_segons_plats.dart';
 import 'package:flutter/material.dart';
 import 'package:dish_dash/Clases/Plat.dart';
 import 'package:dish_dash/Components/platoCard.dart';
 
-class PaginaInicialClient extends StatelessWidget {
-  const PaginaInicialClient({super.key});
+class PaginaEntrants extends StatelessWidget {
+  const PaginaEntrants({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -65,28 +61,7 @@ class PaginaInicialClient extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => PaginaMenuClient()));
                 },
-                child: Text('Menús', style: TextStyle(color: Colors.white)),
-              ),
-            ),
-            Expanded(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => PaginaBegudes()));
-                },
-                child: Text('Begudes', style: TextStyle(color: Colors.white)),
-              ),
-            ),
-            Expanded(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PaginaEntrants()));
-                },
-                child:
-                    Text('Entrants', style: TextStyle(color: Colors.white)),
+                child: Text('Amanides', style: TextStyle(color: Colors.white)),
               ),
             ),
             Expanded(
@@ -97,27 +72,8 @@ class PaginaInicialClient extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => PaginaPrimersPlats()));
                 },
-                child: Text('Primers Plats',
+                child: Text('Fregits',
                     style: TextStyle(color: Colors.white)),
-              ),
-            ),
-
-            Expanded(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => PaginaPostres()));
-                },
-                child: Text('Postres', style: TextStyle(color: Colors.white)),
-              ),
-            ),
-            Expanded(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => PaginaCarrito()));
-                },
-                child: Text('Carrito', style: TextStyle(color: Colors.white)),
               ),
             ),
             // añadir mas aqui
