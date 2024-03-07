@@ -5,6 +5,7 @@ class PlatoCard extends StatelessWidget {
   final String nombrePlato;
   final String descripcion;
   final List<String> ingredientes; 
+  
 
   const PlatoCard({
     Key? key,
@@ -68,7 +69,7 @@ class PlatoCard extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    // Implementar funcionalidad para realizar un pedido
+                    // implementar funcionalitat demanar
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
@@ -83,6 +84,7 @@ class PlatoCard extends StatelessWidget {
       ),
     );
   }
+
 
   void _mostrarDialogoIngredientes(BuildContext context) {
     showDialog(
@@ -101,13 +103,13 @@ class PlatoCard extends StatelessWidget {
               children: [
                 Text(
                   nombrePlato,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Colors.green),
                 ),
                 SizedBox(height: 10),
-                Text(
+                const Text(
                   "Ingredientes:",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
