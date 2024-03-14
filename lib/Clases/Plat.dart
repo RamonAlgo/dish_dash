@@ -14,11 +14,19 @@ class Plat {
   });
 
 //getters
+ String get getImageUrl => imageUrl;
+  String get getNombre => nombrePlato;
+  String get getDescripcion => descripcion;
+  List<String> get getIngredientes => ingredientes;
+  double get getPrecio => precio;
 
-String get getnombre => nombrePlato;
-double get getpreu => precio;
 
 //seters
+set setimageurl(String imageURL){imageUrl = imageURL;}
 set setnombre(String nombre){nombrePlato = nombre;}
+set setdescripcion(String descripcionPlato){descripcion = descripcionPlato;}
+set setingredientes (List<String> ingredientesPlato){ingredientesPlato=ingredientes;}
 set setpreu(double precioPlato){precio = precioPlato;}
+
+
 }
