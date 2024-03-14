@@ -1,24 +1,28 @@
 class Plat {
+
    String imageUrl;
    String nombrePlato;
    String descripcion;
    List<String> ingredientes;
    double precio;
+   int cantidad;
 
   Plat({
     required this.imageUrl,
     required this.nombrePlato,
     required this.descripcion,
     required this.ingredientes,
-     required this.precio,
+    required this.precio,
+    this.cantidad = 1, // Valor inicial predeterminado para la cantidad
   });
 
 //getters
- String get getImageUrl => imageUrl;
+String get getImageUrl => imageUrl;
   String get getNombre => nombrePlato;
   String get getDescripcion => descripcion;
   List<String> get getIngredientes => ingredientes;
   double get getPrecio => precio;
+  int get getCantidad => cantidad; // Getter para la cantidad
 
 
 //seters
@@ -28,5 +32,9 @@ set setdescripcion(String descripcionPlato){descripcion = descripcionPlato;}
 set setingredientes (List<String> ingredientesPlato){ingredientesPlato=ingredientes;}
 set setpreu(double precioPlato){precio = precioPlato;}
 
-
+  set setCantidad(int nuevaCantidad) {
+    if (nuevaCantidad >= 0) { // Asegurar que la cantidad no sea negativa
+      cantidad = nuevaCantidad;
+    }
+  }
 }
