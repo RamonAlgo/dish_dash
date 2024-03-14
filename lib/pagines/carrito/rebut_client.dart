@@ -26,7 +26,8 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
             TextButton(
               child: const Text("Sí"),
               onPressed: () {
-                Provider.of<ModelDades>(context, listen: false).removerDelCarrito(plato);
+                Provider.of<ModelDades>(context, listen: false)
+                    .removerDelCarrito(plato);
                 Navigator.of(context).pop();
               },
             ),
@@ -37,51 +38,108 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
   }
 
   @override
-Widget build(BuildContext context) {
-  final carrito = Provider.of<ModelDades>(context).carritoGlobal;
+  Widget build(BuildContext context) {
+    final carrito = Provider.of<ModelDades>(context).carritoGlobal;
 
-  return Scaffold(
-    appBar: AppBar(
-      title: Text('Carrito'),
-      actions: [
-        IconButton(
-          icon: Icon(Icons.delete_forever),
-          onPressed: () {
-            Provider.of<ModelDades>(context, listen: false).vaciarCarrito();
-          },
-        ),
-      ],
-    ),
-    body: carrito.isEmpty
-        ? Center(child: Text('El carrito está vacío'))
-        : ListView.builder(
-            itemCount: carrito.length,
-            itemBuilder: (context, index) {
-              final plato = carrito[index];
-              return ListTile(
-                title: Text(plato.nombrePlato),
-                subtitle: Text('Precio: ${plato.precio}'),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.remove),
-                      onPressed: () {
-                        //reduir cantitat de plats 
-                      },
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Carrito'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.delete_forever),
+            onPressed: () {
+              final TextEditingController _usernameController =
+                  TextEditingController();
+              final TextEditingController _passwordController =
+                  TextEditingController();
+
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text("Accés Administratiu"),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextField(
+                          controller: _usernameController,
+                          decoration: const InputDecoration(
+                            labelText: 'Usuari',
+                          ),
+                        ),
+                        TextField(
+                          controller: _passwordController,
+                          decoration: const InputDecoration(
+                            labelText: 'Contrasenya',
+                          ),
+                          obscureText: true,
+                        ),
+                      ],
                     ),
-                    Text('1'), 
-                    IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () {
-                        //  aumentar  cantidad
-                      },
-                    ),
-                  ],
-                ),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text("Cancelar"),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      TextButton(
+                        child: const Text("Confirmar"),
+                        onPressed: () {
+                          if (_usernameController.text == 'admin' &&
+                              _passwordController.text == 'admin') {
+                            Provider.of<ModelDades>(context, listen: false)
+                                .vaciarCarrito();
+
+                            Navigator.of(context).pop();
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Credencials incorrectes"),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ],
+                  );
+                },
               );
             },
           ),
-  );
-}
+        ],
+      ),
+      body: carrito.isEmpty
+          ? Center(child: Text('El carrito está vacío'))
+          : ListView.builder(
+              itemCount: carrito.length,
+              itemBuilder: (context, index) {
+                final plato = carrito[index];
+                return ListTile(
+                  title: Text(plato.nombrePlato),
+                  subtitle: Text('Precio: ${plato.precio}'),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.remove),
+                        onPressed: () {
+                          //reduir cantitat de plats
+                        },
+                      ),
+                      Text('1'),
+                      IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: () {
+                          //  aumentar  cantidad
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+    );
+  }
 }

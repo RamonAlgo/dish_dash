@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:dish_dash/Clases/Plat.dart';
 
@@ -16,6 +18,8 @@ class ModelDades extends ChangeNotifier {
     notifyListeners();
   }
 
-  void vaciarCarrito() {}
-
+  void vaciarCarrito() {
+   _carritoGlobal.clear();
+   notifyListeners(); 
+  }
 }
