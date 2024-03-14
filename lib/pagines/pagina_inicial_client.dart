@@ -1,3 +1,4 @@
+import 'package:dish_dash/Clases/model_dades.dart';
 import 'package:dish_dash/pagines/begudes/pagina_begudes.dart';
 import 'package:dish_dash/pagines/carrito/rebut_client.dart';
 import 'package:dish_dash/pagines/menus/pagina_menu_client.dart';
@@ -7,6 +8,7 @@ import 'package:dish_dash/pagines/segonsplats/pagina_segons_plats.dart';
 import 'package:flutter/material.dart';
 import 'package:dish_dash/Clases/Plat.dart';
 import 'package:dish_dash/Components/platoCard.dart';
+import 'package:provider/provider.dart';
 
 class PaginaInicialClient extends StatelessWidget {
   const PaginaInicialClient({super.key});
@@ -130,24 +132,28 @@ class PaginaInicialClient extends StatelessWidget {
         ),
         actions: <Widget>[],
       ),
-      body: GridView.builder(
-          padding: const EdgeInsets.all(8.0),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            crossAxisSpacing: 8.0,
-            mainAxisSpacing: 8.0,
-          ),
-          itemCount: platos.length,
-          itemBuilder: (context, index) {
-            final plato = platos[index];
-            return PlatoCard(
-              imageUrl: plato.imageUrl,
-              nombrePlato: plato.nombrePlato,
-              descripcion: plato.descripcion,
-              ingredientes: plato.ingredientes,
-              precio: plato.precio,
-            );
-          }),
+body: GridView.builder(
+        padding: const EdgeInsets.all(8.0),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: 8.0,
+          mainAxisSpacing: 8.0,
+        ),
+        itemCount: platos.length,
+        itemBuilder: (context, index) {
+          final plato = platos[index];
+          return PlatoCard(
+            plato: plato,
+            onAdd: () {
+              Provider.of<ModelDades>(context, listen: false)
+                  .agregarAlCarrito(plato);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('${plato.nombrePlato} añadido')),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

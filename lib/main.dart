@@ -1,9 +1,27 @@
+import 'package:dish_dash/Clases/model_dades.dart';
 import 'package:dish_dash/pagina_login.dart';
-import 'package:dish_dash/pagines/carrito/rebut_client.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(MyApp());
 
+void main() {
+
+
+  runApp(
+
+    ChangeNotifierProvider(
+
+      create: (context) => ModelDades(),
+
+      child:  MyApp(),
+
+    ),
+
+  );
+
+  
+
+}
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

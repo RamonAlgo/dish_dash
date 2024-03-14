@@ -4,7 +4,7 @@ class menuCard extends StatelessWidget {
   final String imageUrl;
   final String nombrePlato;
   final String descripcion;
-  final List<String> ingredientes; 
+  final List<String> ingredientes;
   final double precio;
 
   const menuCard({
@@ -12,7 +12,7 @@ class menuCard extends StatelessWidget {
     required this.imageUrl,
     required this.nombrePlato,
     this.descripcion = "",
-    required this.ingredientes, 
+    required this.ingredientes,
     required this.precio,
   }) : super(key: key);
 
@@ -70,7 +70,8 @@ class menuCard extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    // Implementar funcionalidad para realizar un pedido
+                    
+
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
@@ -113,7 +114,9 @@ class menuCard extends StatelessWidget {
                   "Ingredientes:",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                ...ingredientes.map((ingrediente) => Text(ingrediente)).toList(),
+                ...ingredientes
+                    .map((ingrediente) => Text(ingrediente))
+                    .toList(),
               ],
             ),
           ),
