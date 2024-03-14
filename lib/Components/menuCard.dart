@@ -4,14 +4,16 @@ class menuCard extends StatelessWidget {
   final String imageUrl;
   final String nombrePlato;
   final String descripcion;
-  final List<String> ingredientes; // Nuevo parámetro para los ingredientes
+  final List<String> ingredientes; 
+  final double precio;
 
   const menuCard({
     Key? key,
     required this.imageUrl,
     required this.nombrePlato,
     this.descripcion = "",
-    required this.ingredientes, // Inicializar en el constructor
+    required this.ingredientes, 
+    required this.precio,
   }) : super(key: key);
 
   @override

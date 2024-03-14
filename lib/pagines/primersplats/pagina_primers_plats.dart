@@ -14,24 +14,28 @@ class PaginaPrimersPlats extends StatelessWidget {
         nombrePlato: 'Menú Infantil ',
         descripcion: 'Pizza Margarita',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'assets/images/menuadult.png',
         nombrePlato: 'Menú adult ',
         descripcion: 'Menú adult',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'assets/images/menudenit.png',
         nombrePlato: 'Menú de nit ',
         descripcion: 'Menú de nit',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'assets/images/menudegustacio.png',
         nombrePlato: 'Menú degustació',
         descripcion: 'Menú degustació',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
+        precio: 10,
       ),
     ];
 
@@ -127,6 +131,7 @@ class PaginaPrimersPlats extends StatelessWidget {
               nombrePlato: plato.nombrePlato,
               descripcion: plato.descripcion,
               ingredientes: plato.ingredientes,
+              precio: plato.precio,
             );
           }),
     );

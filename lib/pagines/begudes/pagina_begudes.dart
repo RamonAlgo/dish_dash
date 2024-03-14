@@ -15,66 +15,77 @@ class PaginaBegudes extends StatelessWidget {
         nombrePlato: 'Cocktail ',
         descripcion: 'Conte Sucre i Alcohol',
         ingredientes: ['Alcohol', 'Refresc', 'Sucre'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/depsi.png',
         nombrePlato: 'Depsi Chino',
         descripcion: '',
         ingredientes: ['Sucres'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/cocacola.png',
         nombrePlato: 'CocaCola ',
         descripcion: '',
         ingredientes: ['Sucres'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/nestea.png',
         nombrePlato: 'Nestea ',
         descripcion: '',
         ingredientes: ['Sucres'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/cocktail5.png',
         nombrePlato: 'Tropical',
         descripcion: 'Conte Sucre i Alcohol',
         ingredientes: ['Alcohol', 'Refresc', 'Sucre'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/nestea.png',
         nombrePlato: 'Nestea ',
         descripcion: '',
         ingredientes: ['Sucres'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/cocktail2.png',
         nombrePlato: 'Tropical Elegance ',
         descripcion: 'Conte Sucre i Alcohol',
         ingredientes: ['Alcohol', 'Refresc', 'Sucre'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/depsi.png',
         nombrePlato: 'Depsi Chino',
         descripcion: '',
         ingredientes: ['Sucres'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/cocktail4.png',
         nombrePlato: 'Fruit Explosion ',
         descripcion: 'Conte Sucre i Alcohol',
         ingredientes: ['Alcohol', 'Refresc', 'Sucre'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/cocacola.png',
         nombrePlato: 'CocaCola ',
         descripcion: '',
         ingredientes: ['Sucres'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/cocktail3.png',
         nombrePlato: 'Somni Vermell',
         descripcion: 'Conte Sucre i Alcohol',
         ingredientes: ['Alcohol', 'Refresc', 'Sucre'],
+        precio: 10,
       )
     ];
 
@@ -122,6 +133,7 @@ class PaginaBegudes extends StatelessWidget {
               nombrePlato: plato.nombrePlato,
               descripcion: plato.descripcion,
               ingredientes: plato.ingredientes,
+              precio: plato.precio,
             );
           }),
     );

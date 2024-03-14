@@ -11,20 +11,19 @@ class MyApp extends StatelessWidget {
       title: 'DishDash',
       theme: ThemeData(
         primarySwatch: Colors.green,
-        scaffoldBackgroundColor: Colors.white, 
+        scaffoldBackgroundColor: Colors.white,
         appBarTheme: AppBarTheme(
-          color: Colors.green, 
-          foregroundColor: Colors.white, 
+          color: Colors.green,
+          foregroundColor: Colors.white,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            primary: Colors.green, 
-            onPrimary: Colors.white, 
+        
           ),
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: PaginaLogin(), 
+      home: PaginaLogin(),
     );
   }
 }

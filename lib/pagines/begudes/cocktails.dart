@@ -13,30 +13,35 @@ class Cocktails extends StatelessWidget {
         nombrePlato: 'Cocktail ',
         descripcion: 'Conte Sucre i Alcohol',
         ingredientes: ['Alcohol', 'Refresc', 'Sucre'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/cocktail2.png',
         nombrePlato: 'Tropical Elegance ',
         descripcion: 'Conte Sucre i Alcohol',
         ingredientes: ['Alcohol', 'Refresc', 'Sucre'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/cocktail3.png',
         nombrePlato: 'Somni Vermell',
         descripcion: 'Conte Sucre i Alcohol',
         ingredientes: ['Alcohol', 'Refresc', 'Sucre'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/cocktail4.png',
         nombrePlato: 'Fruit Explosion ',
         descripcion: 'Conte Sucre i Alcohol',
         ingredientes: ['Alcohol', 'Refresc', 'Sucre'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/cocktail5.png',
         nombrePlato: 'Tropical',
         descripcion: 'Conte Sucre i Alcohol',
         ingredientes: ['Alcohol', 'Refresc', 'Sucre'],
+        precio: 10,
       ),
     ];
     return Scaffold(
@@ -59,6 +64,7 @@ class Cocktails extends StatelessWidget {
               nombrePlato: plato.nombrePlato,
               descripcion: plato.descripcion,
               ingredientes: plato.ingredientes,
+              precio: plato.precio,
             );
           }),
     );

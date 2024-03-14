@@ -5,6 +5,7 @@ class PlatoCard extends StatelessWidget {
   final String nombrePlato;
   final String descripcion;
   final List<String> ingredientes; 
+  final double precio;
   
 
   const PlatoCard({
@@ -13,6 +14,7 @@ class PlatoCard extends StatelessWidget {
     required this.nombrePlato,
     this.descripcion = "",
     required this.ingredientes, 
+    required this.precio,
   }) : super(key: key);
 
   @override

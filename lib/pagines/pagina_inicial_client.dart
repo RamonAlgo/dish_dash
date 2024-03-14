@@ -19,36 +19,42 @@ class PaginaInicialClient extends StatelessWidget {
         nombrePlato: 'Pizza Margarita',
         descripcion: 'Pizza Margarita',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/pizza4quesos.png',
         nombrePlato: 'Pizza 4 formatges',
         descripcion: 'Pizza 4 formatges',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/pizzacarbonara.png',
         nombrePlato: 'Pizza Carbonara',
         descripcion: 'Pizza Carbonara',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/pizza4estacions.png',
         nombrePlato: 'Pizza 4 estacions ',
         descripcion: 'Pizza 4 estacions',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/pizzabolonyesa.png',
         nombrePlato: 'Pizza bolonyesa',
         descripcion: 'Pizza bolonyesa',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/pizzaambpinya.png',
         nombrePlato: 'Pizza amb pinya',
         descripcion: 'Pizza amb pinya',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
+        precio: 10,
       ),
     ];
 
@@ -85,8 +91,7 @@ class PaginaInicialClient extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => PaginaEntrants()));
                 },
-                child:
-                    Text('Entrants', style: TextStyle(color: Colors.white)),
+                child: Text('Entrants', style: TextStyle(color: Colors.white)),
               ),
             ),
             Expanded(
@@ -140,6 +145,7 @@ class PaginaInicialClient extends StatelessWidget {
               nombrePlato: plato.nombrePlato,
               descripcion: plato.descripcion,
               ingredientes: plato.ingredientes,
+              precio: plato.precio,
             );
           }),
     );

@@ -13,37 +13,43 @@ class Refrescs extends StatelessWidget {
         nombrePlato: 'CocaCola ',
         descripcion: '',
         ingredientes: ['Sucres'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/nestea.png',
         nombrePlato: 'Nestea ',
         descripcion: '',
         ingredientes: ['Sucres'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/depsi.png',
         nombrePlato: 'Depsi Chino',
         descripcion: '',
         ingredientes: ['Sucres'],
-      ),Plat(
+        precio: 10,
+      ),
+      Plat(
         imageUrl: 'images/cocacola.png',
         nombrePlato: 'CocaCola ',
         descripcion: '',
         ingredientes: ['Sucres'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/nestea.png',
         nombrePlato: 'Nestea ',
         descripcion: '',
         ingredientes: ['Sucres'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/depsi.png',
         nombrePlato: 'Depsi Chino',
         descripcion: '',
         ingredientes: ['Sucres'],
+        precio: 10,
       ),
-     
     ];
     return Scaffold(
       appBar: AppBar(
@@ -65,6 +71,7 @@ class Refrescs extends StatelessWidget {
               nombrePlato: plato.nombrePlato,
               descripcion: plato.descripcion,
               ingredientes: plato.ingredientes,
+              precio: plato.precio,
             );
           }),
     );

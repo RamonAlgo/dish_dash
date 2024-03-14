@@ -2,7 +2,6 @@ import 'package:dish_dash/Clases/Plat.dart';
 import 'package:dish_dash/Components/menuCard.dart';
 import 'package:flutter/material.dart';
 
-
 class PaginaMenuClient extends StatelessWidget {
   const PaginaMenuClient({super.key});
 
@@ -14,24 +13,30 @@ class PaginaMenuClient extends StatelessWidget {
         nombrePlato: 'Menú Infantil ',
         descripcion: 'Pizza Margarita',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/menuinfantil.png',
         nombrePlato: 'Menú adult ',
         descripcion: ' ',
-        ingredientes: ['Inclou:\n1 Beguda(Begudes amb alcohol no incloses)\n1Entrant(Secció entrants)\n1Primer Plat(Secció Primers plats)\n1 Segon Plat'],
+        ingredientes: [
+          'Inclou:\n1 Beguda(Begudes amb alcohol no incloses)\n1Entrant(Secció entrants)\n1Primer Plat(Secció Primers plats)\n1 Segon Plat'
+        ],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/menuinfantil.png',
         nombrePlato: 'Menú de nit ',
         descripcion: 'Menú de nit',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/menuinfantil.png',
         nombrePlato: 'Menú degustació',
         descripcion: 'Menú degustació',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
+        precio: 10,
       ),
     ];
 
@@ -54,6 +59,7 @@ class PaginaMenuClient extends StatelessWidget {
             nombrePlato: plato.nombrePlato,
             descripcion: plato.descripcion,
             ingredientes: plato.ingredientes,
+            precio: plato.precio,
           );
         },
       ),

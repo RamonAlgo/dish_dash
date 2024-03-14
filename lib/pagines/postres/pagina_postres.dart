@@ -9,42 +9,48 @@ class PaginaPostres extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Plat> platos = [ 
+    final List<Plat> platos = [
       Plat(
         imageUrl: 'images/pizzamargarita.png',
         nombrePlato: 'Pizza Margarita',
         descripcion: 'Pizza Margarita',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/pizza4quesos.png',
         nombrePlato: 'Pizza 4 formatges',
         descripcion: 'Pizza 4 formatges',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/pizzacarbonara.png',
         nombrePlato: 'Pizza Carbonara',
         descripcion: 'Pizza Carbonara',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/pizza4estacions.png',
         nombrePlato: 'Pizza 4 estacions ',
         descripcion: 'Pizza 4 estacions',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/pizzabolonyesa.png',
         nombrePlato: 'Pizza bolonyesa',
         descripcion: 'Pizza bolonyesa',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
+        precio: 10,
       ),
       Plat(
         imageUrl: 'images/pizzaambpinya.png',
         nombrePlato: 'Pizza amb pinya',
         descripcion: 'Pizza amb pinya',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
+        precio: 10,
       ),
     ];
 
@@ -75,7 +81,7 @@ class PaginaPostres extends StatelessWidget {
                 child: Text('Gelats ', style: TextStyle(color: Colors.white)),
               ),
             ),
-            
+
             Expanded(
               child: TextButton(
                 onPressed: () {
@@ -84,8 +90,7 @@ class PaginaPostres extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => PaginaPrimersPlats()));
                 },
-                child: Text('Freds ',
-                    style: TextStyle(color: Colors.white)),
+                child: Text('Freds ', style: TextStyle(color: Colors.white)),
               ),
             ),
             Expanded(
@@ -96,8 +101,8 @@ class PaginaPostres extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => PaginaPrimersPlats()));
                 },
-                child: Text('Semifreds ',
-                    style: TextStyle(color: Colors.white)),
+                child:
+                    Text('Semifreds ', style: TextStyle(color: Colors.white)),
               ),
             ),
             Expanded(
@@ -108,8 +113,7 @@ class PaginaPostres extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => PaginaPrimersPlats()));
                 },
-                child: Text('Calents ',
-                    style: TextStyle(color: Colors.white)),
+                child: Text('Calents ', style: TextStyle(color: Colors.white)),
               ),
             ),
 
@@ -133,6 +137,7 @@ class PaginaPostres extends StatelessWidget {
               nombrePlato: plato.nombrePlato,
               descripcion: plato.descripcion,
               ingredientes: plato.ingredientes,
+              precio: plato.precio,
             );
           }),
     );
