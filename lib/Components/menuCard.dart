@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:dish_dash/Clases/Plat.dart'; 
 
-class menuCard extends StatelessWidget {
-  final String imageUrl;
-  final String nombrePlato;
-  final String descripcion;
-  final List<String> ingredientes; // Nuevo parámetro para los ingredientes
+class MenuCard extends StatelessWidget {
+  final Plat plato;
+  final VoidCallback onAdd;
 
-  const menuCard({
+  const MenuCard({
     Key? key,
-    required this.imageUrl,
-    required this.nombrePlato,
-    this.descripcion = "",
-    required this.ingredientes, // Inicializar en el constructor
+    required this.plato,
+    required this.onAdd,
   }) : super(key: key);
 
   @override
@@ -28,7 +25,7 @@ class menuCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              nombrePlato,
+              plato.nombrePlato,
               style: Theme.of(context)
                   .textTheme
                   .titleLarge
@@ -37,45 +34,41 @@ class menuCard extends StatelessWidget {
           ),
           Expanded(
             child: Image.asset(
-              imageUrl,
+              plato.imageUrl,
               width: double.infinity,
               fit: BoxFit.cover,
             ),
           ),
-          if (descripcion.isNotEmpty)
+          if (plato.descripcion.isNotEmpty)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
-                descripcion,
+                plato.descripcion,
                 style: const TextStyle(color: Colors.grey),
               ),
             ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text('Precio: \€${plato.precio.toString()}'),
+          ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  onPressed: () => _mostrarDialogoIngredientes(context),
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.green,
-                  ),
-                  child: const Text('Continguts'),
+              ElevatedButton(
+                onPressed: () => _mostrarDialogoIngredientes(context),
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.green,
                 ),
+                child: const Text('Continguts'),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Implementar funcionalidad para realizar un pedido
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.green,
-                  ),
-                  child: const Text('Demanar'),
+              ElevatedButton(
+                onPressed: onAdd,
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.green,
                 ),
+                child: const Text('Demanar'),
               ),
             ],
           ),
@@ -100,7 +93,7 @@ class menuCard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  nombrePlato,
+                  plato.nombrePlato,
                   style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -111,7 +104,7 @@ class menuCard extends StatelessWidget {
                   "Ingredientes:",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                ...ingredientes.map((ingrediente) => Text(ingrediente)).toList(),
+                ...plato.ingredientes.map((ingrediente) => Text(ingrediente)).toList(),
               ],
             ),
           ),

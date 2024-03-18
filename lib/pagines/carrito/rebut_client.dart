@@ -1,118 +1,33 @@
+import 'package:dish_dash/Clases/Plat.dart';
+import 'package:dish_dash/Clases/model_dades.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PaginaCarrito extends StatefulWidget {
-  const PaginaCarrito({super.key});
+  const PaginaCarrito({Key? key}) : super(key: key);
 
   @override
   State<PaginaCarrito> createState() => _PaginaCarritoState();
 }
 
 class _PaginaCarritoState extends State<PaginaCarrito> {
-  final List<Map<String, dynamic>> productosEnCarrito = [
-    {'nombre': 'Pizza', 'cantidad': 1, 'precio': 9.99},
-    {'nombre': 'Pasta', 'cantidad': 2, 'precio': 19.99},
-  ];
-
-  void aumentarCantidad(int index) {
-    setState(() {
-      productosEnCarrito[index]['cantidad']++;
-    });
-  }
-
-  void reducirCantidad(int index) {
-    setState(() {
-      productosEnCarrito[index]['cantidad']--;
-      if (productosEnCarrito[index]['cantidad'] == 0) {
-        mostrarAlertaAntesDeEliminar(index);
-      }
-    });
-  }
-
-  void vaciarCarritoConAutenticacion() {
-    final TextEditingController _usernameController = TextEditingController();
-    final TextEditingController _passwordController = TextEditingController();
-
-    showDialog(
-      context: context,
-      barrierDismissible:
-          false, 
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Accés Administratiu"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: _usernameController,
-                decoration: const InputDecoration(
-                  labelText: 'Usuari',
-                ),
-              ),
-              TextField(
-                controller: _passwordController,
-                decoration: const InputDecoration(
-                  labelText: 'Contrasenya',
-                ),
-                obscureText: true,
-              ),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text("Cancelar"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text("Confirmar"),
-              onPressed: () {
-                if (_usernameController.text == 'admin' &&
-                    _passwordController.text == 'admin') {
-                  setState(() {
-                    productosEnCarrito.clear();
-                  });
-                  Navigator.of(context).pop();
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Credencials incorrectes"),
-                    ),
-                  );
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void eliminarDelCarrito(int index) {
-    setState(() {
-      productosEnCarrito.removeAt(index);
-    });
-  }
-
-  void mostrarAlertaAntesDeEliminar(int index) {
+  void mostrarAlertaAntesDeEliminar(Plat plato) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("Eliminar producte"),
-          content: const Text("Estas segur que el vols eliminar?"),
+          content: const Text("Estas segur?"),
           actions: <Widget>[
             TextButton(
               child: const Text("No"),
-              onPressed: () {
-                Navigator.of(context).pop();
-                aumentarCantidad(index);
-              },
+              onPressed: () => Navigator.of(context).pop(),
             ),
             TextButton(
               child: const Text("Sí"),
               onPressed: () {
-                eliminarDelCarrito(index);
+                Provider.of<ModelDades>(context, listen: false)
+                    .removerDelCarrito(plato);
                 Navigator.of(context).pop();
               },
             ),
@@ -124,62 +39,107 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
 
   @override
   Widget build(BuildContext context) {
+    final carrito = Provider.of<ModelDades>(context).carritoGlobal;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Resum'),
+        title: Text('Carrito'),
         actions: [
           IconButton(
-            icon: Icon(Icons.delete),
-            onPressed:vaciarCarritoConAutenticacion,
+            icon: Icon(Icons.delete_forever),
+            onPressed: () {
+              final TextEditingController _usernameController =
+                  TextEditingController();
+              final TextEditingController _passwordController =
+                  TextEditingController();
+
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text("Accés Administratiu"),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextField(
+                          controller: _usernameController,
+                          decoration: const InputDecoration(
+                            labelText: 'Usuari',
+                          ),
+                        ),
+                        TextField(
+                          controller: _passwordController,
+                          decoration: const InputDecoration(
+                            labelText: 'Contrasenya',
+                          ),
+                          obscureText: true,
+                        ),
+                      ],
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text("Cancelar"),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      TextButton(
+                        child: const Text("Confirmar"),
+                        onPressed: () {
+                          if (_usernameController.text == 'admin' &&
+                              _passwordController.text == 'admin') {
+                            Provider.of<ModelDades>(context, listen: false)
+                                .vaciarCarrito();
+
+                            Navigator.of(context).pop();
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Credencials incorrectes"),
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
           ),
         ],
       ),
-      body: productosEnCarrito.isEmpty
-          ? Center(child: Text('Carretó buit'))
+      body: carrito.isEmpty
+          ? Center(child: Text('El carrito está vacío'))
           : ListView.builder(
-              itemCount: productosEnCarrito.length,
-              itemBuilder: (context, index) {
-                final producto = productosEnCarrito[index];
-                return Card(
-                  margin: const EdgeInsets.all(10),
-                  child: ListTile(
-                    leading: Icon(Icons.fastfood),
-                    title: Text(producto['nombre']),
-                    subtitle: Text('${producto['precio']} \€ '),
-                    trailing: FittedBox(
-                      fit: BoxFit.fill,
-                      child: Row(
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.remove),
-                            onPressed: () => reducirCantidad(index),
-                          ),
-                          Text('${producto['cantidad']}'),
-                          IconButton(
-                            icon: Icon(Icons.add),
-                            onPressed: () => aumentarCantidad(index),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-      bottomNavigationBar: productosEnCarrito.isNotEmpty
-          ? SafeArea(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                      minimumSize: Size.fromHeight(50)),
-                  child: Text('Finalizar Compra'),
+        itemCount: carrito.length,
+        itemBuilder: (context, index) {
+          final plato = carrito[index];
+          return ListTile(
+            title: Text(plato.nombrePlato),
+            subtitle: Text('Precio: ${plato.precio}'),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.remove),
+                  onPressed: () {
+                    Provider.of<ModelDades>(context, listen: false).reducirCantidad(plato);
+                  },
                 ),
-              ),
-            )
-          : null,
+                Text('${plato.cantidad}'), // Asumiendo que 'Plat' tiene un campo 'cantidad'
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    Provider.of<ModelDades>(context, listen: false).aumentarCantidad(plato);
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
