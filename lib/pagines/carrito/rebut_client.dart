@@ -113,33 +113,40 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
       body: carrito.isEmpty
           ? Center(child: Text('El carrito está vacío'))
           : ListView.builder(
-        itemCount: carrito.length,
-        itemBuilder: (context, index) {
-          final plato = carrito[index];
-          return ListTile(
-            title: Text(plato.nombrePlato),
-            subtitle: Text('Precio: ${plato.precio}'),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.remove),
-                  onPressed: () {
-                    Provider.of<ModelDades>(context, listen: false).reducirCantidad(plato);
-                  },
-                ),
-                Text('${plato.cantidad}'), // Asumiendo que 'Plat' tiene un campo 'cantidad'
-                IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: () {
-                    Provider.of<ModelDades>(context, listen: false).aumentarCantidad(plato);
-                  },
-                ),
-              ],
+              itemCount: carrito.length,
+              itemBuilder: (context, index) {
+                final plato = carrito[index];
+                return ListTile(
+                  title: Text(plato.nombrePlato),
+                  subtitle: Text('Precio: ${plato.precio}'),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.remove),
+                        onPressed: () {
+                          if (plato.cantidad == 1) {
+                            mostrarAlertaAntesDeEliminar(plato);
+                          } else {
+                            Provider.of<ModelDades>(context, listen: false)
+                                .reducirCantidad(plato);
+                          }
+                        },
+                      ),
+                      Text(
+                          '${plato.cantidad}'), // Asumiendo que 'Plat' tiene un campo 'cantidad'
+                      IconButton(
+                        icon: Icon(Icons.add),
+                        onPressed: () {
+                          Provider.of<ModelDades>(context, listen: false)
+                              .aumentarCantidad(plato);
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }
