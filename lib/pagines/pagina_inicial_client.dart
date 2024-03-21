@@ -133,7 +133,7 @@ class PaginaInicialClient extends StatelessWidget {
         actions: <Widget>[],
       ),
 body: GridView.builder(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(16),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           crossAxisSpacing: 8.0,
