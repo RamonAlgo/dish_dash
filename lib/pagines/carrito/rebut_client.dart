@@ -134,7 +134,7 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
                         },
                       ),
                       Text(
-                          '${plato.cantidad}'), // Asumiendo que 'Plat' tiene un campo 'cantidad'
+                          '${plato.cantidad}'), 
                       IconButton(
                         icon: Icon(Icons.add),
                         onPressed: () {
