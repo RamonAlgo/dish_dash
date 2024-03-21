@@ -13,7 +13,7 @@ class Plat {
     required this.descripcion,
     required this.ingredientes,
     required this.precio,
-    this.cantidad = 1, // Valor inicial predeterminado para la cantidad
+    this.cantidad = 1, 
   });
 
 //getters

@@ -1,3 +1,4 @@
+import 'package:dish_dash/auth/servei_auth.dart';
 import 'package:dish_dash/pagines/administrador/pagina_administrador.dart';
 import 'package:dish_dash/pagines/cuina/pagina_cuina.dart';
 import 'package:dish_dash/pagines/pagina_inicial_client.dart';
@@ -12,34 +13,71 @@ class _PaginaLoginState extends State<PaginaLogin> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  void _login(BuildContext context) {
-    final username = _usernameController.text;
-    final password = _passwordController.text;
-
-    if (username == 'admin' && password == 'admin') {
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => PaginaAdministrador()));
-    } else if (username == 'cocina' && password == 'cocina') {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => PaginaCuina()));
-    } else if (username == 'mesa' && password == 'mesa') {
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => PaginaInicialClient()));
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text("Error"),
-          content: Text("Usuario o contraseña incorrectos"),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text("OK"),
-            ),
-          ],
-        ),
+  void ferLogin(BuildContext context) async {
+    final serveiAuth = ServeiAuth();
+    print("error");
+    try {
+      await serveiAuth.loginAmbEmailIPassword(
+        _usernameController.text,
+        _passwordController.text,
       );
+    } catch (e) {
+      print("Error durante el inicio de sesión: $e");
     }
+  }
+
+  void _login(BuildContext context) async {
+    print("a");
+    final serveiAuth = ServeiAuth();
+    print("error");
+
+    try {
+      await serveiAuth.loginAmbEmailIPassword(
+        _usernameController.text,
+        _passwordController.text,
+      );
+      final user = serveiAuth.getUsuarisActual();
+      if (user != null) {
+        final email = user.email ?? "";
+        if (email.contains("administrador@")) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => PaginaAdministrador()));
+          });
+        } else if (email.contains("cocina@")) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => PaginaCuina()));
+          });
+        } else {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => PaginaInicialClient()));
+          });
+        }
+      } else {
+        _mostrarDialogoError(
+            context, "No se pudo obtener la información del usuario.");
+      }
+    } catch (e) {
+      _mostrarDialogoError(context, e.toString());
+    }
+  }
+
+  void _mostrarDialogoError(BuildContext context, String mensaje) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Error"),
+        content: Text(mensaje),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text("OK"),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -51,7 +89,7 @@ class _PaginaLoginState extends State<PaginaLogin> {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("images/login.png"), //imatgefons
+                image: AssetImage("images/login.png"),
                 fit: BoxFit.cover,
               ),
             ),
