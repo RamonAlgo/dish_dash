@@ -118,7 +118,7 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
                 final plato = carrito[index];
                 return ListTile(
                   title: Text(plato.nombrePlato),
-                  subtitle: Text('Precio: ${plato.precio}'),
+                  subtitle: Text('Precio: ${plato.precio*plato.cantidad }'+ ' €'),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
