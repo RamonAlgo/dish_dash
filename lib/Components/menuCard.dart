@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:dish_dash/Clases/Plat.dart'; // Asegúrate de que la ruta de importación sea correcta
+import 'package:dish_dash/Clases/Plat.dart'; 
 
-class PlatoCard extends StatelessWidget {
+class MenuCard extends StatelessWidget {
   final Plat plato;
   final VoidCallback onAdd;
 
-  const PlatoCard({
+  const MenuCard({
     Key? key,
     required this.plato,
     required this.onAdd,
@@ -60,7 +60,7 @@ class PlatoCard extends StatelessWidget {
                   foregroundColor: Colors.white,
                   backgroundColor: Colors.green,
                 ),
-                child: const Text('Info'),
+                child: const Text('Continguts'),
               ),
               ElevatedButton(
                 onPressed: onAdd,
@@ -94,19 +94,17 @@ class PlatoCard extends StatelessWidget {
               children: [
                 Text(
                   plato.nombrePlato,
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Colors.green),
                 ),
                 SizedBox(height: 10),
-                const Text(
+                Text(
                   "Ingredientes:",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                ...plato.ingredientes
-                    .map((ingrediente) => Text(ingrediente))
-                    .toList(),
+                ...plato.ingredientes.map((ingrediente) => Text(ingrediente)).toList(),
               ],
             ),
           ),

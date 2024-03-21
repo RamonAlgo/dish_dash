@@ -1,60 +1,41 @@
-import 'package:dish_dash/Clases/model_dades.dart';
-import 'package:dish_dash/pagines/begudes/pagina_begudes.dart';
-import 'package:dish_dash/pagines/carrito/rebut_client.dart';
-import 'package:dish_dash/pagines/menus/pagina_menu_client.dart';
-import 'package:dish_dash/pagines/postres/pagina_postres.dart';
-import 'package:dish_dash/pagines/primersplats/pagina_primers_plats.dart';
-import 'package:dish_dash/pagines/segonsplats/pagina_segons_plats.dart';
-import 'package:flutter/material.dart';
 import 'package:dish_dash/Clases/Plat.dart';
+import 'package:dish_dash/Clases/model_dades.dart';
+import 'package:dish_dash/pagines/menus/pagina_menu_client.dart';
+import 'package:flutter/material.dart';
 import 'package:dish_dash/Components/platoCard.dart';
 import 'package:provider/provider.dart';
 
-class PaginaInicialClient extends StatelessWidget {
-  const PaginaInicialClient({super.key});
+class PaginaPrimersPlats extends StatelessWidget {
+  const PaginaPrimersPlats({super.key});
 
   @override
   Widget build(BuildContext context) {
     final List<Plat> platos = [
       Plat(
-        imageUrl: 'images/pizzamargarita.png',
-        nombrePlato: 'Pizza Margarita',
+        imageUrl: 'images/menuinfantil.png',
+        nombrePlato: 'Menú Infantil ',
         descripcion: 'Pizza Margarita',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
         precio: 10,
       ),
       Plat(
-        imageUrl: 'images/pizza4quesos.png',
-        nombrePlato: 'Pizza 4 formatges',
-        descripcion: 'Pizza 4 formatges',
+        imageUrl: 'assets/images/menuadult.png',
+        nombrePlato: 'Menú adult ',
+        descripcion: 'Menú adult',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
         precio: 10,
       ),
       Plat(
-        imageUrl: 'images/pizzacarbonara.png',
-        nombrePlato: 'Pizza Carbonara',
-        descripcion: 'Pizza Carbonara',
+        imageUrl: 'assets/images/menudenit.png',
+        nombrePlato: 'Menú de nit ',
+        descripcion: 'Menú de nit',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
         precio: 10,
       ),
       Plat(
-        imageUrl: 'images/pizza4estacions.png',
-        nombrePlato: 'Pizza 4 estacions ',
-        descripcion: 'Pizza 4 estacions',
-        ingredientes: ['Tomate', 'Queso', 'Piña'],
-        precio: 10,
-      ),
-      Plat(
-        imageUrl: 'images/pizzabolonyesa.png',
-        nombrePlato: 'Pizza bolonyesa',
-        descripcion: 'Pizza bolonyesa',
-        ingredientes: ['Tomate', 'Queso', 'Piña'],
-        precio: 10,
-      ),
-      Plat(
-        imageUrl: 'images/pizzaambpinya.png',
-        nombrePlato: 'Pizza amb pinya',
-        descripcion: 'Pizza amb pinya',
+        imageUrl: 'assets/images/menudegustacio.png',
+        nombrePlato: 'Menú degustació',
+        descripcion: 'Menú degustació',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
         precio: 10,
       ),
@@ -73,16 +54,7 @@ class PaginaInicialClient extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => PaginaMenuClient()));
                 },
-                child: Text('Menús', style: TextStyle(color: Colors.white)),
-              ),
-            ),
-            Expanded(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => PaginaBegudes()));
-                },
-                child: Text('Begudes', style: TextStyle(color: Colors.white)),
+                child: Text('Pizza', style: TextStyle(color: Colors.white)),
               ),
             ),
             Expanded(
@@ -91,9 +63,20 @@ class PaginaInicialClient extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaginaEntrants()));
+                          builder: (context) => PaginaMenuClient()));
                 },
-                child: Text('Entrants', style: TextStyle(color: Colors.white)),
+                child: Text('Pasta', style: TextStyle(color: Colors.white)),
+              ),
+            ),
+            Expanded(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PaginaMenuClient()));
+                },
+                child: Text('Peix', style: TextStyle(color: Colors.white)),
               ),
             ),
             Expanded(
@@ -104,35 +87,38 @@ class PaginaInicialClient extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => PaginaPrimersPlats()));
                 },
-                child: Text('Primers Plats',
-                    style: TextStyle(color: Colors.white)),
+                child: Text('Carn', style: TextStyle(color: Colors.white)),
+              ),
+            ),
+            Expanded(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PaginaPrimersPlats()));
+                },
+                child: Text('Vegà', style: TextStyle(color: Colors.white)),
+              ),
+            ),
+            Expanded(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PaginaPrimersPlats()));
+                },
+                child: Text('Celìacs', style: TextStyle(color: Colors.white)),
               ),
             ),
 
-            Expanded(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => PaginaPostres()));
-                },
-                child: Text('Postres', style: TextStyle(color: Colors.white)),
-              ),
-            ),
-            Expanded(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => PaginaCarrito()));
-                },
-                child: Text('Carrito', style: TextStyle(color: Colors.white)),
-              ),
-            ),
             // añadir mas aqui
           ],
         ),
         actions: <Widget>[],
       ),
-body: GridView.builder(
+      body: GridView.builder(
         padding: const EdgeInsets.all(8.0),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
@@ -157,3 +143,4 @@ body: GridView.builder(
     );
   }
 }
+
