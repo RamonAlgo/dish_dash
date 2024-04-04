@@ -13,7 +13,9 @@ class _PaginaLoginState extends State<PaginaLogin> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  void ferLogin(BuildContext context) async {
+  final serveiAuth = ServeiAuth();
+
+  /*void ferLogin(BuildContext context) async {
     final serveiAuth = ServeiAuth();
     print("error");
     try {
@@ -24,27 +26,26 @@ class _PaginaLoginState extends State<PaginaLogin> {
     } catch (e) {
       print("Error durante el inicio de sesión: $e");
     }
-  }
+  }*/
 
   void _login(BuildContext context) async {
-    print("a");
-    final serveiAuth = ServeiAuth();
-    print("error");
+    print("FuncionLogin");
+    String username = _usernameController.text + '@mesa.com';
 
     try {
       await serveiAuth.loginAmbEmailIPassword(
-        _usernameController.text,
+        username,
         _passwordController.text,
       );
       final user = serveiAuth.getUsuarisActual();
       if (user != null) {
-        final email = user.email ?? "";
-        if (email.contains("administrador@")) {
+        final email = user.email ;
+        if (email!.contains("administrador")) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => PaginaAdministrador()));
           });
-        } else if (email.contains("cocina@")) {
+        } else if (email.contains("cocina")) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => PaginaCuina()));

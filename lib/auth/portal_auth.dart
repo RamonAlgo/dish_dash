@@ -14,6 +14,7 @@ class PortalAuth extends StatelessWidget {
         builder: (context, snapshot) {
 
           if (snapshot.hasData) {
+            
             return  PaginaInicialClient();
           }else{
             return  PaginaLogin();

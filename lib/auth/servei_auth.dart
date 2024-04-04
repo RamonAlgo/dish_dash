@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ServeiAuth {
+  
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<UserCredential> loginAmbEmailIPassword(String email, password) async {
