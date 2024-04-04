@@ -1,5 +1,6 @@
 import 'package:dish_dash/Clases/Plat.dart';
 import 'package:dish_dash/Clases/model_dades.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,6 +10,8 @@ class PaginaCarrito extends StatefulWidget {
   @override
   State<PaginaCarrito> createState() => _PaginaCarritoState();
 }
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
 
 class _PaginaCarritoState extends State<PaginaCarrito> {
   void mostrarAlertaAntesDeEliminar(Plat plato) {
@@ -147,6 +150,44 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
                 );
               },
             ),
+            floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Aquí llamas a la función para obtener y procesar el email del usuario
+          obtenerYProcesarEmail();
+        },
+        child: Icon(Icons.visibility),
+        tooltip: 'Ver Usuario',
+      ),
     );
   }
+  void obtenerYProcesarEmail() {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final User? usuario = auth.currentUser;
+
+  if (usuario != null && usuario.email != null) {
+    String email = usuario.email!; 
+
+    procesarEmail(email);
+  } else {
+    print("No hay usuario logueado o el usuario no tiene un email.");
+  }
+}
+void procesarEmail(String email) {
+  List<String> partes = email.split('@');
+
+  if (partes.isNotEmpty) {
+    String parteDeseada = partes[0];
+    print(parteDeseada);
+    // llamada a insertarDatos
+  } else {
+    print("El email no se pudo procesar correctamente.");
+  }
+}
+
+  void insertarDatos() {
+
+  User? usuario = auth.currentUser;
+  String idusuario;
+ //interaccionar con una coleccion o otra en funcion del usuario que sea.
+}
 }
