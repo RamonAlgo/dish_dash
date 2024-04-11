@@ -5,16 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 class PaginaCarrito extends StatefulWidget {
   const PaginaCarrito({Key? key}) : super(key: key);
 
   @override
   State<PaginaCarrito> createState() => _PaginaCarritoState();
 }
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+final FirebaseAuth auth = FirebaseAuth.instance;
+final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 class _PaginaCarritoState extends State<PaginaCarrito> {
   void mostrarAlertaAntesDeEliminar(Plat plato) {
@@ -124,7 +123,8 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
                 final plato = carrito[index];
                 return ListTile(
                   title: Text(plato.nombrePlato),
-                  subtitle: Text('Precio: ${plato.precio*plato.cantidad }'+ ' €'),
+                  subtitle:
+                      Text('Precio: ${plato.precio * plato.cantidad}' + ' €'),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -136,12 +136,12 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
                           } else {
                             Provider.of<ModelDades>(context, listen: false)
                                 .reducirCantidad(plato);
-                                print(Provider.of<ModelDades>(context,listen: false));
+                            print(Provider.of<ModelDades>(context,
+                                listen: false));
                           }
                         },
                       ),
-                      Text(
-                          '${plato.cantidad}'), 
+                      Text('${plato.cantidad}'),
                       IconButton(
                         icon: Icon(Icons.add),
                         onPressed: () {
@@ -154,7 +154,7 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
                 );
               },
             ),
-            floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton(
         onPressed: () {
           insertarDatos();
         },
@@ -163,46 +163,49 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
       ),
     );
   }
-   obtenerYProcesarEmail() {
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  final User? usuario = auth.currentUser;
 
-  if (usuario != null && usuario.email != null) {
-    String email = usuario.email!; 
+  obtenerYProcesarEmail() {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User? usuario = auth.currentUser;
 
-    return procesarEmail(email);
-  } else {
-    print("No hay usuario logueado o el usuario no tiene un email.");
+    if (usuario != null && usuario.email != null) {
+      String email = usuario.email!;
+
+      return procesarEmail(email);
+    } else {
+      print("No hay usuario logueado o el usuario no tiene un email.");
+    }
   }
-}
- procesarEmail(String email) {
-  List<String> partes = email.split('@');
 
-  if (partes.isNotEmpty) {
-    String parteDeseada = partes[0];
-    return(parteDeseada);
-    // llamada a insertarDatos
-  } else {
+  procesarEmail(String email) {
+    List<String> partes = email.split('@');
+
+    if (partes.isNotEmpty) {
+      String parteDeseada = partes[0];
+      return (parteDeseada);
+      // llamada a insertarDatos
+    } else {}
   }
-}
 
   void insertarDatos() {
- final carrito = Provider.of<ModelDades>(context, listen: false).carritoGlobal;
-String idmesa = obtenerYProcesarEmail();
-print(idmesa);
+    final carrito =
+        Provider.of<ModelDades>(context, listen: false).carritoGlobal;
+    String idmesa = obtenerYProcesarEmail();
+    print(idmesa);
     if (carrito.isNotEmpty) {
       final List<Map<String, dynamic>> platosData = carrito.map((plato) {
         return {
-          'idPlat': plato.idPlat,  
+          'idPlat': plato.idPlat,
           'nom': plato.nombrePlato,
           'cantitat': plato.cantidad,
           'preu': plato.precio
         };
       }).toList();
       print(platosData);
-      firestore.collection('mesas').doc(idmesa).set({
-        'platos': platosData
-      }).then((_) {
+      firestore
+          .collection('mesas')
+          .doc(idmesa)
+          .set({'platos': platosData}).then((_) {
         print('Datos insertados correctamente');
       }).catchError((error) {
         print('Error al insertar datos: $error');
