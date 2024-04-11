@@ -1,5 +1,5 @@
 class Plat {
-
+   String idPlat;
    String imageUrl;
    String nombrePlato;
    String descripcion;
@@ -8,12 +8,13 @@ class Plat {
    int cantidad;
 
   Plat({
+    required this.idPlat,
     required this.imageUrl,
     required this.nombrePlato,
     required this.descripcion,
     required this.ingredientes,
     required this.precio,
-    this.cantidad = 1, // Valor inicial predeterminado para la cantidad
+    this.cantidad = 1, 
   });
 
 //getters
@@ -37,4 +38,5 @@ set setpreu(double precioPlato){precio = precioPlato;}
       cantidad = nuevaCantidad;
     }
   }
+
 }

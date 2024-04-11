@@ -17,6 +17,7 @@ class PaginaInicialClient extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Plat> platos = [
       Plat(
+        idPlat: 'pz1',
         imageUrl: 'images/pizzamargarita.png',
         nombrePlato: 'Pizza Margarita',
         descripcion: 'Pizza Margarita',
@@ -24,6 +25,7 @@ class PaginaInicialClient extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'pz2',
         imageUrl: 'images/pizza4quesos.png',
         nombrePlato: 'Pizza 4 formatges',
         descripcion: 'Pizza 4 formatges',
@@ -31,6 +33,7 @@ class PaginaInicialClient extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'pz3',
         imageUrl: 'images/pizzacarbonara.png',
         nombrePlato: 'Pizza Carbonara',
         descripcion: 'Pizza Carbonara',
@@ -38,6 +41,7 @@ class PaginaInicialClient extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'pz4',
         imageUrl: 'images/pizza4estacions.png',
         nombrePlato: 'Pizza 4 estacions ',
         descripcion: 'Pizza 4 estacions',
@@ -45,6 +49,7 @@ class PaginaInicialClient extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'pz5',
         imageUrl: 'images/pizzabolonyesa.png',
         nombrePlato: 'Pizza bolonyesa',
         descripcion: 'Pizza bolonyesa',
@@ -52,6 +57,7 @@ class PaginaInicialClient extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'pz6',
         imageUrl: 'images/pizzaambpinya.png',
         nombrePlato: 'Pizza amb pinya',
         descripcion: 'Pizza amb pinya',
@@ -132,8 +138,8 @@ class PaginaInicialClient extends StatelessWidget {
         ),
         actions: <Widget>[],
       ),
-body: GridView.builder(
-        padding: const EdgeInsets.all(8.0),
+      body: GridView.builder(
+        padding: const EdgeInsets.all(16),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           crossAxisSpacing: 8.0,
