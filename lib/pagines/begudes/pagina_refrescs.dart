@@ -11,6 +11,7 @@ class Refrescs extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Plat> platos = [
       Plat(
+        idPlat: 'br2',
         imageUrl: 'images/cocacola.png',
         nombrePlato: 'CocaCola ',
         descripcion: '',
@@ -18,6 +19,7 @@ class Refrescs extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'br3',
         imageUrl: 'images/nestea.png',
         nombrePlato: 'Nestea ',
         descripcion: '',
@@ -25,6 +27,7 @@ class Refrescs extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+         idPlat: 'br1',
         imageUrl: 'images/depsi.png',
         nombrePlato: 'Depsi Chino',
         descripcion: '',
@@ -32,6 +35,7 @@ class Refrescs extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'br2',
         imageUrl: 'images/cocacola.png',
         nombrePlato: 'CocaCola ',
         descripcion: '',
@@ -39,6 +43,7 @@ class Refrescs extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'br3',
         imageUrl: 'images/nestea.png',
         nombrePlato: 'Nestea ',
         descripcion: '',
@@ -46,6 +51,7 @@ class Refrescs extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'br1',
         imageUrl: 'images/depsi.png',
         nombrePlato: 'Depsi Chino',
         descripcion: '',

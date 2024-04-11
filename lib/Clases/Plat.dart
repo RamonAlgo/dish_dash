@@ -1,5 +1,5 @@
 class Plat {
-
+   String idPlat;
    String imageUrl;
    String nombrePlato;
    String descripcion;
@@ -8,6 +8,7 @@ class Plat {
    int cantidad;
 
   Plat({
+    required this.idPlat,
     required this.imageUrl,
     required this.nombrePlato,
     required this.descripcion,
@@ -37,4 +38,5 @@ set setpreu(double precioPlato){precio = precioPlato;}
       cantidad = nuevaCantidad;
     }
   }
+
 }

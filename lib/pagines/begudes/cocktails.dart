@@ -11,6 +11,7 @@ class Cocktails extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Plat> platos = [
       Plat(
+        idPlat: 'b1',
         imageUrl: 'images/cocktail.png',
         nombrePlato: 'Cocktail ',
         descripcion: 'Conte Sucre i Alcohol',
@@ -18,6 +19,7 @@ class Cocktails extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'b2',
         imageUrl: 'images/cocktail2.png',
         nombrePlato: 'Tropical Elegance ',
         descripcion: 'Conte Sucre i Alcohol',
@@ -25,6 +27,7 @@ class Cocktails extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'b3',
         imageUrl: 'images/cocktail3.png',
         nombrePlato: 'Somni Vermell',
         descripcion: 'Conte Sucre i Alcohol',
@@ -32,6 +35,7 @@ class Cocktails extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'b4',
         imageUrl: 'images/cocktail4.png',
         nombrePlato: 'Fruit Explosion ',
         descripcion: 'Conte Sucre i Alcohol',
@@ -39,6 +43,7 @@ class Cocktails extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'b5',
         imageUrl: 'images/cocktail5.png',
         nombrePlato: 'Tropical',
         descripcion: 'Conte Sucre i Alcohol',
@@ -51,7 +56,7 @@ class Cocktails extends StatelessWidget {
         title: Text('Cocktails'),
         centerTitle: true,
       ),
-     body: GridView.builder(
+      body: GridView.builder(
         padding: const EdgeInsets.all(8.0),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,

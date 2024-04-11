@@ -11,6 +11,7 @@ class PaginaMenuClient extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Plat> platos = [
       Plat(
+        idPlat: 'm1',
         imageUrl: 'images/menuinfantil.png',
         nombrePlato: 'Menú Infantil ',
         descripcion: 'Pizza Margarita',
@@ -18,6 +19,7 @@ class PaginaMenuClient extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'm2',
         imageUrl: 'images/menuinfantil.png',
         nombrePlato: 'Menú adult ',
         descripcion: ' ',
@@ -27,6 +29,7 @@ class PaginaMenuClient extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'm3',
         imageUrl: 'images/menuinfantil.png',
         nombrePlato: 'Menú de nit ',
         descripcion: 'Menú de nit',
@@ -34,6 +37,7 @@ class PaginaMenuClient extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'm4',
         imageUrl: 'images/menuinfantil.png',
         nombrePlato: 'Menú degustació',
         descripcion: 'Menú degustació',

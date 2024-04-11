@@ -3,6 +3,8 @@ import 'package:dish_dash/Clases/model_dades.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class PaginaCarrito extends StatefulWidget {
   const PaginaCarrito({Key? key}) : super(key: key);
@@ -11,6 +13,7 @@ class PaginaCarrito extends StatefulWidget {
   State<PaginaCarrito> createState() => _PaginaCarritoState();
 }
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 
 class _PaginaCarritoState extends State<PaginaCarrito> {
@@ -133,6 +136,7 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
                           } else {
                             Provider.of<ModelDades>(context, listen: false)
                                 .reducirCantidad(plato);
+                                print(Provider.of<ModelDades>(context,listen: false));
                           }
                         },
                       ),
@@ -152,42 +156,59 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
             ),
             floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Aquí llamas a la función para obtener y procesar el email del usuario
-          obtenerYProcesarEmail();
+          insertarDatos();
         },
         child: Icon(Icons.visibility),
         tooltip: 'Ver Usuario',
       ),
     );
   }
-  void obtenerYProcesarEmail() {
+   obtenerYProcesarEmail() {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final User? usuario = auth.currentUser;
 
   if (usuario != null && usuario.email != null) {
     String email = usuario.email!; 
 
-    procesarEmail(email);
+    return procesarEmail(email);
   } else {
     print("No hay usuario logueado o el usuario no tiene un email.");
   }
 }
-void procesarEmail(String email) {
+ procesarEmail(String email) {
   List<String> partes = email.split('@');
 
   if (partes.isNotEmpty) {
     String parteDeseada = partes[0];
-    print(parteDeseada);
+    return(parteDeseada);
     // llamada a insertarDatos
   } else {
-    print("El email no se pudo procesar correctamente.");
   }
 }
 
   void insertarDatos() {
-
-  User? usuario = auth.currentUser;
-  String idusuario;
- //interaccionar con una coleccion o otra en funcion del usuario que sea.
-}
+ final carrito = Provider.of<ModelDades>(context, listen: false).carritoGlobal;
+String idmesa = obtenerYProcesarEmail();
+print(idmesa);
+    if (carrito.isNotEmpty) {
+      final List<Map<String, dynamic>> platosData = carrito.map((plato) {
+        return {
+          'idPlat': plato.idPlat,  
+          'nom': plato.nombrePlato,
+          'cantitat': plato.cantidad,
+          'preu': plato.precio
+        };
+      }).toList();
+      print(platosData);
+      firestore.collection('mesas').doc(idmesa).set({
+        'platos': platosData
+      }).then((_) {
+        print('Datos insertados correctamente');
+      }).catchError((error) {
+        print('Error al insertar datos: $error');
+      });
+    } else {
+      print('El carrito está vacío');
+    }
+  }
 }

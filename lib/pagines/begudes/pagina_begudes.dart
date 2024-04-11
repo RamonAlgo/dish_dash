@@ -13,6 +13,7 @@ class PaginaBegudes extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Plat> platos = [
       Plat(
+        idPlat: 'b1',
         imageUrl: 'images/cocktail.png',
         nombrePlato: 'Cocktail ',
         descripcion: 'Conte Sucre i Alcohol',
@@ -20,6 +21,7 @@ class PaginaBegudes extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'br1',
         imageUrl: 'images/depsi.png',
         nombrePlato: 'Depsi Chino',
         descripcion: '',
@@ -27,6 +29,7 @@ class PaginaBegudes extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'br2',
         imageUrl: 'images/cocacola.png',
         nombrePlato: 'CocaCola ',
         descripcion: '',
@@ -34,6 +37,7 @@ class PaginaBegudes extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'br3',
         imageUrl: 'images/nestea.png',
         nombrePlato: 'Nestea ',
         descripcion: '',
@@ -41,6 +45,7 @@ class PaginaBegudes extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'b5',
         imageUrl: 'images/cocktail5.png',
         nombrePlato: 'Tropical',
         descripcion: 'Conte Sucre i Alcohol',
@@ -48,6 +53,7 @@ class PaginaBegudes extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'br4',
         imageUrl: 'images/nestea.png',
         nombrePlato: 'Nestea ',
         descripcion: '',
@@ -55,6 +61,7 @@ class PaginaBegudes extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'b2',
         imageUrl: 'images/cocktail2.png',
         nombrePlato: 'Tropical Elegance ',
         descripcion: 'Conte Sucre i Alcohol',
@@ -62,6 +69,7 @@ class PaginaBegudes extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'br1',
         imageUrl: 'images/depsi.png',
         nombrePlato: 'Depsi Chino',
         descripcion: '',
@@ -69,6 +77,7 @@ class PaginaBegudes extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'b4',
         imageUrl: 'images/cocktail4.png',
         nombrePlato: 'Fruit Explosion ',
         descripcion: 'Conte Sucre i Alcohol',
@@ -76,6 +85,7 @@ class PaginaBegudes extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'br2',
         imageUrl: 'images/cocacola.png',
         nombrePlato: 'CocaCola ',
         descripcion: '',
@@ -83,6 +93,7 @@ class PaginaBegudes extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'b3',
         imageUrl: 'images/cocktail3.png',
         nombrePlato: 'Somni Vermell',
         descripcion: 'Conte Sucre i Alcohol',

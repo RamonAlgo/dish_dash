@@ -13,6 +13,7 @@ class PaginaEntrants extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Plat> platos = [
       Plat(
+        idPlat: 'p1',
         imageUrl: 'images/pizzamargarita.png',
         nombrePlato: 'Pizza Margarita',
         descripcion: 'Pizza Margarita',
@@ -20,6 +21,7 @@ class PaginaEntrants extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'p2',
         imageUrl: 'images/pizza4quesos.png',
         nombrePlato: 'Pizza 4 formatges',
         descripcion: 'Pizza 4 formatges',
@@ -27,6 +29,7 @@ class PaginaEntrants extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'p3',
         imageUrl: 'images/pizzacarbonara.png',
         nombrePlato: 'Pizza Carbonara',
         descripcion: 'Pizza Carbonara',
@@ -34,6 +37,7 @@ class PaginaEntrants extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'p4',
         imageUrl: 'images/pizza4estacions.png',
         nombrePlato: 'Pizza 4 estacions ',
         descripcion: 'Pizza 4 estacions',
@@ -41,6 +45,7 @@ class PaginaEntrants extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'p5',
         imageUrl: 'images/pizzabolonyesa.png',
         nombrePlato: 'Pizza bolonyesa',
         descripcion: 'Pizza bolonyesa',
@@ -48,6 +53,7 @@ class PaginaEntrants extends StatelessWidget {
         precio: 10,
       ),
       Plat(
+        idPlat: 'p6',
         imageUrl: 'images/pizzaambpinya.png',
         nombrePlato: 'Pizza amb pinya',
         descripcion: 'Pizza amb pinya',

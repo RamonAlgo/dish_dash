@@ -15,21 +15,9 @@ class _PaginaLoginState extends State<PaginaLogin> {
 
   final serveiAuth = ServeiAuth();
 
-  /*void ferLogin(BuildContext context) async {
-    final serveiAuth = ServeiAuth();
-    print("error");
-    try {
-      await serveiAuth.loginAmbEmailIPassword(
-        _usernameController.text,
-        _passwordController.text,
-      );
-    } catch (e) {
-      print("Error durante el inicio de sesión: $e");
-    }
-  }*/
+
 
   void _login(BuildContext context) async {
-    print("FuncionLogin");
     String username = _usernameController.text + '@mesa.com';
 
     try {
