@@ -154,12 +154,27 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
                 );
               },
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          insertarDatos();
-        },
-        child: Icon(Icons.visibility),
-        tooltip: 'Ver Usuario',
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 16.0),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width - 32, // Ancho igual al ancho de la pantalla menos el padding horizontal
+          child: ElevatedButton(
+            onPressed: () {
+              insertarDatos();
+            },
+            style: ElevatedButton.styleFrom(
+              primary: Colors.green,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              padding: EdgeInsets.symmetric(vertical: 16.0), // Padding vertical
+            ),
+            child: Text(
+              'Confirmar pedido',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
       ),
     );
   }
