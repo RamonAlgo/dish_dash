@@ -63,69 +63,6 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
               );
             },
           ),
-          IconButton(
-            icon: Icon(Icons.delete_forever),
-            onPressed: () {
-              final TextEditingController _usernameController =
-                  TextEditingController();
-              final TextEditingController _passwordController =
-                  TextEditingController();
-
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text("Accés Administratiu"),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextField(
-                          controller: _usernameController,
-                          decoration: const InputDecoration(
-                            labelText: 'Usuari',
-                          ),
-                        ),
-                        TextField(
-                          controller: _passwordController,
-                          decoration: const InputDecoration(
-                            labelText: 'Contrasenya',
-                          ),
-                          obscureText: true,
-                        ),
-                      ],
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        child: const Text("Cancelar"),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      TextButton(
-                        child: const Text("Confirmar"),
-                        onPressed: () {
-                          if (_usernameController.text == 'admin' &&
-                              _passwordController.text == 'admin') {
-                            Provider.of<ModelDades>(context, listen: false)
-                                .vaciarCarrito();
-
-                            Navigator.of(context).pop();
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Credencials incorrectes"),
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
         ],
       ),
       body: carrito.isEmpty
