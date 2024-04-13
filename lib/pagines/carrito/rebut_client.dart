@@ -1,5 +1,6 @@
 import 'package:dish_dash/Clases/Plat.dart';
 import 'package:dish_dash/Clases/model_dades.dart';
+import 'package:dish_dash/pagines/carrito/paginacomandes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -50,6 +51,18 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
       appBar: AppBar(
         title: Text('Carrito'),
         actions: [
+          IconButton(
+            icon: Icon(Icons.history),
+            onPressed: () async {
+              String mesaId = await obtenerYProcesarEmail();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PaginaMenjarDemanat(mesaId: mesaId),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: Icon(Icons.delete_forever),
             onPressed: () {
@@ -157,7 +170,7 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 16.0),
         child: SizedBox(
-          width: MediaQuery.of(context).size.width - 32, 
+          width: MediaQuery.of(context).size.width - 32,
           child: ElevatedButton(
             onPressed: () {
               insertarDatos();
@@ -167,7 +180,7 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
-              padding: EdgeInsets.symmetric(vertical: 16.0), 
+              padding: EdgeInsets.symmetric(vertical: 16.0),
             ),
             child: Text(
               'Confirmar pedido',
@@ -179,17 +192,18 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
     );
   }
 
-  obtenerYProcesarEmail() {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    final User? usuario = auth.currentUser;
+  
 
+  Future<String> obtenerYProcesarEmail() async {
+    final User? usuario = FirebaseAuth.instance.currentUser;
     if (usuario != null && usuario.email != null) {
       String email = usuario.email!;
-
-      return procesarEmail(email);
-    } else {
-      print("No hay usuario logueado o el usuario no tiene un email.");
+      List<String> partes = email.split('@');
+      if (partes.isNotEmpty) {
+        return partes[0];
+      }
     }
+    return 'defaultMesaId'; 
   }
 
   procesarEmail(String email) {
@@ -202,32 +216,55 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
     } else {}
   }
 
-  void insertarDatos() {
-    final carrito =
-        Provider.of<ModelDades>(context, listen: false).carritoGlobal;
-    String idmesa = obtenerYProcesarEmail();
-    print(idmesa);
-    if (carrito.isNotEmpty) {
-      final List<Map<String, dynamic>> platosData = carrito.map((plato) {
-        return {
-          'idPlat': plato.idPlat,
-          'nom': plato.nombrePlato,
-          'cantitat': plato.cantidad,
-          'preu': plato.precio,
-          'entregado':false
-        };
-      }).toList();
-      print(platosData);
-      firestore
-          .collection('mesas')
-          .doc(idmesa)
-          .set({'platos': platosData}).then((_) {
-        print('Datos insertados correctamente');
-      }).catchError((error) {
-        print('Error al insertar datos: $error');
-      });
-    } else {
-      print('El carrito está vacío');
-    }
+  void insertarDatos() async {
+  final carrito = Provider.of<ModelDades>(context, listen: false).carritoGlobal;
+  String idmesa = await obtenerYProcesarEmail(); 
+
+  DocumentSnapshot snapshot = await firestore.collection('mesas').doc(idmesa).get();
+
+  if (snapshot.exists) {
+    final List<Map<String, dynamic>> platosData = carrito.map((plato) {
+      return {
+        'idPlat': plato.idPlat,
+        'nom': plato.nombrePlato,
+        'cantitat': plato.cantidad,
+        'preu': plato.precio,
+        'entregado': false
+      };
+    }).toList();
+
+    firestore.collection('mesas').doc(idmesa).update({
+      'platos': FieldValue.arrayUnion(platosData),
+      'timestamp': Timestamp.now()
+    }).then((_) {
+      Provider.of<ModelDades>(context, listen: false).vaciarCarrito();
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Pedido confirmado .')));
+    }).catchError((error) {
+      print('Error al insertar datos: $error');
+    });
+  } else {
+    final List<Map<String, dynamic>> platosData = carrito.map((plato) {
+      return {
+        'idPlat': plato.idPlat,
+        'nom': plato.nombrePlato,
+        'cantitat': plato.cantidad,
+        'preu': plato.precio,
+        'entregado': false
+      };
+    }).toList();
+
+    firestore.collection('mesas').doc(idmesa).set({
+      'platos': platosData,
+      'mesaId': idmesa,
+      'timestamp': Timestamp.now()
+    }).then((_) {
+      Provider.of<ModelDades>(context, listen: false).vaciarCarrito();
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Pedido confirmado.')));
+    }).catchError((error) {
+      print('Error al insertar datos: $error');
+    });
   }
+}
 }
