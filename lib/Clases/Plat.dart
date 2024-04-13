@@ -23,7 +23,7 @@ String get getImageUrl => imageUrl;
   String get getDescripcion => descripcion;
   List<String> get getIngredientes => ingredientes;
   double get getPrecio => precio;
-  int get getCantidad => cantidad; // Getter para la cantidad
+  int get getCantidad => cantidad; 
 
 
 //seters
@@ -34,7 +34,7 @@ set setingredientes (List<String> ingredientesPlato){ingredientesPlato=ingredien
 set setpreu(double precioPlato){precio = precioPlato;}
 
   set setCantidad(int nuevaCantidad) {
-    if (nuevaCantidad >= 0) { // Asegurar que la cantidad no sea negativa
+    if (nuevaCantidad >= 0) { 
       cantidad = nuevaCantidad;
     }
   }

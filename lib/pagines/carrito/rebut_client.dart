@@ -157,7 +157,7 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 16.0),
         child: SizedBox(
-          width: MediaQuery.of(context).size.width - 32, // Ancho igual al ancho de la pantalla menos el padding horizontal
+          width: MediaQuery.of(context).size.width - 32, 
           child: ElevatedButton(
             onPressed: () {
               insertarDatos();
@@ -167,7 +167,7 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
-              padding: EdgeInsets.symmetric(vertical: 16.0), // Padding vertical
+              padding: EdgeInsets.symmetric(vertical: 16.0), 
             ),
             child: Text(
               'Confirmar pedido',
@@ -213,7 +213,8 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
           'idPlat': plato.idPlat,
           'nom': plato.nombrePlato,
           'cantitat': plato.cantidad,
-          'preu': plato.precio
+          'preu': plato.precio,
+          'entregado':false
         };
       }).toList();
       print(platosData);
