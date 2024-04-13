@@ -83,7 +83,6 @@ class _PaginaTPVState extends State<paginaTPV> {
       }, SetOptions(merge: true));
     }
 
-    // Delete the document from TPV collection
     batch.delete(_firestore.collection('tpv').doc(pedido.id));
 
     batch.commit().then((_) {
