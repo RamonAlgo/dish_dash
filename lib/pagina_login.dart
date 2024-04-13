@@ -37,12 +37,12 @@ class _PaginaLoginState extends State<PaginaLogin> {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => PaginaCuina()));
           });
-        } /*else if (email.contains("tpv")) {
+        } else if (email.contains("tpv")) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => paginaTPV()));
           });
-        }*/ else {
+        } else {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => PaginaInicialClient()));

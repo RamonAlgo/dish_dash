@@ -15,16 +15,19 @@ class _PaginaTPVState extends State<paginaTPV> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('TPV - Pedidos Finalizados'),
+        title: Text('TPV '),
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: _firestore.collection('TPV').orderBy('fecha', descending: true).snapshots(),
+        stream: _firestore.collection('tpv').orderBy('fecha', descending: true).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.data!.docs.isEmpty) {
+            return Center(child: Text("No hay pedidos pendientes."));
           }
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,
@@ -65,15 +68,28 @@ class _PaginaTPVState extends State<paginaTPV> {
   }
 
   void marcarComoPagado(QueryDocumentSnapshot pedido) {
-    var total = pedido['total'] as double;
-    _firestore.collection('estadisticas').doc('estadisticas').set({
-      'totalVentas': FieldValue.increment(total)
-    }, SetOptions(merge: true)).then((_) {
+    var platos = pedido['platos'] as List<dynamic>;
+
+    WriteBatch batch = _firestore.batch();
+
+    for (var plat in platos) {
+      var platId = plat['idPlat'];
+      var cantidad = plat['cantitat'] as int;
+
+      DocumentReference statRef = _firestore.collection('estadisticas').doc(platId);
+
+      batch.set(statRef, {
+        'cantidad': FieldValue.increment(cantidad)
+      }, SetOptions(merge: true));
+    }
+
+    // Delete the document from TPV collection
+    batch.delete(_firestore.collection('tpv').doc(pedido.id));
+
+    batch.commit().then((_) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Pedido marcado como pagado y estadísticas actualizadas.'))
+        SnackBar(content: Text('Pedido marcado como pagado y estadísticas actualizadas. Pedido eliminado de la lista.'))
       );
- 
-      _firestore.collection('TPV').doc(pedido.id).delete();
     }).catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error al actualizar estadísticas: $error'))
