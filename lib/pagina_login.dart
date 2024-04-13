@@ -2,6 +2,7 @@ import 'package:dish_dash/auth/servei_auth.dart';
 import 'package:dish_dash/pagines/administrador/pagina_administrador.dart';
 import 'package:dish_dash/pagines/cuina/pagina_cuina.dart';
 import 'package:dish_dash/pagines/pagina_inicial_client.dart';
+import 'package:dish_dash/tpv/paginatpv.dart';
 import 'package:flutter/material.dart';
 
 class PaginaLogin extends StatefulWidget {
@@ -15,8 +16,6 @@ class _PaginaLoginState extends State<PaginaLogin> {
 
   final serveiAuth = ServeiAuth();
 
-
-
   void _login(BuildContext context) async {
     String username = _usernameController.text + '@mesa.com';
 
@@ -27,7 +26,7 @@ class _PaginaLoginState extends State<PaginaLogin> {
       );
       final user = serveiAuth.getUsuarisActual();
       if (user != null) {
-        final email = user.email ;
+        final email = user.email;
         if (email!.contains("administrador")) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Navigator.pushReplacement(context,
@@ -38,7 +37,12 @@ class _PaginaLoginState extends State<PaginaLogin> {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => PaginaCuina()));
           });
-        } else {
+        } /*else if (email.contains("tpv")) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => paginaTPV()));
+          });
+        }*/ else {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => PaginaInicialClient()));
