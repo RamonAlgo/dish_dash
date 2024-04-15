@@ -1,4 +1,5 @@
 import 'package:dish_dash/auth/servei_auth.dart';
+import 'package:dish_dash/pagines/administrador/adminDashboard.dart';
 import 'package:dish_dash/pagines/administrador/pagina_administrador.dart';
 import 'package:dish_dash/pagines/cuina/pagina_cuina.dart';
 import 'package:dish_dash/pagines/pagina_inicial_client.dart';
@@ -30,7 +31,7 @@ class _PaginaLoginState extends State<PaginaLogin> {
         if (email!.contains("administrador")) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => PaginaAdministrador()));
+                MaterialPageRoute(builder: (context) => AdminDashboardPage()));
           });
         } else if (email.contains("cocina")) {
           WidgetsBinding.instance.addPostFrameCallback((_) {

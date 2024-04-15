@@ -149,7 +149,6 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
     if (partes.isNotEmpty) {
       String parteDeseada = partes[0];
       return (parteDeseada);
-      // llamada a insertarDatos
     } else {}
   }
 
