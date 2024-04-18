@@ -11,11 +11,28 @@ class paginaEstadistiquesAdministrador extends StatefulWidget {
 
 class _PaginaEstadisticasAdministradorState extends State<paginaEstadistiquesAdministrador> {
   late Stream<List<DocumentSnapshot>> _stream;
+  late String _selectedYear;
+  late String _selectedMonth;
 
   @override
   void initState() {
     super.initState();
-    _stream = FirebaseFirestore.instance.collection('estadisticas').snapshots().map((snapshot) => snapshot.docs);
+    _selectedYear = DateTime.now().year.toString();
+    _selectedMonth = DateTime.now().month.toString().padLeft(2, '0');
+    _updateStream();
+  }
+
+  void _updateStream() {
+    setState(() {
+      _stream = FirebaseFirestore.instance
+          .collection('estadisticas')
+          .doc(_selectedYear)
+          .collection('meses')
+          .doc(_selectedMonth)
+          .collection('platos')
+          .snapshots()
+          .map((snapshot) => snapshot.docs);
+    });
   }
 
   @override
@@ -24,26 +41,74 @@ class _PaginaEstadisticasAdministradorState extends State<paginaEstadistiquesAdm
       appBar: AppBar(
         title: Text('Estadísticas'),
       ),
-      body: Center(
-        child: StreamBuilder<List<DocumentSnapshot>>(
-          stream: _stream,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else {
-              final data = snapshot.data!;
-              List<FlSpot> spots = [];
-              for (var i = 0; i < data.length; i++) {
-                final recuento = data[i]['cantidad'] ?? 0;
-                spots.add(FlSpot(i.toDouble(), recuento.toDouble()));
-              }
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                DropdownButton<String>(
+                  value: _selectedYear,
+                  onChanged: (String? newValue) {
+                    if (newValue != null) {
+                      setState(() {
+                        _selectedYear = newValue;
+                        _updateStream();
+                      });
+                    }
+                  },
+                  items: List.generate(5, (index) {
+                    int year = DateTime.now().year - index;
+                    return DropdownMenuItem(
+                      value: year.toString(),
+                      child: Text(year.toString()),
+                    );
+                  }),
+                ),
+                SizedBox(width: 20),
+                DropdownButton<String>(
+                  value: _selectedMonth,
+                  onChanged: (String? newValue) {
+                    if (newValue != null) {
+                      setState(() {
+                        _selectedMonth = newValue;
+                        _updateStream();
+                      });
+                    }
+                  },
+                  items: List.generate(12, (index) {
+                    return DropdownMenuItem(
+                      value: (index + 1).toString().padLeft(2, '0'),
+                      child: Text((index + 1).toString().padLeft(2, '0')),
+                    );
+                  }),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: StreamBuilder<List<DocumentSnapshot>>(
+              stream: _stream,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else {
+                  final data = snapshot.data!;
+                  List<FlSpot> spots = [];
+                  for (var i = 0; i < data.length; i++) {
+                    final recuento = data[i]['cantidad'] ?? 0;
+                    spots.add(FlSpot(i.toDouble(), recuento.toDouble()));
+                  }
 
-              return spots.isNotEmpty ? ChartWithLegend(spots: spots, data: data) : Text('No hay datos disponibles');
-            }
-          },
-        ),
+                  return spots.isNotEmpty ? ChartWithLegend(spots: spots, data: data) : Text('No hay datos disponibles');
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
