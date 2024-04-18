@@ -84,6 +84,8 @@ class _PaginaTPVState extends State<paginaTPV> {
 
     for (var plat in platos) {
       var platId = plat['idPlat'];
+      var nomPlat = plat['nom'];
+
       var cantidad = plat['cantitat'] as int;
       var precioTotalPlato = plat['preuTotalPlato'] as double;
       totalPedido += precioTotalPlato;
@@ -100,6 +102,7 @@ class _PaginaTPVState extends State<paginaTPV> {
           platRef,
           {
             'cantidad': FieldValue.increment(cantidad),
+            'nom': nomPlat
           },
           SetOptions(merge: true));
     }

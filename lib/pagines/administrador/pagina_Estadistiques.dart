@@ -6,10 +6,12 @@ class paginaEstadistiquesAdministrador extends StatefulWidget {
   const paginaEstadistiquesAdministrador({Key? key}) : super(key: key);
 
   @override
-  State<paginaEstadistiquesAdministrador> createState() => _PaginaEstadisticasAdministradorState();
+  State<paginaEstadistiquesAdministrador> createState() =>
+      _PaginaEstadisticasAdministradorState();
 }
 
-class _PaginaEstadisticasAdministradorState extends State<paginaEstadistiquesAdministrador> {
+class _PaginaEstadisticasAdministradorState
+    extends State<paginaEstadistiquesAdministrador> {
   late Stream<List<DocumentSnapshot>> _stream;
   late String _selectedYear;
   late String _selectedMonth;
@@ -103,7 +105,9 @@ class _PaginaEstadisticasAdministradorState extends State<paginaEstadistiquesAdm
                     spots.add(FlSpot(i.toDouble(), recuento.toDouble()));
                   }
 
-                  return spots.isNotEmpty ? ChartWithLegend(spots: spots, data: data) : Text('No hay datos disponibles');
+                  return spots.isNotEmpty
+                      ? ChartWithLegend(spots: spots, data: data)
+                      : Text('No hay datos disponibles');
                 }
               },
             ),
@@ -118,7 +122,8 @@ class ChartWithLegend extends StatelessWidget {
   final List<FlSpot> spots;
   final List<DocumentSnapshot> data;
 
-  const ChartWithLegend({Key? key, required this.spots, required this.data}) : super(key: key);
+  const ChartWithLegend({Key? key, required this.spots, required this.data})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +136,8 @@ class ChartWithLegend extends StatelessWidget {
             PieChartData(
               sections: spots.map((spot) {
                 return PieChartSectionData(
-                  color: Colors.primaries[spots.indexOf(spot) % Colors.primaries.length],
+                  color: Colors
+                      .primaries[spots.indexOf(spot) % Colors.primaries.length],
                   value: spot.y,
                   title: '${spot.y}',
                   radius: 100,
@@ -147,7 +153,8 @@ class ChartWithLegend extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: spots.map((spot) {
               final index = spots.indexOf(spot);
-              final id = data[index].id; 
+              final id = data[index].id;
+              final nom = data [index]['nom'];
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Row(
@@ -159,7 +166,7 @@ class ChartWithLegend extends StatelessWidget {
                     ),
                     SizedBox(width: 8),
                     Text(
-                      'Plato $id',
+                      'Plato $nom',
                       style: TextStyle(fontSize: 16),
                     ),
                   ],
@@ -168,6 +175,13 @@ class ChartWithLegend extends StatelessWidget {
             }).toList(),
           ),
         ),
+        Expanded(
+            child: BarChart(BarChartData(
+                barTouchData: BarTouchData(
+                    touchTooltipData: BarTouchTooltipData(
+                        getTooltipColor: (_) => Colors.blueGrey,
+                        tooltipHorizontalAlignment: FLHorizontalAlignment.right,
+                        tooltipMargin: -10))))),
       ],
     );
   }
