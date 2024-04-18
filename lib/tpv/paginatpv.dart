@@ -15,7 +15,7 @@ class _PaginaTPVState extends State<paginaTPV> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('TPV '),
+        title: const Text('TPV '),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore
@@ -27,10 +27,10 @@ class _PaginaTPVState extends State<paginaTPV> {
             return Text('Error: ${snapshot.error}');
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.data!.docs.isEmpty) {
-            return Center(child: Text("No hay pedidos pendientes."));
+            return const Center(child: Text("No hay pedidos pendientes."));
           }
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,
@@ -38,7 +38,7 @@ class _PaginaTPVState extends State<paginaTPV> {
               var pedido = snapshot.data!.docs[index];
               var platos = pedido['platos'] as List<dynamic>;
               return Card(
-                margin: EdgeInsets.all(8.0),
+                margin: const EdgeInsets.all(8.0),
                 child: ExpansionTile(
                   title: Text(
                       'Mesa ${pedido['mesaId']} - Total: ${pedido['total']}€'),
@@ -57,7 +57,7 @@ class _PaginaTPVState extends State<paginaTPV> {
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                         onPressed: () => marcarComoPagado(pedido),
-                        child: Text('Marcar como pagado'),
+                        child: const Text('Marcar como pagado'),
                         style: ElevatedButton.styleFrom(
                           primary: Colors.green,
                         ),
@@ -119,8 +119,8 @@ class _PaginaTPVState extends State<paginaTPV> {
     batch.delete(_firestore.collection('tpv').doc(pedido.id));
 
     batch.commit().then((_) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: const Text(
             'Pedido marcado como pagado y estadísticas actualizadas. Pedido eliminado de la lista.'),
         backgroundColor: Colors.green,
       ));

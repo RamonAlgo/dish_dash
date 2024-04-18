@@ -36,12 +36,12 @@ class _PaginaEstadisticasAdministradorState
           .map((snapshot) => snapshot.docs);
     });
   }
-
+   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Estadísticas'),
+        title: Text('Estadistiques'),
       ),
       body: Column(
         children: [
@@ -154,7 +154,7 @@ class ChartWithLegend extends StatelessWidget {
             children: spots.map((spot) {
               final index = spots.indexOf(spot);
               final id = data[index].id;
-              final nom = data [index]['nom'];
+              final nom = data[index]['nom'];
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Row(
@@ -175,13 +175,6 @@ class ChartWithLegend extends StatelessWidget {
             }).toList(),
           ),
         ),
-        Expanded(
-            child: BarChart(BarChartData(
-                barTouchData: BarTouchData(
-                    touchTooltipData: BarTouchTooltipData(
-                        getTooltipColor: (_) => Colors.blueGrey,
-                        tooltipHorizontalAlignment: FLHorizontalAlignment.right,
-                        tooltipMargin: -10))))),
       ],
     );
   }
