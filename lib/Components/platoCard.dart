@@ -40,11 +40,7 @@ class PlatoCard extends StatelessWidget {
             ),
           ),
 
-          /*Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text('Precio: \€${plato.precio.toString()}'),
-          ),*/
-
+         
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -63,7 +59,6 @@ class PlatoCard extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   onAdd();
-                  _mostrarPopup(context);
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
@@ -78,31 +73,7 @@ class PlatoCard extends StatelessWidget {
     );
   }
 
- void _mostrarPopup(BuildContext context) {
-    OverlayEntry overlayEntry = OverlayEntry(
-      builder: (context) => Center(
-        child: Container(
-          width: MediaQuery.of(context).size.width, 
-          padding: EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.7),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: const Center(
-            child: Text(
-              'Plat afegit al carrito',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20, color: Colors.yellow),
-            ),
-          ),
-        ),
-      ),
-    );
 
-    Overlay.of(context).insert(overlayEntry);
-
-    Future.delayed(Duration(seconds: 1)).then((value) => overlayEntry.remove());
-}
 
 
   void _mostrarDialogoIngredientes(BuildContext context) {

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:dish_dash/Clases/Plat.dart';
 import 'package:dish_dash/Components/platoCard.dart';
 import 'package:provider/provider.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+
 
 class PaginaEntrants extends StatelessWidget {
   const PaginaEntrants({super.key});
@@ -109,9 +111,21 @@ class PaginaEntrants extends StatelessWidget {
             onAdd: () {
               Provider.of<ModelDades>(context, listen: false)
                   .agregarAlCarrito(plato);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('${plato.nombrePlato} añadido')),
+              final snackBar = SnackBar(
+                backgroundColor: Color.fromARGB(100,92, 174, 99),
+                elevation: 10,
+                behavior: SnackBarBehavior.fixed,
+                content: AwesomeSnackbarContent(
+                  color: Color.fromARGB(1000,92, 174, 99),
+                  title: '¡Éxito!',
+                  message: '${plato.nombrePlato} añadido al carrito',
+                  contentType: ContentType.success,
+                ),
               );
+
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(snackBar);
             },
           );
         },

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:dish_dash/pagines/administrador/paginaEstadisticas.dart';
+import 'package:dish_dash/pagines/administrador/pagina_Estadistiques.dart';
 import 'package:dish_dash/pagines/administrador/pagina_administrador.dart';
 
 class AdminDashboardPage extends StatelessWidget {

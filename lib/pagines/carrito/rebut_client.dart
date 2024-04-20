@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+
 
 class PaginaCarrito extends StatefulWidget {
   const PaginaCarrito({Key? key}) : super(key: key);
@@ -174,10 +176,10 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
       'timestamp': Timestamp.now()
     }).then((_) {
       Provider.of<ModelDades>(context, listen: false).vaciarCarrito();
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Pedido confirmado .')));
+      showAwesomeSnackbar(context, 'Pedido confirmado.', ContentType.success);
     }).catchError((error) {
       print('Error al insertar datos: $error');
+      showAwesomeSnackbar(context, 'Error al confirmar pedido: $error', ContentType.failure);
     });
   } else {
     final List<Map<String, dynamic>> platosData = carrito.map((plato) {
@@ -196,11 +198,25 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
       'timestamp': Timestamp.now()
     }).then((_) {
       Provider.of<ModelDades>(context, listen: false).vaciarCarrito();
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Pedido confirmado.')));
+      showAwesomeSnackbar(context, 'Pedido confirmado.', ContentType.success);
     }).catchError((error) {
       print('Error al insertar datos: $error');
+      showAwesomeSnackbar(context, 'Error al confirmar pedido: $error', ContentType.failure);
     });
   }
+}
+
+void showAwesomeSnackbar(BuildContext context, String message, ContentType contentType) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      backgroundColor: Colors.transparent, 
+      elevation: 0,
+      content: AwesomeSnackbarContent(
+        title: contentType == ContentType.success ? 'Éxito' : 'Error',
+        message: message,
+        contentType: contentType,
+      ),
+    ),
+  );
 }
 }
