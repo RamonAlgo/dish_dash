@@ -11,6 +11,9 @@ import 'package:dish_dash/Components/platoCard.dart';
 import 'package:provider/provider.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
+//cojer platos/bebidas/menus de Base de datos
+//quitar platos puestos a mano
+
 class PaginaInicialClient extends StatelessWidget {
   const PaginaInicialClient({super.key});
 
@@ -23,47 +26,7 @@ class PaginaInicialClient extends StatelessWidget {
         nombrePlato: 'Pizza Margarita',
         descripcion: 'Pizza Margarita',
         ingredientes: ['Tomate', 'Queso', 'Piña'],
-        precio: 10,
-      ),
-      Plat(
-        idPlat: 'pz2',
-        imageUrl: 'images/pizza4quesos.png',
-        nombrePlato: 'Pizza 4 formatges',
-        descripcion: 'Pizza 4 formatges',
-        ingredientes: ['Tomate', 'Queso', 'Piña'],
-        precio: 10,
-      ),
-      Plat(
-        idPlat: 'pz3',
-        imageUrl: 'images/pizzacarbonara.png',
-        nombrePlato: 'Pizza Carbonara',
-        descripcion: 'Pizza Carbonara',
-        ingredientes: ['Tomate', 'Queso', 'Piña'],
-        precio: 10,
-      ),
-      Plat(
-        idPlat: 'pz4',
-        imageUrl: 'images/pizza4estacions.png',
-        nombrePlato: 'Pizza 4 estacions ',
-        descripcion: 'Pizza 4 estacions',
-        ingredientes: ['Tomate', 'Queso', 'Piña'],
-        precio: 10,
-      ),
-      Plat(
-        idPlat: 'pz5',
-        imageUrl: 'images/pizzabolonyesa.png',
-        nombrePlato: 'Pizza bolonyesa',
-        descripcion: 'Pizza bolonyesa',
-        ingredientes: ['Tomate', 'Queso', 'Piña'],
-        precio: 10,
-      ),
-      Plat(
-        idPlat: 'pz6',
-        imageUrl: 'images/pizzaambpinya.png',
-        nombrePlato: 'Pizza amb pinya',
-        descripcion: 'Pizza amb pinya',
-        ingredientes: ['Tomate', 'Queso', 'Piña'],
-        precio: 10,
+        precio: 100,
       ),
     ];
 
