@@ -129,7 +129,7 @@ class _PaginaTPVState extends State<paginaTPV> {
 
   void generarTicket(QueryDocumentSnapshot pedido) async {
     final pdf = pw.Document();
-    final customFont = await loadCustomFont(); // Carga la fuente personalizada
+    final customFont = await loadCustomFont(); 
 
     var platos = pedido['platos'] as List<dynamic>;
     double total = double.parse(pedido['total'].toString());
@@ -213,7 +213,7 @@ class _PaginaTPVState extends State<paginaTPV> {
           children: [
             pw.Text('Base Imponible: ${baseImponible.toStringAsFixed(2)}€',
                 style: pw.TextStyle(font: customFont)),
-            pw.SizedBox(width: 16), // Espacio controlado entre los elementos
+            pw.SizedBox(width: 16), 
             pw.Text('IVA (21%): ${iva.toStringAsFixed(2)}€',
                 style: pw.TextStyle(font: customFont)),
           ],
