@@ -40,8 +40,7 @@ class PaginaInicialClient extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => PaginaMenuClient()));
+                      MaterialPageRoute(builder: (context) => PaginaMenuClient()));
                 },
                 child: Text('Menús', style: TextStyle(color: Colors.white)),
               ),
