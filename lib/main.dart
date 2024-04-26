@@ -1,6 +1,8 @@
 import 'package:dish_dash/Clases/model_dades.dart';
 import 'package:dish_dash/firebase_options.dart';
 import 'package:dish_dash/pagina_login.dart';
+import 'package:dish_dash/pagina_login_externa.dart';
+import 'package:dish_dash/pagines/landing/landingpage.dart';
 import 'package:dish_dash/pagines/pagina_inicial_client.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +49,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: PaginaLogin(),
+      home: (LandingPage()),
     );
   }
 }
