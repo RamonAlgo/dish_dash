@@ -110,7 +110,7 @@ class _paginaLoginExternaState extends State<paginaLoginExterna>
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    FlutterLogo(size: 100),
+                    Image.asset("images/logorestaurafacil.png"),
                     SizedBox(height: 20),
                     TextField(
                       controller: _usernameController,
