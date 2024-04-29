@@ -126,7 +126,6 @@ class PaginaPostres extends StatelessWidget {
                 child: Text('Calents ', style: TextStyle(color: Colors.white)),
               ),
             ),
-
             // añadir mas aqui
           ],
         ),

@@ -11,8 +11,6 @@ import 'package:dish_dash/Components/platoCard.dart';
 import 'package:provider/provider.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
-//cojer platos/bebidas/menus de Base de datos
-//quitar platos puestos a mano
 
 class PaginaInicialClient extends StatelessWidget {
   const PaginaInicialClient({super.key});

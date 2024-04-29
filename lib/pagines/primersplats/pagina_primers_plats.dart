@@ -9,7 +9,6 @@ import 'package:dish_dash/Components/platoCard.dart';
 import 'package:provider/provider.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
-
 class PaginaPrimersPlats extends StatelessWidget {
   const PaginaPrimersPlats({super.key});
 
@@ -93,39 +92,51 @@ class PaginaPrimersPlats extends StatelessWidget {
         actions: <Widget>[],
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('primersPlats').doc('Pp2').snapshots(),
-        builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        stream: FirebaseFirestore.instance.collection('primersPlats').snapshots(),
+        builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator(); // Muestra un indicador de carga mientras se obtienen los datos
+            return Center(child: CircularProgressIndicator());
+          }
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Center(child: Text('No hay platos disponibles'));
           }
 
-          if (!snapshot.hasData || snapshot.data == null) {
-            return Text('No data available'); // Maneja el caso en que no hay datos disponibles
-          }
+          List<Plat> plats = snapshot.data!.docs.map((DocumentSnapshot doc) {
+            Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+            return Plat.fromFirestore(doc);
+          }).toList();
 
-          // Convierte los datos a un tipo Map<String, dynamic>
-          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-
-          // Crea un objeto Plat con los datos del documento "Pp1"
-          Plat plat = Plat(
-            idPlat: snapshot.data!.id,
-            imageUrl: data['ImageUrl'] ?? '',
-            nombrePlato: data['NombrePlato'] ?? '',
-            descripcion: data['Descripcion'] ?? '',
-            ingredientes: List<String>.from(data['Ingredientes'] ?? []),
-            precio: (data['Precio'] ?? 0.0).toDouble(),
-            cantidad: 1,
-            carn: data['Carn'] ?? false,
-            celiacs: data['Celiacs'] ?? false,
-            pasta: data['Pasta'] ?? false,
-            peix: data['Peix'] ?? false,
-            pizza: data['Pizza'] ?? false,
-            vega: data['Vega'] ?? false,
-          );
-
-          // Muestra el nombre del plato en la pantalla
-          return Center(
-            child: Text(plat.getNombre),
+          return GridView.builder(
+            padding: const EdgeInsets.all(8.0),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: 8.0,
+              mainAxisSpacing: 8.0,
+            ),
+            itemCount: plats.length,
+            itemBuilder: (context, index) {
+              final plato = plats[index];
+              return PlatoCard(
+                plato: plato,
+                onAdd: () {
+                  Provider.of<ModelDades>(context, listen: false).agregarAlCarrito(plato);
+                  final snackBar = SnackBar(
+                    backgroundColor: Color.fromARGB(100, 92, 174, 99),
+                    elevation: 10,
+                    behavior: SnackBarBehavior.fixed,
+                    content: AwesomeSnackbarContent(
+                      color: Color.fromARGB(1000, 92, 174, 99),
+                      title: '¡Éxito!',
+                      message: '${plato.nombrePlato} añadido al carrito',
+                      contentType: ContentType.success,
+                    ),
+                  );
+                  ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(snackBar);
+                },
+              );
+            },
           );
         },
       ),

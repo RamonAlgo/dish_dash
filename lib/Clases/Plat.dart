@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Plat {
   String idPlat;
   String imageUrl;
@@ -62,4 +64,23 @@ class Plat {
   set setPeix(bool peix) => this.peix = peix;
   set setPizza(bool pizza) => this.pizza = pizza;
   set setVega(bool vega) => this.vega = vega;
+
+  factory Plat.fromFirestore(DocumentSnapshot doc) {
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    return Plat(
+      idPlat: doc.id,
+      imageUrl: data['ImageUrl'] ?? '',
+      nombrePlato: data['NombrePlato'] ?? '',
+      descripcion: data['Descripcion'] ?? '',
+      ingredientes: List<String>.from(data['Ingredientes'] ?? []),
+      precio: (data['Precio'] ?? 0.0).toDouble(),
+      cantidad: 1,
+      carn: data['Carn'] ?? false,
+      celiacs: data['Celiacs'] ?? false,
+      pasta: data['Pasta'] ?? false,
+      peix: data['Peix'] ?? false,
+      pizza: data['Pizza'] ?? false,
+      vega: data['Vega'] ?? false,
+    );
+  }
 }

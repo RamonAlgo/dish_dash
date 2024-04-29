@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:dish_dash/Clases/Plat.dart'; // Asegúrate de que la ruta de importación sea correcta
+import 'package:dish_dash/Clases/Plat.dart'; 
 
 class PlatoCard extends StatelessWidget {
   final Plat plato;
@@ -33,14 +33,12 @@ class PlatoCard extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Image.asset(
+            child: Image.network(
               plato.imageUrl,
               width: double.infinity,
               fit: BoxFit.fill,
             ),
           ),
-
-         
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -72,9 +70,6 @@ class PlatoCard extends StatelessWidget {
       ),
     );
   }
-
-
-
 
   void _mostrarDialogoIngredientes(BuildContext context) {
     showDialog(

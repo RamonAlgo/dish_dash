@@ -16,13 +16,9 @@ WidgetsFlutterBinding.ensureInitialized();
   runApp(
 
     ChangeNotifierProvider(
-
       create: (context) => ModelDades(),
-
       child:  MyApp(),
-
     ),
-
   );
 
   

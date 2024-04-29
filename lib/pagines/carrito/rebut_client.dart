@@ -115,7 +115,7 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
               insertarDatos();
             },
             style: ElevatedButton.styleFrom(
-              primary: Colors.green,
+              backgroundColor: Colors.green,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
