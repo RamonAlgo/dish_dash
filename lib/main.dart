@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: (PaginaEstadisticasAdministrador()),
+      home: (LandingPage()),
     );
   }
 }
