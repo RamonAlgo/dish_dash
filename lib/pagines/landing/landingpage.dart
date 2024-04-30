@@ -109,7 +109,7 @@ class _LandingPageState extends State<LandingPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'DishDash',
+                            'Restaurafacil',
                             style: TextStyle(
                               fontSize: 48,
                               fontWeight: FontWeight.bold,
@@ -125,7 +125,7 @@ class _LandingPageState extends State<LandingPage> {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                             child: Text(
-                              'DishDash te ofrece todo lo que necesitas para llevar tu restaurante al próximo nivel. Desde gestión de pedidos hasta análisis de ventas en tiempo real, facilitamos cada aspecto de tu negocio.',
+                              'Restaurafacil te ofrece todo lo que necesitas para llevar tu restaurante al próximo nivel. Desde gestión de pedidos hasta análisis de ventas en tiempo real, facilitamos cada aspecto de tu negocio.',
                               textAlign: TextAlign.center,
                               style: TextStyle(fontSize: 16, color: Colors.white),
                             ),
@@ -175,7 +175,7 @@ class _LandingPageState extends State<LandingPage> {
           ),
           SizedBox(height: 20),
           Text(
-            'DishDash ofrece una plataforma integrada que ayuda a los restaurantes a maximizar su eficiencia, mejorar la gestión del tiempo y optimizar los recursos. Nuestras herramientas analíticas avanzadas permiten a los gerentes tomar decisiones basadas en datos precisos, mejorando así el servicio y la satisfacción del cliente.',
+            'Restaurafacil ofrece una plataforma integrada que ayuda a los restaurantes a maximizar su eficiencia, mejorar la gestión del tiempo y optimizar los recursos. Nuestras herramientas analíticas avanzadas permiten a los gerentes tomar decisiones basadas en datos precisos, mejorando así el servicio y la satisfacción del cliente.',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16),
           ),

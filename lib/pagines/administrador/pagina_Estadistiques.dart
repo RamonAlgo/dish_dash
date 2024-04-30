@@ -42,7 +42,7 @@ class _PaginaEstadisticasAdministradorState
     return Scaffold(
       appBar: AppBar(
         title: Text('Estadísticas del Restaurante'),
-        backgroundColor: Colors.deepOrangeAccent,
+        backgroundColor: Color.fromARGB(255, 66, 145, 206),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -50,9 +50,9 @@ class _PaginaEstadisticasAdministradorState
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
             colors: [
-              Colors.orange.shade100,
-              Colors.orange.shade200,
-              Colors.orange.shade300,
+              Colors.grey.shade100,
+              Colors.grey.shade200,
+              Colors.grey.shade300,
             ],
           ),
         ),
@@ -140,7 +140,7 @@ class ChartWithLegend extends StatelessWidget {
         color: Colors.primaries[index % Colors.primaries.length],
         value: count.toDouble(),
         title: '$count',
-        radius: 250,
+        radius: 150,
         titleStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
       );
     }).toList();
