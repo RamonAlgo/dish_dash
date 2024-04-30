@@ -1,5 +1,4 @@
 import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dish_dash/Clases/Plat.dart';
 import 'package:dish_dash/Clases/model_dades.dart';
@@ -93,7 +92,7 @@ class PaginaPrimersPlats extends StatelessWidget {
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('primersPlats').snapshots(),
-        builder: (context, snapshot) {
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           }
@@ -102,7 +101,6 @@ class PaginaPrimersPlats extends StatelessWidget {
           }
 
           List<Plat> plats = snapshot.data!.docs.map((DocumentSnapshot doc) {
-            Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
             return Plat.fromFirestore(doc);
           }).toList();
 
@@ -121,15 +119,8 @@ class PaginaPrimersPlats extends StatelessWidget {
                 onAdd: () {
                   Provider.of<ModelDades>(context, listen: false).agregarAlCarrito(plato);
                   final snackBar = SnackBar(
-                    backgroundColor: Color.fromARGB(100, 92, 174, 99),
-                    elevation: 10,
-                    behavior: SnackBarBehavior.fixed,
-                    content: AwesomeSnackbarContent(
-                      color: Color.fromARGB(1000, 92, 174, 99),
-                      title: '¡Éxito!',
-                      message: '${plato.nombrePlato} añadido al carrito',
-                      contentType: ContentType.success,
-                    ),
+                    backgroundColor: Color.fromARGB(255, 92, 174, 99),
+                    content: Text('${plato.nombrePlato} añadido al carrito'),
                   );
                   ScaffoldMessenger.of(context)
                     ..hideCurrentSnackBar()
@@ -139,7 +130,7 @@ class PaginaPrimersPlats extends StatelessWidget {
             },
           );
         },
-      ),
+      )
     );
   }
 }

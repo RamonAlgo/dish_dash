@@ -6,28 +6,14 @@ import 'package:dish_dash/pagines/postres/pagina_postres.dart';
 import 'package:dish_dash/pagines/primersplats/pagina_primers_plats.dart';
 import 'package:dish_dash/pagines/segonsplats/pagina_segons_plats.dart';
 import 'package:flutter/material.dart';
-import 'package:dish_dash/Clases/Plat.dart';
-import 'package:dish_dash/Components/platoCard.dart';
 import 'package:provider/provider.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-
 
 class PaginaInicialClient extends StatelessWidget {
   const PaginaInicialClient({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final List<Plat> platos = [
-      Plat(
-        idPlat: 'pz1',
-        imageUrl: 'images/pizzamargarita.png',
-        nombrePlato: 'Pizza Margarita',
-        descripcion: 'Pizza Margarita',
-        ingredientes: ['Tomate', 'Queso', 'Piña'],
-        precio: 100,
-      ),
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -75,7 +61,6 @@ class PaginaInicialClient extends StatelessWidget {
                     style: TextStyle(color: Colors.white)),
               ),
             ),
-
             Expanded(
               child: TextButton(
                 onPressed: () {
@@ -94,45 +79,13 @@ class PaginaInicialClient extends StatelessWidget {
                 child: Text('Carrito', style: TextStyle(color: Colors.white)),
               ),
             ),
-            // añadir mas aqui
           ],
         ),
         actions: <Widget>[],
       ),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(16),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 8.0,
-          mainAxisSpacing: 8.0,
-        ),
-        itemCount: platos.length,
-        itemBuilder: (context, index) {
-          final plato = platos[index];
-          return PlatoCard(
-            plato: plato,
-            onAdd: () {
-              Provider.of<ModelDades>(context, listen: false)
-                  .agregarAlCarrito(plato);
-
-              final snackBar = SnackBar(
-                backgroundColor: Color.fromARGB(100,92, 174, 99),
-                elevation: 10,
-                behavior: SnackBarBehavior.fixed,
-                content: AwesomeSnackbarContent(
-                  color: Color.fromARGB(1000,92, 174, 99),
-                  title: '¡Éxito!',
-                  message: '${plato.nombrePlato} añadido al carrito',
-                  contentType: ContentType.success,
-                ),
-              );
-
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(snackBar);
-            },
-          );
-        },
+      body: Center(
+        child: Text('Seleccione una categoría desde el menú superior.',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
       ),
     );
   }

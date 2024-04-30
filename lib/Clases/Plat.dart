@@ -8,12 +8,7 @@ class Plat {
   List<String> ingredientes;
   double precio;
   int cantidad;
-  bool carn;
-  bool celiacs;
-  bool pasta;
-  bool peix;
-  bool pizza;
-  bool vega;
+  Map<String, bool> caracteristicas;
 
   Plat({
     required this.idPlat,
@@ -23,50 +18,40 @@ class Plat {
     required this.ingredientes,
     required this.precio,
     this.cantidad = 1,
-    this.carn = false,
-    this.celiacs = false,
-    this.pasta = false,
-    this.peix = false,
-    this.pizza = false,
-    this.vega = false,
-  }) {
-    assert(precio >= 0, 'El precio debe ser un valor positivo.');
-  }
+    required this.caracteristicas,
+  });
 
-  // Getters
-  String get getImageUrl => imageUrl;
-  String get getNombre => nombrePlato;
-  String get getDescripcion => descripcion;
-  List<String> get getIngredientes => ingredientes;
-  double get getPrecio => precio;
-  int get getCantidad => cantidad;
-  bool get getCarn => carn;
-  bool get getCeliacs => celiacs;
-  bool get getPasta => pasta;
-  bool get getPeix => peix;
-  bool get getPizza => pizza;
-  bool get getVega => vega;
-
-  // Setters
-  set setImageUrl(String imageUrl) => this.imageUrl = imageUrl;
-  set setNombre(String nombre) => nombrePlato = nombre;
-  set setDescripcion(String descripcion) => this.descripcion = descripcion;
-  set setIngredientes(List<String> ingredientes) => this.ingredientes = ingredientes;
-  set setPrecio(double precio) => this.precio = precio;
-  set setCantidad(int nuevaCantidad) {
-    if (nuevaCantidad >= 0) {
-      cantidad = nuevaCantidad;
-    }
-  }
-  set setCarn(bool carn) => this.carn = carn;
-  set setCeliacs(bool celiacs) => this.celiacs = celiacs;
-  set setPasta(bool pasta) => this.pasta = pasta;
-  set setPeix(bool peix) => this.peix = peix;
-  set setPizza(bool pizza) => this.pizza = pizza;
-  set setVega(bool vega) => this.vega = vega;
-
+  // Método de fábrica adaptable basado en el tipo de plato
   factory Plat.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    String tipoPlato = data['TipoPlato'];  // Asume que cada documento tiene un campo 'TipoPlato'
+
+    // Definiendo mapas de características para cada tipo de plato
+    Map<String, Map<String, bool>> characteristicsForType = {
+      'PrimersPlats': {
+        'Carn': data['Carn'] ?? false,
+        'Celiacs': data['Celiacs'] ?? false,
+        'Pasta': data['Pasta'] ?? false,
+        'Peix': data['Peix'] ?? false,
+        'Pizza': data['Pizza'] ?? false,
+        'Vega': data['Vega'] ?? false,
+      },
+      'Postre': {
+        'Calents': data['Calents'] ?? false,
+        'Freds': data['Freds'] ?? false,
+        'Fruita': data['Fruita'] ?? false,
+        'Gelats': data['Gelats'] ?? false,
+        'SemiFreds': data['SemiFreds'] ?? false,
+      },
+      'Entrants': {
+        'Amanides': data['Amanides'] ?? false,
+        'Fregits': data['Fregits'] ?? false,
+      }
+    };
+
+    // Asegurándonos de obtener el mapa correcto de características según el tipo de plato o un mapa vacío si no se encuentra
+    Map<String, bool> selectedCharacteristics = characteristicsForType[tipoPlato] ?? {};
+
     return Plat(
       idPlat: doc.id,
       imageUrl: data['ImageUrl'] ?? '',
@@ -74,13 +59,8 @@ class Plat {
       descripcion: data['Descripcion'] ?? '',
       ingredientes: List<String>.from(data['Ingredientes'] ?? []),
       precio: (data['Precio'] ?? 0.0).toDouble(),
-      cantidad: 1,
-      carn: data['Carn'] ?? false,
-      celiacs: data['Celiacs'] ?? false,
-      pasta: data['Pasta'] ?? false,
-      peix: data['Peix'] ?? false,
-      pizza: data['Pizza'] ?? false,
-      vega: data['Vega'] ?? false,
+      cantidad: data['Cantidad'] ?? 1,
+      caracteristicas: selectedCharacteristics,
     );
   }
 }
