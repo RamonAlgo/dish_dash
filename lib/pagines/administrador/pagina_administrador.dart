@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class PaginaAdministrador extends StatefulWidget {
   const PaginaAdministrador({Key? key}) : super(key: key);
@@ -8,10 +9,18 @@ class PaginaAdministrador extends StatefulWidget {
 }
 
 class _PaginaAdministradorState extends State<PaginaAdministrador> {
-  final TextEditingController _ingredientesController = TextEditingController();
   final TextEditingController _nombreController = TextEditingController();
   final TextEditingController _descripcionController = TextEditingController();
   final TextEditingController _precioController = TextEditingController();
+  final TextEditingController _ingredientesController = TextEditingController();
+
+  // Estados de los CheckBoxes
+  bool _isCarn = false;
+  bool _isCeliacs = false;
+  bool _isPasta = false;
+  bool _isPeix = false;
+  bool _isPizza = false;
+  bool _isVega = false;
 
   @override
   Widget build(BuildContext context) {
@@ -24,82 +33,78 @@ class _PaginaAdministradorState extends State<PaginaAdministrador> {
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Nombre:',
-                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-              ),
-              TextField(
+            children: <Widget>[
+              TextFormField(
                 controller: _nombreController,
-                decoration: const InputDecoration(
-                  hintText: 'Introduce el nombre del plato',
+                decoration: InputDecoration(
+                  labelText: 'Nombre del Plato',
                   border: OutlineInputBorder(),
                 ),
               ),
-              SizedBox(height: 16.0),
-              const Text(
-                'Descripción:',
-                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-              ),
-              TextField(
+              SizedBox(height: 10),
+              TextFormField(
                 controller: _descripcionController,
-                decoration: const InputDecoration(
-                  hintText: 'Introduce la descripción del plato',
+                decoration: InputDecoration(
+                  labelText: 'Descripción',
                   border: OutlineInputBorder(),
                 ),
-                maxLines: null,
+                maxLines: 3,
               ),
-              SizedBox(height: 16.0),
-              const Text(
-                'Ingredientes:',
-                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-              ),
-              TextField(
-                controller: _ingredientesController,
-                decoration: const InputDecoration(
-                  hintText: 'Introduce los ingredientes del plato',
-                  border: OutlineInputBorder(),
-                ),
-                maxLines: null,
-              ),
-              SizedBox(height: 16.0),
-              const Text(
-                'Precio:',
-                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-              ),
-              TextField(
+              SizedBox(height: 10),
+              TextFormField(
                 controller: _precioController,
-                decoration: const InputDecoration(
-                  hintText: 'Introduce el precio del plato',
+                decoration: InputDecoration(
+                  labelText: 'Precio (€)',
                   border: OutlineInputBorder(),
                 ),
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
+                ],
               ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () {
-                  //imagen
-                },
-                child: Text('Subir Imagen'),
-              ),
-              SizedBox(height: 16.0),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    String ingredientes = _ingredientesController.text;
-                    String nombre = _nombreController.text;
-                    String descripcion = _descripcionController.text;
-                    double precio =
-                        double.tryParse(_precioController.text) ?? 0.0;
-                    //añadir plato a la bbdd
-                  },
-                  child: Text('Añadir Plato'),
+              SizedBox(height: 10),
+              TextFormField(
+                controller: _ingredientesController,
+                decoration: InputDecoration(
+                  labelText: 'Ingredientes',
+                  hintText: 'Ingrediente1, Ingrediente2, ...',
+                  border: OutlineInputBorder(),
                 ),
               ),
+              SizedBox(height: 20),
+              buildCheckbox("Carn", _isCarn, (bool value) {
+                setState(() { _isCarn = value; });
+              }),
+              buildCheckbox("Celiacs", _isCeliacs, (bool value) {
+                setState(() { _isCeliacs = value; });
+              }),
+              buildCheckbox("Pasta", _isPasta, (bool value) {
+                setState(() { _isPasta = value; });
+              }),
+              buildCheckbox("Peix", _isPeix, (bool value) {
+                setState(() { _isPeix = value; });
+              }),
+              buildCheckbox("Pizza", _isPizza, (bool value) {
+                setState(() { _isPizza = value; });
+              }),
+              buildCheckbox("Vega", _isVega, (bool value) {
+                setState(() { _isVega = value; });
+              }),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildCheckbox(String title, bool boolValue, Function onChanged) {
+    return CheckboxListTile(
+      title: Text(title),
+      value: boolValue,
+      onChanged: (bool? newValue) {
+        onChanged(newValue ?? false);
+      },
+      controlAffinity: ListTileControlAffinity.leading,  // Pone el checkbox al inicio del ListTile
     );
   }
 }
