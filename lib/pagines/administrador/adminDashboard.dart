@@ -26,7 +26,7 @@ class AdminDashboardPage extends StatelessWidget {
                 height: 200,
                 child: Center(
                   child: Text(
-                    'Añadir platos',
+                    'Administrar Menu',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 20),
                   ),
