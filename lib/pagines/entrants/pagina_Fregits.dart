@@ -1,47 +1,19 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dish_dash/Clases/Plat.dart';
-import 'package:dish_dash/Components/platoCard.dart';
 import 'package:dish_dash/Clases/model_dades.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:dish_dash/pagines/menus/pagina_menu_client.dart';
-import 'package:dish_dash/pagines/primersplats/pagina_primers_plats.dart';
+import 'package:dish_dash/Components/platoCard.dart';
 
-class PaginaEntrants extends StatelessWidget {
-  const PaginaEntrants({super.key});
+class PaginaFregits extends StatelessWidget {
+  const PaginaFregits ({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Expanded(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PaginaMenuClient()));
-                },
-                child: Text('Amanides', style: TextStyle(color: Colors.white)),
-              ),
-            ),
-            Expanded(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PaginaPrimersPlats()));
-                },
-                child: Text('Fregits', style: TextStyle(color: Colors.white)),
-              ),
-            ),
-          ],
-        ),
+        title: Text('Fregits'),
+        centerTitle: true,
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('entrants').snapshots(),
@@ -50,12 +22,16 @@ class PaginaEntrants extends StatelessWidget {
             return Center(child: CircularProgressIndicator());
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('No hay entrants disponibles'));
+            return Center(child: Text('No hay amanides disponibles'));
           }
 
-          List<Plat> plats = snapshot.data!.docs.map((DocumentSnapshot doc) {
-            return Plat.fromFirestore(doc);
-          }).toList();
+          List<Plat> platos = snapshot.data!.docs.map((DocumentSnapshot doc) {
+            var data = doc.data() as Map<String, dynamic>; 
+            if (data['Fregits'] == true) { 
+              return Plat.fromFirestore(doc);
+            }
+            return null;
+          }).whereType<Plat>().toList();
 
           return GridView.builder(
             padding: const EdgeInsets.all(8.0),
@@ -64,9 +40,9 @@ class PaginaEntrants extends StatelessWidget {
               crossAxisSpacing: 8.0,
               mainAxisSpacing: 8.0,
             ),
-            itemCount: plats.length,
+            itemCount: platos.length,
             itemBuilder: (context, index) {
-              final plato = plats[index];
+              final plato = platos[index];
               return PlatoCard(
                 plato: plato,
                 onAdd: () {

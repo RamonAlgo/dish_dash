@@ -1,12 +1,15 @@
-import 'dart:html';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dish_dash/Clases/Plat.dart';
 import 'package:dish_dash/Clases/model_dades.dart';
-import 'package:dish_dash/pagines/menus/pagina_menu_client.dart';
+import 'package:dish_dash/pagines/primersplats/pagina_carn.dart';
+import 'package:dish_dash/pagines/primersplats/pagina_celiacs.dart';
+import 'package:dish_dash/pagines/primersplats/pagina_pasta.dart';
+import 'package:dish_dash/pagines/primersplats/pagina_peix.dart';
+import 'package:dish_dash/pagines/primersplats/pagina_pizza.dart';
+import 'package:dish_dash/pagines/primersplats/pagina_vega.dart';
 import 'package:flutter/material.dart';
 import 'package:dish_dash/Components/platoCard.dart';
 import 'package:provider/provider.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class PaginaPrimersPlats extends StatelessWidget {
   const PaginaPrimersPlats({super.key});
@@ -24,7 +27,7 @@ class PaginaPrimersPlats extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaginaMenuClient()));
+                          builder: (context) => PaginaPizza()));
                 },
                 child: Text('Pizza', style: TextStyle(color: Colors.white)),
               ),
@@ -35,7 +38,7 @@ class PaginaPrimersPlats extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaginaMenuClient()));
+                          builder: (context) => PaginaPasta()));
                 },
                 child: Text('Pasta', style: TextStyle(color: Colors.white)),
               ),
@@ -46,7 +49,7 @@ class PaginaPrimersPlats extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaginaMenuClient()));
+                          builder: (context) => PaginaPeix()));
                 },
                 child: Text('Peix', style: TextStyle(color: Colors.white)),
               ),
@@ -57,7 +60,7 @@ class PaginaPrimersPlats extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaginaPrimersPlats()));
+                          builder: (context) => PaginaCarn()));
                 },
                 child: Text('Carn', style: TextStyle(color: Colors.white)),
               ),
@@ -68,7 +71,7 @@ class PaginaPrimersPlats extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaginaPrimersPlats()));
+                          builder: (context) => PaginaVega()));
                 },
                 child: Text('Vegà', style: TextStyle(color: Colors.white)),
               ),
@@ -79,7 +82,7 @@ class PaginaPrimersPlats extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaginaPrimersPlats()));
+                          builder: (context) => PaginaCeliacs()));
                 },
                 child: Text('Celìacs', style: TextStyle(color: Colors.white)),
               ),

@@ -1,6 +1,5 @@
 import 'package:dish_dash/auth/servei_auth.dart';
 import 'package:dish_dash/pagines/administrador/adminDashboard.dart';
-import 'package:dish_dash/pagines/administrador/pagina_administrador.dart';
 import 'package:dish_dash/pagines/cuina/pagina_cuina.dart';
 import 'package:dish_dash/pagines/pagina_inicial_client.dart';
 import 'package:dish_dash/tpv/paginatpv.dart';

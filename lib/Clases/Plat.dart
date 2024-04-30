@@ -21,12 +21,10 @@ class Plat {
     required this.caracteristicas,
   });
 
-  // Método de fábrica adaptable basado en el tipo de plato
   factory Plat.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    String tipoPlato = data['TipoPlato'];  // Asume que cada documento tiene un campo 'TipoPlato'
+    String tipoPlato = data['TipoPlato'];  
 
-    // Definiendo mapas de características para cada tipo de plato
     Map<String, Map<String, bool>> characteristicsForType = {
       'PrimersPlats': {
         'Carn': data['Carn'] ?? false,
@@ -46,10 +44,13 @@ class Plat {
       'Entrants': {
         'Amanides': data['Amanides'] ?? false,
         'Fregits': data['Fregits'] ?? false,
+      },
+      'Bebidas': {
+        'Cocktails': data['Cocktails'] ?? false,
+        'Refrescs': data['Refrescs'] ?? false,
       }
     };
 
-    // Asegurándonos de obtener el mapa correcto de características según el tipo de plato o un mapa vacío si no se encuentra
     Map<String, bool> selectedCharacteristics = characteristicsForType[tipoPlato] ?? {};
 
     return Plat(

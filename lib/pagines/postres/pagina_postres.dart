@@ -2,9 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dish_dash/Clases/Plat.dart';
 import 'package:dish_dash/Clases/model_dades.dart';
 import 'package:dish_dash/Components/platoCard.dart';
+import 'package:dish_dash/pagines/postres/pagina_calents.dart';
+import 'package:dish_dash/pagines/postres/pagina_freds.dart';
+import 'package:dish_dash/pagines/postres/pagina_fruita.dart';
+import 'package:dish_dash/pagines/postres/pagina_gelats.dart';
+import 'package:dish_dash/pagines/postres/pagina_semi_freds.dart';
 import 'package:flutter/material.dart';
-import 'package:dish_dash/pagines/menus/pagina_menu_client.dart';
-import 'package:dish_dash/pagines/primersplats/pagina_primers_plats.dart';
 import 'package:provider/provider.dart';
 
 class PaginaPostres extends StatelessWidget {
@@ -23,7 +26,7 @@ class PaginaPostres extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaginaMenuClient()));
+                          builder: (context) => PaginaFruita()));
                 },
                 child: Text('Fruita', style: TextStyle(color: Colors.white)),
               ),
@@ -34,7 +37,7 @@ class PaginaPostres extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaginaPrimersPlats()));
+                          builder: (context) => PaginaGelats()));
                 },
                 child: Text('Gelats ', style: TextStyle(color: Colors.white)),
               ),
@@ -45,7 +48,7 @@ class PaginaPostres extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaginaPrimersPlats()));
+                          builder: (context) => PaginaFreds()));
                 },
                 child: Text('Freds ', style: TextStyle(color: Colors.white)),
               ),
@@ -56,7 +59,7 @@ class PaginaPostres extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaginaPrimersPlats()));
+                          builder: (context) => PaginaSemiFreds()));
                 },
                 child: Text('Semifreds ', style: TextStyle(color: Colors.white)),
               ),
@@ -67,12 +70,11 @@ class PaginaPostres extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaginaPrimersPlats()));
+                          builder: (context) => PaginaCalents()));
                 },
                 child: Text('Calents ', style: TextStyle(color: Colors.white)),
               ),
             ),
-            // añadir más aquí
           ],
         ),
         actions: <Widget>[],

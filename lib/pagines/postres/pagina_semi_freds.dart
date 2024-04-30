@@ -1,33 +1,33 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:provider/provider.dart';
 import 'package:dish_dash/Clases/Plat.dart';
-import 'package:dish_dash/Components/platoCard.dart';
 import 'package:dish_dash/Clases/model_dades.dart';
+import 'package:dish_dash/Components/platoCard.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class Cocktails extends StatelessWidget {
-  const Cocktails({super.key});
+class PaginaSemiFreds extends StatelessWidget {
+  const PaginaSemiFreds ({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cocktails'),
+        title: Text('Postres Semi Freds'),
         centerTitle: true,
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('bebidas').snapshots(),
+        stream: FirebaseFirestore.instance.collection('postres').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('No hay cocktails disponibles'));
+            return Center(child: Text('No hay amanides disponibles'));
           }
 
           List<Plat> platos = snapshot.data!.docs.map((DocumentSnapshot doc) {
-            var data = doc.data() as Map<String, dynamic>; // Realizando un casting a Map<String, dynamic>
-            if (data['Cocktails'] == true) { // Ahora puedes acceder a 'esCocktail' de manera segura
+            var data = doc.data() as Map<String, dynamic>;
+            if (data['SemiFreds'] == true) { 
               return Plat.fromFirestore(doc);
             }
             return null;

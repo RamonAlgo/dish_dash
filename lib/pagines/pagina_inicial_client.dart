@@ -1,13 +1,10 @@
-import 'package:dish_dash/Clases/model_dades.dart';
 import 'package:dish_dash/pagines/begudes/pagina_begudes.dart';
 import 'package:dish_dash/pagines/carrito/rebut_client.dart';
 import 'package:dish_dash/pagines/menus/pagina_menu_client.dart';
 import 'package:dish_dash/pagines/postres/pagina_postres.dart';
 import 'package:dish_dash/pagines/primersplats/pagina_primers_plats.dart';
-import 'package:dish_dash/pagines/segonsplats/pagina_segons_plats.dart';
+import 'package:dish_dash/pagines/entrants/pagina_entrants.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class PaginaInicialClient extends StatelessWidget {
   const PaginaInicialClient({super.key});
