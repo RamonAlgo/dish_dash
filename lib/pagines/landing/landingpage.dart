@@ -12,8 +12,7 @@ class _LandingPageState extends State<LandingPage> {
   final PageController _pageController = PageController();
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _emailController = TextEditingController();
-    bool _isHovering = false;
-
+  bool _isHovering = false;
 
   int _currentPage = 0;
   final List<String> _images = [
@@ -22,7 +21,7 @@ class _LandingPageState extends State<LandingPage> {
     "images/restaurant3.jpg",
   ];
 
-  final double promotionalSectionHeight = 400; 
+  final double promotionalSectionHeight = 400;
 
   @override
   void dispose() {
@@ -61,13 +60,14 @@ class _LandingPageState extends State<LandingPage> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
             colors: [
               Colors.lightGreen.shade600,
               Colors.green.shade500,
               Colors.green.shade400,
-              Colors.lightGreen.shade300
+              Colors.lightGreen.shade200,
+              Colors.lightGreen.shade200,
             ],
           ),
         ),
@@ -75,10 +75,25 @@ class _LandingPageState extends State<LandingPage> {
           controller: _scrollController,
           child: Column(
             children: <Widget>[
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: TextButton(
+                    onPressed: _handleLogin,
+                    child: Text(
+                      "Ya eres cliente? Iniciar sesión",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               promotionalSection(),
-              const SizedBox(height: 50), 
-              Image.asset("images/añadirimagen.png",
-                  fit: BoxFit.cover), 
+              SizedBox(height: 50),
+              Image.asset("images/add_image_here.png", fit: BoxFit.cover),
               _buildAportamosSection(context),
             ],
           ),
@@ -87,82 +102,98 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
-  Widget promotionalSection() {
-    return Container(
-      height: 400,
-      padding: EdgeInsets.symmetric(vertical: 20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset("images/logorestaurafacil.png", width: 120),
-          const Text('Bienvenido a Restaurafacil',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 34,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white)),
-          SizedBox(height: 16),
-          const Text('Optimiza tu restaurante desde 10€ al mes',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white)),
-          SizedBox(height: 8),
-          const Text(
-              'Un servicio completo para mejorar la gestión y la experiencia del cliente.',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, color: Colors.white70)),
-          SizedBox(height: 20),
-          MouseRegion(
-            onEnter: (_) => setState(() => _isHovering = true),
-            onExit: (_) => setState(() => _isHovering = false),
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.6,
-              child: TextField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  hintText: 'Introduce tu email',
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide(
-                          color: _isHovering ? Colors.black : Colors.transparent)),
-                  suffixIcon: Container(
-                    margin: EdgeInsets.only(right: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.green.shade800,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        "Solicitar Información",
-                        style: TextStyle(color: Colors.white),
-                      ),
+ Widget promotionalSection() {
+  return Container(
+    height: promotionalSectionHeight,
+    padding: EdgeInsets.symmetric(vertical: 20),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset("images/logorestaurafacil.png", width: 120),
+            SizedBox(width: 20),  
+            Flexible( 
+              child: Text('Restaurafacil',
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                      fontSize: 34,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white)),
+            ),
+          ],
+        ),
+        SizedBox(height: 16),
+        Text('Optimiza tu restaurante desde 10€ al mes',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Colors.white)),
+        SizedBox(height: 8),
+        Text(
+            'Un servicio completo para mejorar la gestión y la experiencia del cliente.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16, color: Colors.white70)),
+        SizedBox(height: 20),
+        MouseRegion(
+          onEnter: (_) => setState(() => _isHovering = true),
+          onExit: (_) => setState(() => _isHovering = false),
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.6,
+            child: TextField(
+              controller: _emailController,
+              decoration: InputDecoration(
+                hintText: 'Introduce tu email',
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide(
+                        color: _isHovering ? Colors.black : Colors.transparent)),
+                suffixIcon: Container(
+                  margin: EdgeInsets.only(right: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.green.shade800,
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      "Solicitar Información",
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
+
   Widget _buildAportamosSection(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Colors.green.shade300,
+            Colors.white70,
+            Colors.white60,
+          ],
+          stops: [0.1, 0.5, 0.9],
+        ),
+      ),
       child: Column(
         children: [
-          const Text('Qué aportamos?',
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white)),
-          const SizedBox(height: 20),
+          const SizedBox(height: 50),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -175,21 +206,23 @@ class _LandingPageState extends State<LandingPage> {
           const Text(
               'Empleamos tecnicas de Data Mining para optimizar la oferta de platos disponible ',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, color: Colors.white)),
+              style: TextStyle(fontSize: 16, color: Colors.black)),
           const SizedBox(height: 20),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              _buildFeatureIcon(context, Icons.lock, "Seguridad"),
               _buildFeatureIcon(
-                  context, Icons.restaurant_menu, "Gestión de platos"),
+                  context, Icons.event_available, "Disponible 24 * 7"),
             ],
           ),
           const SizedBox(height: 20),
-          const Text('Modificación de la oferta de platos en cuestión de segundos',
+          const Text(
+              'Usamos tecnicas de seguridad y integridad complejas para garantizar disponibilidad total',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 16, color: Colors.white)),
           const SizedBox(height: 20),
-          Image.asset("images/añadirimagengrafico.png", fit: BoxFit.cover),
+          Image.asset("images/admindashboard.png", fit: BoxFit.cover),
         ],
       ),
     );
@@ -199,25 +232,28 @@ class _LandingPageState extends State<LandingPage> {
     return Column(
       children: [
         Container(
-          width: 50, 
-          height: 50, 
+          width: 50,
+          height: 50,
           decoration: BoxDecoration(
-            color: Colors.white, 
-            borderRadius: BorderRadius.circular(10), 
+            color: Colors.green.shade700,
+            borderRadius: BorderRadius.circular(10),
           ),
           child: Icon(
             icon,
             size: 30,
-            color: Colors.lightGreen,
+            color: Color.fromARGB(255, 49, 49, 49),
           ),
-          alignment: Alignment.center, 
+          alignment: Alignment.center,
         ),
-        SizedBox(height: 8),
+        SizedBox(
+          height: 10,
+          width: 10,
+        ),
         Text(label,
             style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.white)),
+                color: Colors.black)),
       ],
     );
   }
