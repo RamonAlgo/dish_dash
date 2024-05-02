@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:dish_dash/Clases/Plat.dart'; 
+import 'package:dish_dash/Clases/Plat.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PlatoCard extends StatelessWidget {
   final Plat plato;
@@ -10,6 +11,21 @@ class PlatoCard extends StatelessWidget {
     required this.plato,
     required this.onAdd,
   }) : super(key: key);
+
+  String _getCollectionName(String tipoPlato) {
+  switch (tipoPlato) {
+    case 'Bebidas':
+      return 'bebidas';
+    case 'Entrants':
+      return 'entrants';
+    case 'PrimersPlats':
+      return 'primersPlats';
+    case 'Postre':
+      return 'postres';
+    default:
+      return 'unknown';
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +48,47 @@ class PlatoCard extends StatelessWidget {
                   ?.copyWith(color: Colors.green),
             ),
           ),
-          Expanded(
-            child: Image.network(
-              plato.imageUrl,
-              width: double.infinity,
-              fit: BoxFit.fill,
-            ),
+          FutureBuilder<DocumentSnapshot>(
+            future: FirebaseFirestore.instance
+              .collection(_getCollectionName(plato.tipoPlato))
+              .doc(plato.idPlat)
+              .get(),
+            builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Expanded(child: Center(child: CircularProgressIndicator()));
+              }
+              if (snapshot.hasError) {
+                return Expanded(child: Center(child: Text("Error al cargar datos: ${snapshot.error}")));
+              }
+              if (snapshot.hasData && snapshot.data!.exists) {
+                Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+                String imageUrl = data['ImageUrl'];
+                if (imageUrl == null) {
+                  return Expanded(child: Center(child: Text("Imagen no disponible")));
+                }
+                return Expanded(
+                  child: Image.network(
+                    imageUrl,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) return child;  
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                  : null,
+                        ),
+                      );
+                    },
+                    errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                      return Text(exception.toString());
+                    },
+                  ),
+                );
+              }
+              return Expanded(child: Center(child: Text("Imagen no disponible")));
+            },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -67,7 +118,7 @@ class PlatoCard extends StatelessWidget {
             ],
           ),
         ],
-      ),
+      )
     );
   }
 
