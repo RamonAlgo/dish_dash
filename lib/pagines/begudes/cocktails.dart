@@ -26,9 +26,15 @@ class Cocktails extends StatelessWidget {
           }
 
           List<Plat> platos = snapshot.data!.docs.map((DocumentSnapshot doc) {
-            var data = doc.data() as Map<String, dynamic>; // Realizando un casting a Map<String, dynamic>
-            if (data['Cocktails'] == true) { // Ahora puedes acceder a 'esCocktail' de manera segura
-              return Plat.fromFirestore(doc);
+            if (doc.id == "counter") {
+              return null;
+            }
+            var data = doc.data() as Map<String, dynamic>;
+            if (data['Caracteristicas'] != null) {
+              var caracteristicas = data['Caracteristicas'] as Map<String, dynamic>;
+              if (caracteristicas['Cocktails'] == true) {
+                return Plat.fromFirestore(doc);
+              }
             }
             return null;
           }).whereType<Plat>().toList();

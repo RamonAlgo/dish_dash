@@ -9,6 +9,7 @@ class Plat {
   double precio;
   int cantidad;
   Map<String, bool> caracteristicas;
+  String tipoPlato;
 
   Plat({
     required this.idPlat,
@@ -19,6 +20,7 @@ class Plat {
     required this.precio,
     this.cantidad = 1,
     required this.caracteristicas,
+    required this.tipoPlato,
   });
 
   factory Plat.fromFirestore(DocumentSnapshot doc) {
@@ -59,9 +61,10 @@ class Plat {
       nombrePlato: data['NombrePlato'] ?? '',
       descripcion: data['Descripcion'] ?? '',
       ingredientes: List<String>.from(data['Ingredientes'] ?? []),
-      precio: (data['Precio'] ?? 0.0).toDouble(),
+      precio: (data['Precio'] ?? 0.00).toDouble(),
       cantidad: data['Cantidad'] ?? 1,
       caracteristicas: selectedCharacteristics,
+      tipoPlato: tipoPlato,
     );
   }
 }

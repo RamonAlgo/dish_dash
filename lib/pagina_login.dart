@@ -78,7 +78,6 @@ class _PaginaLoginState extends State<PaginaLogin> {
     return Scaffold(
       body: Stack(
         children: [
-          // Fondo
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(

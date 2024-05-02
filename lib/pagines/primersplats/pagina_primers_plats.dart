@@ -87,8 +87,6 @@ class PaginaPrimersPlats extends StatelessWidget {
                 child: Text('Celìacs', style: TextStyle(color: Colors.white)),
               ),
             ),
-
-            // añadir mas aqui
           ],
         ),
         actions: <Widget>[],
@@ -96,43 +94,43 @@ class PaginaPrimersPlats extends StatelessWidget {
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('primersPlats').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('No hay platos disponibles'));
-          }
-
-          List<Plat> plats = snapshot.data!.docs.map((DocumentSnapshot doc) {
-            return Plat.fromFirestore(doc);
-          }).toList();
-
-          return GridView.builder(
-            padding: const EdgeInsets.all(8.0),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              crossAxisSpacing: 8.0,
-              mainAxisSpacing: 8.0,
-            ),
-            itemCount: plats.length,
-            itemBuilder: (context, index) {
-              final plato = plats[index];
-              return PlatoCard(
-                plato: plato,
-                onAdd: () {
-                  Provider.of<ModelDades>(context, listen: false).agregarAlCarrito(plato);
-                  final snackBar = SnackBar(
-                    backgroundColor: Color.fromARGB(255, 92, 174, 99),
-                    content: Text('${plato.nombrePlato} añadido al carrito'),
-                  );
-                  ScaffoldMessenger.of(context)
-                    ..hideCurrentSnackBar()
-                    ..showSnackBar(snackBar);
-                },
-              );
-            },
-          );
-        },
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return Center(child: Text('No hay platos disponibles'));
+            }
+            List<Plat> plats = snapshot.data!.docs
+              .where((doc) => doc.id != 'counter')
+              .map((DocumentSnapshot doc) {
+                return Plat.fromFirestore(doc);
+              }).toList();
+            return GridView.builder(
+              padding: const EdgeInsets.all(8.0),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 8.0,
+                mainAxisSpacing: 8.0,
+              ),
+              itemCount: plats.length,
+              itemBuilder: (context, index) {
+                final plato = plats[index];
+                return PlatoCard(
+                  plato: plato,
+                  onAdd: () {
+                    Provider.of<ModelDades>(context, listen: false).agregarAlCarrito(plato);
+                    final snackBar = SnackBar(
+                      backgroundColor: Color.fromARGB(255, 92, 174, 99),
+                      content: Text('${plato.nombrePlato} añadido al carrito'),
+                    );
+                    ScaffoldMessenger.of(context)
+                      ..hideCurrentSnackBar()
+                      ..showSnackBar(snackBar);
+                  },
+                );
+              },
+            );
+          },
       )
     );
   }

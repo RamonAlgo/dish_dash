@@ -26,9 +26,15 @@ class PaginaCeliacs extends StatelessWidget {
           }
 
           List<Plat> platos = snapshot.data!.docs.map((DocumentSnapshot doc) {
+            if (doc.id == "counter") {
+              return null;
+            }
             var data = doc.data() as Map<String, dynamic>;
-            if (data['Celiacs'] == true) { 
-              return Plat.fromFirestore(doc);
+            if (data['Caracteristicas'] != null) {
+              var caracteristicas = data['Caracteristicas'] as Map<String, dynamic>;
+              if (caracteristicas['Celiacs'] == true) {
+                return Plat.fromFirestore(doc);
+              }
             }
             return null;
           }).whereType<Plat>().toList();

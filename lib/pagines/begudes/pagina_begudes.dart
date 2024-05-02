@@ -35,7 +35,6 @@ class PaginaBegudes extends StatelessWidget {
                 child: Text('Cocktails ', style: TextStyle(color: Colors.white)),
               ),
             ),
-            // añadir mas aquí si es necesario
           ],
         ),
       ),
@@ -50,8 +49,11 @@ class PaginaBegudes extends StatelessWidget {
           }
 
           List<Plat> plats = snapshot.data!.docs.map((DocumentSnapshot doc) {
+            if (doc.id == "counter") {
+              return null;
+            }
             return Plat.fromFirestore(doc);
-          }).toList();
+          }).whereType<Plat>().toList();
 
           return GridView.builder(
             padding: const EdgeInsets.all(8.0),

@@ -24,11 +24,17 @@ class PaginaVega extends StatelessWidget {
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return Center(child: Text('No hay amanides disponibles'));
           }
-
+          
           List<Plat> platos = snapshot.data!.docs.map((DocumentSnapshot doc) {
+            if (doc.id == "counter") {
+              return null;
+            }
             var data = doc.data() as Map<String, dynamic>;
-            if (data['Vega'] == true) { 
-              return Plat.fromFirestore(doc);
+            if (data['Caracteristicas'] != null) {
+              var caracteristicas = data['Caracteristicas'] as Map<String, dynamic>;
+              if (caracteristicas['Vega'] == true) {
+                return Plat.fromFirestore(doc);
+              }
             }
             return null;
           }).whereType<Plat>().toList();

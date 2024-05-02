@@ -26,9 +26,15 @@ class PaginaAmanides extends StatelessWidget {
           }
 
           List<Plat> platos = snapshot.data!.docs.map((DocumentSnapshot doc) {
-            var data = doc.data() as Map<String, dynamic>; 
-            if (data['Amanides'] == true) { 
-              return Plat.fromFirestore(doc);
+            if (doc.id == "counter") {
+              return null;
+            }
+            var data = doc.data() as Map<String, dynamic>;
+            if (data['Caracteristicas'] != null) {
+              var caracteristicas = data['Caracteristicas'] as Map<String, dynamic>;
+              if (caracteristicas['Amanides'] == true) {
+                return Plat.fromFirestore(doc);
+              }
             }
             return null;
           }).whereType<Plat>().toList();

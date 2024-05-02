@@ -19,10 +19,8 @@ WidgetsFlutterBinding.ensureInitialized();
       child:  MyApp(),
     ),
   );
-
-  
-
 }
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -37,7 +35,6 @@ class MyApp extends StatelessWidget {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-        
           ),
         ),
       ),
