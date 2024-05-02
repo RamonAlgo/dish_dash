@@ -18,6 +18,7 @@ class _PaginaAdministradorState extends State<PaginaAdministrador> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Añadir Plato'),
+        backgroundColor: Colors.deepOrangeAccent,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
