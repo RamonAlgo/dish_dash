@@ -5,24 +5,24 @@ import 'package:dish_dash/Clases/Plat.dart';
 import 'package:dish_dash/Clases/model_dades.dart';
 import 'package:dish_dash/Components/platoCard.dart';
 
-class Refrescs extends StatelessWidget {
-  const Refrescs({super.key});
+class PaginaFregits extends StatelessWidget {
+  const PaginaFregits ({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Refrescs'),
+        title: Text('Fregits'),
         centerTitle: true,
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('bebidas').snapshots(),
+        stream: FirebaseFirestore.instance.collection('entrants').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('No hay refrescs disponibles'));
+            return Center(child: Text('No hay amanides disponibles'));
           }
 
           List<Plat> platos = snapshot.data!.docs.map((DocumentSnapshot doc) {
@@ -32,7 +32,7 @@ class Refrescs extends StatelessWidget {
             var data = doc.data() as Map<String, dynamic>;
             if (data['Caracteristicas'] != null) {
               var caracteristicas = data['Caracteristicas'] as Map<String, dynamic>;
-              if (caracteristicas['Refrescs'] == true) {
+              if (caracteristicas['Fregits'] == true) {
                 return Plat.fromFirestore(doc);
               }
             }

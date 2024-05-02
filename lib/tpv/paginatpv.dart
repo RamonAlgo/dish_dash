@@ -65,7 +65,7 @@ class _PaginaTPVState extends State<paginaTPV> {
                         onPressed: () => marcarComoPagado(pedido),
                         child: Text('Marcar como pagado'),
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.green,
+                          backgroundColor: Colors.green,
                         ),
                       ),
                     ),
