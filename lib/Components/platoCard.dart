@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:dish_dash/Clases/Plat.dart'; // Asegúrate de que la ruta de importación sea correcta
+import 'package:dish_dash/Clases/Plat.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PlatoCard extends StatelessWidget {
   final Plat plato;
@@ -10,6 +11,21 @@ class PlatoCard extends StatelessWidget {
     required this.plato,
     required this.onAdd,
   }) : super(key: key);
+
+  String _getCollectionName(String tipoPlato) {
+  switch (tipoPlato) {
+    case 'Bebidas':
+      return 'bebidas';
+    case 'Entrants':
+      return 'entrants';
+    case 'PrimersPlats':
+      return 'primersPlats';
+    case 'Postre':
+      return 'postres';
+    default:
+      return 'unknown';
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -32,19 +48,48 @@ class PlatoCard extends StatelessWidget {
                   ?.copyWith(color: Colors.green),
             ),
           ),
-          Expanded(
-            child: Image.asset(
-              plato.imageUrl,
-              width: double.infinity,
-              fit: BoxFit.fill,
-            ),
+          FutureBuilder<DocumentSnapshot>(
+            future: FirebaseFirestore.instance
+              .collection(_getCollectionName(plato.tipoPlato))
+              .doc(plato.idPlat)
+              .get(),
+            builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Expanded(child: Center(child: CircularProgressIndicator()));
+              }
+              if (snapshot.hasError) {
+                return Expanded(child: Center(child: Text("Error al cargar datos: ${snapshot.error}")));
+              }
+              if (snapshot.hasData && snapshot.data!.exists) {
+                Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+                String imageUrl = data['ImageUrl'];
+                if (imageUrl == null) {
+                  return Expanded(child: Center(child: Text("Imagen no disponible")));
+                }
+                return Expanded(
+                  child: Image.network(
+                    imageUrl,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) return child;  
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                  : null,
+                        ),
+                      );
+                    },
+                    errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                      return Text(exception.toString());
+                    },
+                  ),
+                );
+              }
+              return Expanded(child: Center(child: Text("Imagen no disponible")));
+            },
           ),
-
-          /*Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text('Precio: \€${plato.precio.toString()}'),
-          ),*/
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -63,7 +108,6 @@ class PlatoCard extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   onAdd();
-                  _mostrarPopup(context);
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
@@ -74,36 +118,9 @@ class PlatoCard extends StatelessWidget {
             ],
           ),
         ],
-      ),
+      )
     );
   }
-
- void _mostrarPopup(BuildContext context) {
-    OverlayEntry overlayEntry = OverlayEntry(
-      builder: (context) => Center(
-        child: Container(
-          width: MediaQuery.of(context).size.width, 
-          padding: EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.7),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: const Center(
-            child: Text(
-              'Plat afegit al carrito',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20, color: Colors.yellow),
-            ),
-          ),
-        ),
-      ),
-    );
-
-    Overlay.of(context).insert(overlayEntry);
-
-    Future.delayed(Duration(seconds: 1)).then((value) => overlayEntry.remove());
-}
-
 
   void _mostrarDialogoIngredientes(BuildContext context) {
     showDialog(

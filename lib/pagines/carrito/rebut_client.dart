@@ -1,9 +1,12 @@
 import 'package:dish_dash/Clases/Plat.dart';
 import 'package:dish_dash/Clases/model_dades.dart';
+import 'package:dish_dash/pagines/carrito/paginacomandes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+
 
 class PaginaCarrito extends StatefulWidget {
   const PaginaCarrito({Key? key}) : super(key: key);
@@ -51,65 +54,14 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
         title: Text('Carrito'),
         actions: [
           IconButton(
-            icon: Icon(Icons.delete_forever),
-            onPressed: () {
-              final TextEditingController _usernameController =
-                  TextEditingController();
-              final TextEditingController _passwordController =
-                  TextEditingController();
-
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text("Accés Administratiu"),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextField(
-                          controller: _usernameController,
-                          decoration: const InputDecoration(
-                            labelText: 'Usuari',
-                          ),
-                        ),
-                        TextField(
-                          controller: _passwordController,
-                          decoration: const InputDecoration(
-                            labelText: 'Contrasenya',
-                          ),
-                          obscureText: true,
-                        ),
-                      ],
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        child: const Text("Cancelar"),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      TextButton(
-                        child: const Text("Confirmar"),
-                        onPressed: () {
-                          if (_usernameController.text == 'admin' &&
-                              _passwordController.text == 'admin') {
-                            Provider.of<ModelDades>(context, listen: false)
-                                .vaciarCarrito();
-
-                            Navigator.of(context).pop();
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Credencials incorrectes"),
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                    ],
-                  );
-                },
+            icon: Icon(Icons.history),
+            onPressed: () async {
+              String mesaId = await obtenerYProcesarEmail();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PaginaMenjarDemanat(mesaId: mesaId),
+                ),
               );
             },
           ),
@@ -157,17 +109,17 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 16.0),
         child: SizedBox(
-          width: MediaQuery.of(context).size.width - 32, // Ancho igual al ancho de la pantalla menos el padding horizontal
+          width: MediaQuery.of(context).size.width - 32,
           child: ElevatedButton(
             onPressed: () {
               insertarDatos();
             },
             style: ElevatedButton.styleFrom(
-              primary: Colors.green,
+              backgroundColor: Colors.green,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
-              padding: EdgeInsets.symmetric(vertical: 16.0), // Padding vertical
+              padding: EdgeInsets.symmetric(vertical: 16.0),
             ),
             child: Text(
               'Confirmar pedido',
@@ -179,17 +131,18 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
     );
   }
 
-  obtenerYProcesarEmail() {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    final User? usuario = auth.currentUser;
+  
 
+  Future<String> obtenerYProcesarEmail() async {
+    final User? usuario = FirebaseAuth.instance.currentUser;
     if (usuario != null && usuario.email != null) {
       String email = usuario.email!;
-
-      return procesarEmail(email);
-    } else {
-      print("No hay usuario logueado o el usuario no tiene un email.");
+      List<String> partes = email.split('@');
+      if (partes.isNotEmpty) {
+        return partes[0];
+      }
     }
+    return 'defaultMesaId'; 
   }
 
   procesarEmail(String email) {
@@ -198,35 +151,72 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
     if (partes.isNotEmpty) {
       String parteDeseada = partes[0];
       return (parteDeseada);
-      // llamada a insertarDatos
     } else {}
   }
 
-  void insertarDatos() {
-    final carrito =
-        Provider.of<ModelDades>(context, listen: false).carritoGlobal;
-    String idmesa = obtenerYProcesarEmail();
-    print(idmesa);
-    if (carrito.isNotEmpty) {
-      final List<Map<String, dynamic>> platosData = carrito.map((plato) {
-        return {
-          'idPlat': plato.idPlat,
-          'nom': plato.nombrePlato,
-          'cantitat': plato.cantidad,
-          'preu': plato.precio
-        };
-      }).toList();
-      print(platosData);
-      firestore
-          .collection('mesas')
-          .doc(idmesa)
-          .set({'platos': platosData}).then((_) {
-        print('Datos insertados correctamente');
-      }).catchError((error) {
-        print('Error al insertar datos: $error');
-      });
-    } else {
-      print('El carrito está vacío');
-    }
+  void insertarDatos() async {
+  final carrito = Provider.of<ModelDades>(context, listen: false).carritoGlobal;
+  String idmesa = await obtenerYProcesarEmail(); 
+
+  DocumentSnapshot snapshot = await firestore.collection('mesas').doc(idmesa).get();
+
+  if (snapshot.exists) {
+    final List<Map<String, dynamic>> platosData = carrito.map((plato) {
+      return {
+        'idPlat': plato.idPlat,
+        'nom': plato.nombrePlato,
+        'cantitat': plato.cantidad,
+        'preu': plato.precio,
+        'entregado': false
+      };
+    }).toList();
+
+    firestore.collection('mesas').doc(idmesa).update({
+      'platos': FieldValue.arrayUnion(platosData),
+      'timestamp': Timestamp.now()
+    }).then((_) {
+      Provider.of<ModelDades>(context, listen: false).vaciarCarrito();
+      showAwesomeSnackbar(context, 'Pedido confirmado.', ContentType.success);
+    }).catchError((error) {
+      print('Error al insertar datos: $error');
+      showAwesomeSnackbar(context, 'Error al confirmar pedido: $error', ContentType.failure);
+    });
+  } else {
+    final List<Map<String, dynamic>> platosData = carrito.map((plato) {
+      return {
+        'idPlat': plato.idPlat,
+        'nom': plato.nombrePlato,
+        'cantitat': plato.cantidad,
+        'preu': plato.precio,
+        'entregado': false
+      };
+    }).toList();
+
+    firestore.collection('mesas').doc(idmesa).set({
+      'platos': platosData,
+      'mesaId': idmesa,
+      'timestamp': Timestamp.now()
+    }).then((_) {
+      Provider.of<ModelDades>(context, listen: false).vaciarCarrito();
+      showAwesomeSnackbar(context, 'Pedido confirmado.', ContentType.success);
+    }).catchError((error) {
+      print('Error al insertar datos: $error');
+      showAwesomeSnackbar(context, 'Error al confirmar pedido: $error', ContentType.failure);
+    });
   }
+}
+
+void showAwesomeSnackbar(BuildContext context, String message, ContentType contentType) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      backgroundColor: Colors.transparent, 
+      elevation: 0,
+      content: AwesomeSnackbarContent(
+        title: contentType == ContentType.success ? 'Éxito' : 'Error',
+        message: message,
+        contentType: contentType,
+      ),
+    ),
+  );
+}
 }

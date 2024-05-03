@@ -1,9 +1,13 @@
-import 'package:dish_dash/Clases/model_dades.dart';
-import 'package:dish_dash/pagines/menus/pagina_menu_client.dart';
-import 'package:dish_dash/pagines/primersplats/pagina_primers_plats.dart';
-import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dish_dash/Clases/Plat.dart';
+import 'package:dish_dash/Clases/model_dades.dart';
 import 'package:dish_dash/Components/platoCard.dart';
+import 'package:dish_dash/pagines/postres/pagina_calents.dart';
+import 'package:dish_dash/pagines/postres/pagina_freds.dart';
+import 'package:dish_dash/pagines/postres/pagina_fruita.dart';
+import 'package:dish_dash/pagines/postres/pagina_gelats.dart';
+import 'package:dish_dash/pagines/postres/pagina_semi_freds.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PaginaPostres extends StatelessWidget {
@@ -11,57 +15,6 @@ class PaginaPostres extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Plat> platos = [
-      Plat(
-        idPlat: 'p1',
-        imageUrl: 'images/pizzamargarita.png',
-        nombrePlato: 'Pizza Margarita',
-        descripcion: 'Pizza Margarita',
-        ingredientes: ['Tomate', 'Queso', 'Piña'],
-        precio: 10,
-      ),
-      Plat(
-        idPlat: 'p2',
-        imageUrl: 'images/pizza4quesos.png',
-        nombrePlato: 'Pizza 4 formatges',
-        descripcion: 'Pizza 4 formatges',
-        ingredientes: ['Tomate', 'Queso', 'Piña'],
-        precio: 10,
-      ),
-      Plat(
-        idPlat: 'p3',
-        imageUrl: 'images/pizzacarbonara.png',
-        nombrePlato: 'Pizza Carbonara',
-        descripcion: 'Pizza Carbonara',
-        ingredientes: ['Tomate', 'Queso', 'Piña'],
-        precio: 10,
-      ),
-      Plat(
-        idPlat: 'p4',
-        imageUrl: 'images/pizza4estacions.png',
-        nombrePlato: 'Pizza 4 estacions ',
-        descripcion: 'Pizza 4 estacions',
-        ingredientes: ['Tomate', 'Queso', 'Piña'],
-        precio: 10,
-      ),
-      Plat(
-        idPlat: 'p5',
-        imageUrl: 'images/pizzabolonyesa.png',
-        nombrePlato: 'Pizza bolonyesa',
-        descripcion: 'Pizza bolonyesa',
-        ingredientes: ['Tomate', 'Queso', 'Piña'],
-        precio: 10,
-      ),
-      Plat(
-        idPlat: 'p6',
-        imageUrl: 'images/pizzaambpinya.png',
-        nombrePlato: 'Pizza amb pinya',
-        descripcion: 'Pizza amb pinya',
-        ingredientes: ['Tomate', 'Queso', 'Piña'],
-        precio: 10,
-      ),
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -73,7 +26,7 @@ class PaginaPostres extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaginaMenuClient()));
+                          builder: (context) => PaginaFruita()));
                 },
                 child: Text('Fruita', style: TextStyle(color: Colors.white)),
               ),
@@ -84,19 +37,18 @@ class PaginaPostres extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaginaPrimersPlats()));
+                          builder: (context) => PaginaGelats()));
                 },
                 child: Text('Gelats ', style: TextStyle(color: Colors.white)),
               ),
             ),
-
             Expanded(
               child: TextButton(
                 onPressed: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaginaPrimersPlats()));
+                          builder: (context) => PaginaFreds()));
                 },
                 child: Text('Freds ', style: TextStyle(color: Colors.white)),
               ),
@@ -107,10 +59,9 @@ class PaginaPostres extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaginaPrimersPlats()));
+                          builder: (context) => PaginaSemiFreds()));
                 },
-                child:
-                    Text('Semifreds ', style: TextStyle(color: Colors.white)),
+                child: Text('Semifreds ', style: TextStyle(color: Colors.white)),
               ),
             ),
             Expanded(
@@ -119,34 +70,55 @@ class PaginaPostres extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaginaPrimersPlats()));
+                          builder: (context) => PaginaCalents()));
                 },
                 child: Text('Calents ', style: TextStyle(color: Colors.white)),
               ),
             ),
-
-            // añadir mas aqui
           ],
         ),
         actions: <Widget>[],
       ),
-     body: GridView.builder(
-        padding: const EdgeInsets.all(8.0),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 8.0,
-          mainAxisSpacing: 8.0,
-        ),
-        itemCount: platos.length,
-        itemBuilder: (context, index) {
-          final plato = platos[index];
-          return PlatoCard(
-            plato: plato,
-            onAdd: () {
-              Provider.of<ModelDades>(context, listen: false)
-                  .agregarAlCarrito(plato);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('${plato.nombrePlato} añadido')),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('postres').snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Center(child: Text('No hay postres disponibles'));
+          }
+
+          List<Plat> plats = snapshot.data!.docs.map((DocumentSnapshot doc) {
+            if (doc.id == "counter") {
+              return null;
+            }
+            return Plat.fromFirestore(doc);
+          }).whereType<Plat>().toList();
+
+
+          return GridView.builder(
+            padding: const EdgeInsets.all(8.0),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: 8.0,
+              mainAxisSpacing: 8.0,
+            ),
+            itemCount: plats.length,
+            itemBuilder: (context, index) {
+              final plato = plats[index];
+              return PlatoCard(
+                plato: plato,
+                onAdd: () {
+                  Provider.of<ModelDades>(context, listen: false).agregarAlCarrito(plato);
+                  final snackBar = SnackBar(
+                    backgroundColor: Color.fromARGB(255, 92, 174, 99),
+                    content: Text('${plato.nombrePlato} añadido al carrito'),
+                  );
+                  ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(snackBar);
+                },
               );
             },
           );
