@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-class paginaEstadistiquesAdministrador extends StatefulWidget {
-  const paginaEstadistiquesAdministrador({Key? key}) : super(key: key);
+class PaginaEstadisticasAdministrador extends StatefulWidget {
+  const PaginaEstadisticasAdministrador({Key? key}) : super(key: key);
 
   @override
-  State<paginaEstadistiquesAdministrador> createState() =>
+  State<PaginaEstadisticasAdministrador> createState() =>
       _PaginaEstadisticasAdministradorState();
 }
 
 class _PaginaEstadisticasAdministradorState
-    extends State<paginaEstadistiquesAdministrador> {
+    extends State<PaginaEstadisticasAdministrador> {
   late Stream<List<DocumentSnapshot>> _stream;
   late String _selectedYear;
   late String _selectedMonth;
@@ -36,97 +36,115 @@ class _PaginaEstadisticasAdministradorState
           .map((snapshot) => snapshot.docs);
     });
   }
-   
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Estadistiques'),
+        title: Text('Estadísticas del Restaurante'),
+        backgroundColor: Color.fromARGB(255, 66, 145, 206),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                DropdownButton<String>(
-                  value: _selectedYear,
-                  onChanged: (String? newValue) {
-                    if (newValue != null) {
-                      setState(() {
-                        _selectedYear = newValue;
-                        _updateStream();
-                      });
-                    }
-                  },
-                  items: List.generate(5, (index) {
-                    int year = DateTime.now().year - index;
-                    return DropdownMenuItem(
-                      value: year.toString(),
-                      child: Text(year.toString()),
-                    );
-                  }),
-                ),
-                SizedBox(width: 20),
-                DropdownButton<String>(
-                  value: _selectedMonth,
-                  onChanged: (String? newValue) {
-                    if (newValue != null) {
-                      setState(() {
-                        _selectedMonth = newValue;
-                        _updateStream();
-                      });
-                    }
-                  },
-                  items: List.generate(12, (index) {
-                    return DropdownMenuItem(
-                      value: (index + 1).toString().padLeft(2, '0'),
-                      child: Text((index + 1).toString().padLeft(2, '0')),
-                    );
-                  }),
-                ),
-              ],
-            ),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [
+              Colors.grey.shade100,
+              Colors.grey.shade200,
+              Colors.grey.shade300,
+            ],
           ),
-          Expanded(
-            child: StreamBuilder<List<DocumentSnapshot>>(
-              stream: _stream,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else {
-                  final data = snapshot.data!;
-                  List<FlSpot> spots = [];
-                  for (var i = 0; i < data.length; i++) {
-                    final recuento = data[i]['cantidad'] ?? 0;
-                    spots.add(FlSpot(i.toDouble(), recuento.toDouble()));
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  DropdownButton<String>(
+                    value: _selectedYear,
+                    onChanged: (String? newValue) {
+                      if (newValue != null) {
+                        setState(() {
+                          _selectedYear = newValue;
+                          _updateStream();
+                        });
+                      }
+                    },
+                    items: List.generate(5, (index) {
+                      int year = DateTime.now().year - index;
+                      return DropdownMenuItem(
+                        value: year.toString(),
+                        child: Text(year.toString()),
+                      );
+                    }),
+                  ),
+                  SizedBox(width: 20),
+                  DropdownButton<String>(
+                    value: _selectedMonth,
+                    onChanged: (String? newValue) {
+                      if (newValue != null) {
+                        setState(() {
+                          _selectedMonth = newValue;
+                          _updateStream();
+                        });
+                      }
+                    },
+                    items: List.generate(12, (index) {
+                      return DropdownMenuItem(
+                        value: (index + 1).toString().padLeft(2, '0'),
+                        child: Text((index + 1).toString().padLeft(2, '0')),
+                      );
+                    }),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: StreamBuilder<List<DocumentSnapshot>>(
+                stream: _stream,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (snapshot.data!.isEmpty) {
+                    return Center(child: Text('No hay datos disponibles'));
+                  } else {
+                    final data = snapshot.data!;
+                    return ChartWithLegend(data: data);
                   }
-
-                  return spots.isNotEmpty
-                      ? ChartWithLegend(spots: spots, data: data)
-                      : Text('No hay datos disponibles');
-                }
-              },
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
 class ChartWithLegend extends StatelessWidget {
-  final List<FlSpot> spots;
   final List<DocumentSnapshot> data;
 
-  const ChartWithLegend({Key? key, required this.spots, required this.data})
-      : super(key: key);
+  ChartWithLegend({Key? key, required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    List<PieChartSectionData> sections = data.map((doc) {
+      final count = doc['cantidad'] as int;
+      final index = data.indexOf(doc);
+      return PieChartSectionData(
+        color: Colors.primaries[index % Colors.primaries.length],
+        value: count.toDouble(),
+        title: '$count',
+        radius: 150,
+        titleStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+      );
+    }).toList();
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -134,45 +152,23 @@ class ChartWithLegend extends StatelessWidget {
           flex: 3,
           child: PieChart(
             PieChartData(
-              sections: spots.map((spot) {
-                return PieChartSectionData(
-                  color: Colors
-                      .primaries[spots.indexOf(spot) % Colors.primaries.length],
-                  value: spot.y,
-                  title: '${spot.y}',
-                  radius: 100,
-                );
-              }).toList(),
+              sections: sections,
+              sectionsSpace: 0,
             ),
           ),
         ),
         Expanded(
           flex: 1,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: spots.map((spot) {
-              final index = spots.indexOf(spot);
-              final id = data[index].id;
-              final nom = data[index]['nom'];
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 20,
-                      height: 20,
-                      color: Colors.primaries[index % Colors.primaries.length],
-                    ),
-                    SizedBox(width: 8),
-                    Text(
-                      'Plato $nom',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
+          child: ListView.builder(
+            itemCount: data.length,
+            itemBuilder: (context, index) {
+              final doc = data[index];
+              return ListTile(
+                leading: Icon(Icons.circle, color: Colors.primaries[index % Colors.primaries.length]),
+                title: Text(doc['nom']),
+                subtitle: Text('Cantidad vendida: ${doc['cantidad']}'),
               );
-            }).toList(),
+            },
           ),
         ),
       ],

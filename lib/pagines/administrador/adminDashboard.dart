@@ -8,6 +8,7 @@ class AdminDashboardPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Admin Dashboard'),
+        backgroundColor: Colors.deepOrangeAccent,
       ),
       body: Center(
         child: Row(
@@ -39,7 +40,7 @@ class AdminDashboardPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => paginaEstadistiquesAdministrador()),
+                      builder: (context) => PaginaEstadisticasAdministrador()),
                 );
               },
               child: Container(
