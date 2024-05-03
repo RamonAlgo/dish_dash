@@ -123,7 +123,8 @@ Future<String> getNextPlatId() async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Añadir Plato'),
+        title: Text('Añadir Plato'),
+        backgroundColor: Colors.deepOrangeAccent,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

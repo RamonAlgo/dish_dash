@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:dish_dash/pagina_login_externa.dart';
 
@@ -14,7 +15,6 @@ class _LandingPageState extends State<LandingPage> {
   final TextEditingController _emailController = TextEditingController();
   bool _isHovering = false;
 
-  int _currentPage = 0;
   final List<String> _images = [
     "images/restaurant1.jpg",
     "images/restaurant2.jpg",
@@ -146,7 +146,7 @@ class _LandingPageState extends State<LandingPage> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: _saveEmailToFirestore,
                       child: const Text(
                         "Solicitar Información",
                         style: TextStyle(color: Colors.white),
@@ -216,7 +216,7 @@ class _LandingPageState extends State<LandingPage> {
         ),
         SizedBox(height: 8),
         Container(
-          width: 120, // Controla el ancho del texto principal
+          width: 120, 
           child: Text(
             label,
             textAlign: TextAlign.center,
@@ -228,7 +228,7 @@ class _LandingPageState extends State<LandingPage> {
           ),
         ),
         Container(
-          width: 120, // Controla el ancho del texto adicional
+          width: 120, 
           child: Text(
             additionalText,
             textAlign: TextAlign.center,
@@ -241,7 +241,28 @@ class _LandingPageState extends State<LandingPage> {
       ],
     );
   }
+void _saveEmailToFirestore() async {
+  String email = _emailController.text.trim();
 
+  if (email.isEmpty || !RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email)) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Por favor, introduce un correo válido')),
+    );
+    return;
+  }
+
+  try {
+    await FirebaseFirestore.instance.collection('informacionSolicitada').add({'email': email});
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Correo guardado con éxito')),
+    );
+    _emailController.clear(); 
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Error al guardar el correo: $e')),
+    );
+  }
+}
   void _handleLogin() {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => paginaLoginExterna()));
