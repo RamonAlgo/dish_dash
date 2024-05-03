@@ -11,6 +11,8 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   final PageController _pageController = PageController();
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _emailController = TextEditingController();
+  bool _isHovering = false;
 
   int _currentPage = 0;
   final List<String> _images = [
@@ -18,185 +20,230 @@ class _LandingPageState extends State<LandingPage> {
     "images/restaurant2.jpg",
     "images/restaurant3.jpg",
   ];
+
+  final double promotionalSectionHeight = 600;
+
   @override
   void dispose() {
     _pageController.dispose();
     _scrollController.dispose();
+    _emailController.dispose();
     super.dispose();
-  }
-
-  void _handleLogin() {
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => paginaLoginExterna()));
   }
 
   @override
   void initState() {
     super.initState();
-    
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.doWhile(() async {
         await Future.delayed(Duration(seconds: 3));
-        if (_currentPage < _images.length - 1) {
-          _currentPage++;
-        } else {
-          _currentPage = 0;
-        }
-        if (_pageController.hasClients) {
-          _pageController.animateToPage(
-            _currentPage,
-            duration: Duration(milliseconds: 1500),
-            curve: Curves.easeInOut,
-          );
-        }
-        return true; 
+        return true;
       });
     });
-  }
-
-
-
-  void _scrollToSection() {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: Duration(seconds: 1),
-      curve: Curves.fastOutSlowIn,
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        actions: <Widget>[
-          TextButton(
-            onPressed: _handleLogin,
-            child: Text(
-              'Iniciar sesión',
-              style: TextStyle(color: Theme.of(context).primaryColor),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.lightGreen.shade600,
+              Colors.green.shade500,
+              Colors.green.shade400,
+              Colors.white
+            ],
+          ),
+        ),
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: TextButton(
+                    onPressed: _handleLogin,
+                    child: Text(
+                      "Ya eres cliente? Iniciar sesión",
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ),
+              promotionalSection(),
+              SizedBox(height: 50),
+              Image.asset("images/add_image_here.png", fit: BoxFit.cover),
+              _buildAportamosSection(context),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget promotionalSection() {
+    return Container(
+      height: promotionalSectionHeight,
+      padding: EdgeInsets.symmetric(vertical: 20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset("images/logorestaurafacil.png", width: 120),
+              SizedBox(width: 20),
+              Flexible(
+                child: Text('Restaurafacil',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        fontSize: 34,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white)),
+              ),
+            ],
+          ),
+          SizedBox(height: 16),
+          Text('Optimiza tu restaurante desde 10€ al mes',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white)),
+          SizedBox(height: 8),
+          Text(
+              'Un servicio completo para mejorar la gestión y la experiencia del cliente.',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16, color: Colors.white70)),
+          SizedBox(height: 20),
+          MouseRegion(
+            onEnter: (_) => setState(() => _isHovering = true),
+            onExit: (_) => setState(() => _isHovering = false),
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.6,
+              child: TextField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  hintText: 'Introduce tu email',
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide: BorderSide(
+                          color:
+                              _isHovering ? Colors.black : Colors.transparent)),
+                  suffixIcon: Container(
+                    margin: EdgeInsets.only(right: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.green.shade800,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: TextButton(
+                      onPressed: () {},
+                      child: const Text(
+                        "Solicitar Información",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
         ],
-      ),
-      body: SingleChildScrollView(
-        controller: _scrollController,
-        child: Column(
-          children: <Widget>[
-            Container(
-              height: 900,
-              child: PageView.builder(
-                controller: _pageController,
-                itemCount: _images.length,
-                itemBuilder: (context, index) {
-                  return Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(_images[index]),
-                            fit: BoxFit.cover,
-                            colorFilter: ColorFilter.mode(
-                              Colors.black.withOpacity(0.5),
-                              BlendMode.darken,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Restaurafacil',
-                            style: TextStyle(
-                              fontSize: 48,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          SizedBox(height: 16),  
-                          Text(
-                            'La solución definitiva para gestionar tu restaurante',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-                            child: Text(
-                              'Restaurafacil te ofrece todo lo que necesitas para llevar tu restaurante al próximo nivel. Desde gestión de pedidos hasta análisis de ventas en tiempo real, facilitamos cada aspecto de tu negocio.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 16, color: Colors.white),
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: _scrollToSection,
-                            style: ElevatedButton.styleFrom(
-                              primary: Theme.of(context).primaryColor, 
-                              onPrimary: Colors.white, 
-                            ),
-                            child: Text('Descubre más', style: TextStyle(fontSize: 20)),
-                          ),
-                        ],
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
-                        _buildAportamosSection(context), ],
-        ),
       ),
     );
   }
 
   Widget _buildAportamosSection(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.orange.shade100,
-        borderRadius: BorderRadius.circular(10),
-      ),
+      padding: EdgeInsets.all(20),
       child: Column(
         children: [
-          Text(
-            'Qué aportamos?',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.deepOrange),
-          ),
-          SizedBox(height: 20),
+          const SizedBox(height: 50),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildFeatureIcon(context, Icons.restaurant_menu, "Gestión de Menús"),
-              _buildFeatureIcon(context, Icons.analytics, "Análisis de Datos"),
-              _buildFeatureIcon(context, Icons.schedule, "Optimización de Tiempo"),
+              _buildFeatureIcon(
+                  context, Icons.schedule, "Optimización de tiempo", "Gracias a las estadísticas podrías ahorrar hasta un 50% del tiempo en creación de nuevos platos"),
+              _buildFeatureIcon(context, Icons.analytics,
+                  "Disponibilidad", "Empleamos distintas técnicas de Análisis de datos para determinar que platos en la carta son los que estan siendo mas vendidos"),
             ],
           ),
-          SizedBox(height: 20),
-          Text(
-            'Restaurafacil ofrece una plataforma integrada que ayuda a los restaurantes a maximizar su eficiencia, mejorar la gestión del tiempo y optimizar los recursos. Nuestras herramientas analíticas avanzadas permiten a los gerentes tomar decisiones basadas en datos precisos, mejorando así el servicio y la satisfacción del cliente.',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16),
+          const SizedBox(height: 20),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildFeatureIcon(
+                  context, Icons.lock, "Seguridad", "Contamos con diferentes capas y protocolos de seguridad avanzada"),
+              _buildFeatureIcon(context, Icons.event_available,
+                  "Disponibilidad", "Accesible 24 * 7 ,solo necesitas una conexión  a Internet"),
+            ],
           ),
-          SizedBox(height: 20),
-          Image.asset("assets/feature_graphic.png", fit: BoxFit.cover),
+          Image.asset("images/admindashboard.png", fit: BoxFit.cover),
         ],
       ),
     );
   }
 
-  Widget _buildFeatureIcon(BuildContext context, IconData icon, String label) {
+  Widget _buildFeatureIcon(BuildContext context, IconData icon, String label,
+      String additionalText) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        CircleAvatar(
-          backgroundColor: Theme.of(context).primaryColor,
-          radius: 30,
-          child: Icon(icon, size: 30, color: Colors.white),
+        Container(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+            color: Colors.green.shade700,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(
+            icon,
+            size: 30,
+            color: Color.fromARGB(255, 49, 49, 49),
+          ),
+          alignment: Alignment.center,
         ),
         SizedBox(height: 8),
-        Text(label, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        Container(
+          width: 120, // Controla el ancho del texto principal
+          child: Text(
+            label,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+        ),
+        Container(
+          width: 120, // Controla el ancho del texto adicional
+          child: Text(
+            additionalText,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+            ),
+          ),
+        ),
       ],
     );
+  }
+
+  void _handleLogin() {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => paginaLoginExterna()));
   }
 }
