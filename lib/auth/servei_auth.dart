@@ -1,32 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ServeiAuth {
+  
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<UserCredential?> loginAmbEmailIPassword(String email, String password) async {
+  Future<UserCredential> loginAmbEmailIPassword(String email, password) async {
     try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      print("serveiauth");
 
-      final userUid = userCredential.user?.uid;
+      UserCredential creadencialUsuari = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
 
-      DocumentSnapshot restaurantSnapshot = await _firestore
-          .collection('restaurantes')
-          .doc(userUid)
-          .get();
-
-      if (restaurantSnapshot.exists) {
-        print('Restaurante encontrado: ${restaurantSnapshot.data()}');
-        return userCredential;
-      } else {
-        throw Exception('No se encontró un restaurante con ese UID');
-      }
+      return creadencialUsuari;
     } on FirebaseAuthException catch (e) {
-      throw Exception(e.message);
+      throw Exception(e);
     }
   }
 
