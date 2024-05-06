@@ -1,7 +1,10 @@
 import 'package:dish_dash/Clases/model_dades.dart';
 import 'package:dish_dash/firebase_options.dart';
+import 'package:dish_dash/pagina_login_externa.dart';
 import 'package:dish_dash/pagines/administrador/adminDashboard.dart';
+import 'package:dish_dash/pagines/administrador/paginaDadesRestaurant.dart';
 import 'package:dish_dash/pagines/landing/landingpage.dart';
+import 'package:dish_dash/tpv/paginatpv.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,7 +43,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: (AdminDashboardPage()),
+      home: (PaginaLoginExterna()),
     );
   }
 }

@@ -7,10 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:dish_dash/pagines/administrador/pagina_Estadistiques.dart';
 import 'package:dish_dash/pagines/administrador/pagina_administrador.dart';
 
-
 class AdminDashboardPage extends StatelessWidget {
-  @override
+  final String domain;
 
+  const AdminDashboardPage({Key? key, required this.domain}) : super(key: key);
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -52,8 +54,7 @@ class AdminDashboardPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          PaginaEstadisticasAdministrador()),
+                      builder: (context) => PaginaEstadisticasAdministrador()),
                 );
               },
             ),
@@ -86,6 +87,7 @@ class AdminDashboardPage extends StatelessWidget {
     );
   }
 }
+
 
 class DashboardButton extends StatelessWidget {
   final String title;

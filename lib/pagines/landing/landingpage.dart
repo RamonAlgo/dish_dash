@@ -265,6 +265,6 @@ void _saveEmailToFirestore() async {
 }
   void _handleLogin() {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => paginaLoginExterna()));
+        context, MaterialPageRoute(builder: (context) => PaginaLoginExterna()));
   }
 }

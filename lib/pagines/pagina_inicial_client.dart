@@ -1,13 +1,15 @@
+import 'package:flutter/material.dart';
 import 'package:dish_dash/pagines/begudes/pagina_begudes.dart';
 import 'package:dish_dash/pagines/carrito/rebut_client.dart';
 import 'package:dish_dash/pagines/menus/pagina_menu_client.dart';
 import 'package:dish_dash/pagines/postres/pagina_postres.dart';
 import 'package:dish_dash/pagines/primersplats/pagina_primers_plats.dart';
 import 'package:dish_dash/pagines/entrants/pagina_entrants.dart';
-import 'package:flutter/material.dart';
 
 class PaginaInicialClient extends StatelessWidget {
-  const PaginaInicialClient({super.key});
+  final String domain;
+
+  const PaginaInicialClient({super.key, required this.domain});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +54,7 @@ class PaginaInicialClient extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaginaPrimersPlats()));
+                          builder: (context) => PaginaPrimersPlats())); 
                 },
                 child: Text('Primers Plats',
                     style: TextStyle(color: Colors.white)),

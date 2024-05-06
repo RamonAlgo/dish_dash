@@ -9,7 +9,8 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 
 class PaginaCarrito extends StatefulWidget {
-  const PaginaCarrito({Key? key}) : super(key: key);
+  final String domain;
+  const PaginaCarrito({Key? key,required this.domain}) : super(key: key);
 
   @override
   State<PaginaCarrito> createState() => _PaginaCarritoState();

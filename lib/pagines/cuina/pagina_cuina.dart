@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PaginaCuina extends StatefulWidget {
-  const PaginaCuina({super.key});
+  final String domain;
+
+  const PaginaCuina({Key? key, required this.domain}) : super(key: key);
 
   @override
   State<PaginaCuina> createState() => _PaginaCuinaState();
@@ -104,6 +106,5 @@ void _verificarYEliminarSiNecesario(String mesaId) {
   });
 }
 
-
-
 }
+

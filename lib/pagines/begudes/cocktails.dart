@@ -16,7 +16,8 @@ class Cocktails extends StatelessWidget {
         centerTitle: true,
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('bebidas').snapshots(),
+        stream: FirebaseFirestore.instance.collection('bebidas')
+        .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -25,19 +26,23 @@ class Cocktails extends StatelessWidget {
             return Center(child: Text('No hay cocktails disponibles'));
           }
 
-          List<Plat> platos = snapshot.data!.docs.map((DocumentSnapshot doc) {
-            if (doc.id == "counter") {
-              return null;
-            }
-            var data = doc.data() as Map<String, dynamic>;
-            if (data['Caracteristicas'] != null) {
-              var caracteristicas = data['Caracteristicas'] as Map<String, dynamic>;
-              if (caracteristicas['Cocktails'] == true) {
-                return Plat.fromFirestore(doc);
-              }
-            }
-            return null;
-          }).whereType<Plat>().toList();
+          List<Plat> platos = snapshot.data!.docs
+              .map((DocumentSnapshot doc) {
+                if (doc.id == "counter") {
+                  return null;
+                }
+                var data = doc.data() as Map<String, dynamic>;
+                if (data['Caracteristicas'] != null) {
+                  var caracteristicas =
+                      data['Caracteristicas'] as Map<String, dynamic>;
+                  if (caracteristicas['Cocktails'] == true) {
+                    return Plat.fromFirestore(doc);
+                  }
+                }
+                return null;
+              })
+              .whereType<Plat>()
+              .toList();
 
           return GridView.builder(
             padding: const EdgeInsets.all(8.0),
@@ -52,7 +57,8 @@ class Cocktails extends StatelessWidget {
               return PlatoCard(
                 plato: plato,
                 onAdd: () {
-                  Provider.of<ModelDades>(context, listen: false).agregarAlCarrito(plato);
+                  Provider.of<ModelDades>(context, listen: false)
+                      .agregarAlCarrito(plato);
                   final snackBar = SnackBar(
                     backgroundColor: Color.fromARGB(255, 92, 174, 99),
                     content: Text('${plato.nombrePlato} añadido al carrito'),

@@ -1,20 +1,20 @@
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:dish_dash/auth/servei_auth.dart';
 import 'package:dish_dash/pagina_login.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/scheduler.dart';
 
-class paginaLoginExterna extends StatefulWidget {
+class PaginaLoginExterna extends StatefulWidget {
   @override
-  _paginaLoginExternaState createState() => _paginaLoginExternaState();
+  _PaginaLoginExternaState createState() => _PaginaLoginExternaState();
 }
 
-class _paginaLoginExternaState extends State<paginaLoginExterna>
+class _PaginaLoginExternaState extends State<PaginaLoginExterna>
     with SingleTickerProviderStateMixin {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   late AnimationController _animationController;
   late Animation<double> _opacityAnimation;
+  final ServeiAuth serveiAuth = ServeiAuth();
 
   @override
   void initState() {
@@ -37,31 +37,29 @@ class _paginaLoginExternaState extends State<paginaLoginExterna>
     super.dispose();
   }
 
-  final serveiAuth = ServeiAuth();
-  void _login(BuildContext context) async {
-    String username = _usernameController.text;
+  void _login() async {
+    String email = _usernameController.text.trim();
+    String password = _passwordController.text.trim();
+    String domain = email.split('@').last;
 
     try {
-      await serveiAuth.loginAmbEmailIPassword(
-        username,
-        _passwordController.text,
-      );
-      final user = serveiAuth.getUsuarisActual();
-      if (user != null) {
-        final email = user.email;
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => PaginaLogin()));
-        });
+      UserCredential? userCredential = await serveiAuth.loginAmbEmailIPassword(email, password);
+      if (userCredential != null) {
+        // Push replacement without crossing the async boundary
+        if (!mounted) return;
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => PaginaLogin(domain: domain)),
+        );
       } else {
-        _mostrarDialogoError(
-            context, "No se pudo obtener la información del usuario.");
+        _mostrarDialogoError("No se pudo obtener la información del usuario.");
       }
     } catch (e) {
-      _mostrarDialogoError(context, e.toString());
+      _mostrarDialogoError(e.toString());
     }
   }
-  void _mostrarDialogoError(BuildContext context, String mensaje) {
+
+  void _mostrarDialogoError(String mensaje) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -80,64 +78,52 @@ class _paginaLoginExternaState extends State<paginaLoginExterna>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
+      body: Center(
+        child: FadeTransition(
+          opacity: _opacityAnimation,
+          child: Container(
+            width: 300,
+            padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("images/login.png"),
-                fit: BoxFit.cover,
-              ),
+              color: Colors.white.withOpacity(0.85),
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 15.0,
+                  offset: Offset(0, 5),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset("images/logorestaurafacil.png"),
+                SizedBox(height: 20),
+                TextField(
+                  controller: _usernameController,
+                  decoration: InputDecoration(
+                    labelText: "Usuario",
+                    prefixIcon: Icon(Icons.person),
+                  ),
+                ),
+                TextField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: "Contraseña",
+                    prefixIcon: Icon(Icons.lock),
+                  ),
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _login,
+                  child: Text("Iniciar sesión"),
+                ),
+              ],
             ),
           ),
-          Center(
-            child: FadeTransition(
-              opacity: _opacityAnimation,
-              child: Container(
-                width: 300,
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.85),
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 15.0,
-                      offset: Offset(0, 5),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset("images/logorestaurafacil.png"),
-                    SizedBox(height: 20),
-                    TextField(
-                      controller: _usernameController,
-                      decoration: InputDecoration(
-                        labelText: "Usuario",
-                        prefixIcon: Icon(Icons.person),
-                      ),
-                    ),
-                    TextField(
-                      controller: _passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: "Contraseña",
-                        prefixIcon: Icon(Icons.lock),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () => _login(context),
-                      child: Text("Iniciar sesión"),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

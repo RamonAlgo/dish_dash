@@ -12,18 +12,17 @@ class ServeiAuth {
         password: password,
       );
 
-      final userUid = userCredential.user?.uid;
-
+      String domain = email.split('@').last;
       DocumentSnapshot restaurantSnapshot = await _firestore
           .collection('restaurantes')
-          .doc(userUid)
+          .doc(domain)
           .get();
 
       if (restaurantSnapshot.exists) {
         print('Restaurante encontrado: ${restaurantSnapshot.data()}');
         return userCredential;
       } else {
-        throw Exception('No se encontró un restaurante con ese UID');
+        throw Exception('No se encontró un restaurante con ese dominio');
       }
     } on FirebaseAuthException catch (e) {
       throw Exception(e.message);
@@ -31,7 +30,7 @@ class ServeiAuth {
   }
 
   Future<void> tancarSessio() async {
-    return await _auth.signOut();
+    await _auth.signOut();
   }
 
   User? getUsuarisActual() {
