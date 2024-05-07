@@ -1,3 +1,5 @@
+/// The `ModelDades` class manages a global cart of `Plat` items in a Flutter application, allowing for
+/// adding, increasing, decreasing, removing, and clearing items from the cart.
 import 'package:flutter/material.dart';
 import 'package:dish_dash/Clases/Plat.dart';
 

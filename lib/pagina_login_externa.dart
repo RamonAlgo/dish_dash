@@ -1,3 +1,5 @@
+/// The above class represents a login page in a Flutter application with Firebase authentication
+/// integration.
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:dish_dash/auth/servei_auth.dart';
@@ -45,7 +47,6 @@ class _PaginaLoginExternaState extends State<PaginaLoginExterna>
     try {
       UserCredential? userCredential = await serveiAuth.loginAmbEmailIPassword(email, password);
       if (userCredential != null) {
-        // Push replacement without crossing the async boundary
         if (!mounted) return;
         Navigator.pushReplacement(
           context,

@@ -1,3 +1,5 @@
+/// The `PaginaEnvioEmails` class in Dart is a Flutter widget that displays a list of emails fetched
+/// from Firestore and allows the user to send emails using the device's default email client.
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';

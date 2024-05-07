@@ -1,3 +1,6 @@
+/// The PaginaAdministrador class in Dart allows users to add new dessert items to Firestore with image
+/// upload and categorization features.
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dish_dash/Clases/Plat.dart';
 import 'package:firebase_storage/firebase_storage.dart';

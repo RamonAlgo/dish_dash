@@ -11,7 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PaginaPostres extends StatelessWidget {
-  const PaginaPostres({super.key});
+  final String domain;
+  const PaginaPostres({super.key,required this.domain});
 
   @override
   Widget build(BuildContext context) {

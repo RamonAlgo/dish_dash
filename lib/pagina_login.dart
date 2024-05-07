@@ -1,3 +1,5 @@
+/// The `PaginaLogin` class in Dart represents a login page that allows users to authenticate based on
+/// their email domain and redirects them to different pages based on their email type.
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';

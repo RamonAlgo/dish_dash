@@ -1,3 +1,5 @@
+/// The `PaginaInicialClient` class in Dart represents the initial page for a client app with options to
+/// navigate to different food categories.
 import 'package:flutter/material.dart';
 import 'package:dish_dash/pagines/begudes/pagina_begudes.dart';
 import 'package:dish_dash/pagines/carrito/rebut_client.dart';
@@ -23,7 +25,7 @@ class PaginaInicialClient extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => PaginaMenuClient()));
+                      MaterialPageRoute(builder: (context) => PaginaMenuClient(domain: domain)));
                 },
                 child: Text('Menús', style: TextStyle(color: Colors.white)),
               ),
@@ -54,7 +56,7 @@ class PaginaInicialClient extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PaginaPrimersPlats())); 
+                          builder: (context) => PaginaPrimersPlats(domain: domain,))); 
                 },
                 child: Text('Primers Plats',
                     style: TextStyle(color: Colors.white)),
@@ -64,7 +66,7 @@ class PaginaInicialClient extends StatelessWidget {
               child: TextButton(
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => PaginaPostres()));
+                      MaterialPageRoute(builder: (context) => PaginaPostres(domain: domain,)));
                 },
                 child: Text('Postres', style: TextStyle(color: Colors.white)),
               ),
@@ -73,7 +75,7 @@ class PaginaInicialClient extends StatelessWidget {
               child: TextButton(
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => PaginaCarrito()));
+                      MaterialPageRoute(builder: (context) => PaginaCarrito(domain: domain,)));
                 },
                 child: Text('Carrito', style: TextStyle(color: Colors.white)),
               ),

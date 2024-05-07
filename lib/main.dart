@@ -1,3 +1,5 @@
+/// The main function initializes Firebase, sets up provider for state management, and runs the Flutter
+/// application with MaterialApp.
 import 'package:dish_dash/Clases/model_dades.dart';
 import 'package:dish_dash/firebase_options.dart';
 import 'package:dish_dash/pagina_login_externa.dart';
@@ -43,7 +45,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: (PaginaLoginExterna()),
+      home: (LandingPage()),
     );
   }
 }
