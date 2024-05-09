@@ -26,13 +26,12 @@ class _EliminarPlatMenuState extends State<EliminarPlatMenu> {
       final querySnapshot = await FirebaseFirestore.instance
           .collection(collection)
           .get();
-
       setState(() {
         _dataList = querySnapshot.docs
             .where((doc) => doc.id != 'counter')
             .map((doc) => {
                   ...doc.data() as Map<String, dynamic>,
-                  'id': doc.id, // Añade el ID del documento
+                  'id': doc.id,
                 })
             .toList();
       });
@@ -43,7 +42,7 @@ class _EliminarPlatMenuState extends State<EliminarPlatMenu> {
     String? collection = _getCollectionName();
     if (collection != null) {
       await FirebaseFirestore.instance.collection(collection).doc(docId).delete();
-      _fetchData(); // Actualiza la lista después de eliminar
+      _fetchData();
     }
   }
 
@@ -92,12 +91,12 @@ class _EliminarPlatMenuState extends State<EliminarPlatMenu> {
         itemBuilder: (context, index) {
           final item = _dataList[index];
           return ListTile(
-            title: Text(item['name'] ?? 'No Name'),
-            subtitle: Text(item['description'] ?? 'No Description'),
+            title: Text(item['NombrePlato'] ?? 'No Name'),
+            subtitle: Text(item['Descripcion'] ?? 'No Description'),
             trailing: IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),
               onPressed: () {
-                _deleteDocument(item['id']); // Llama al método para eliminar
+                _deleteDocument(item['id']);
               },
             ),
           );
@@ -117,7 +116,7 @@ class _EliminarPlatMenuState extends State<EliminarPlatMenu> {
       case 'Postres':
         return 'postres';
       default:
-        return null; // 'Menús' o cualquier otro caso no especificado
+        return null; 
     }
   }
 }

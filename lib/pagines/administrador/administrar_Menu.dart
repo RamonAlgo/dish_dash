@@ -1,3 +1,4 @@
+import 'package:dish_dash/pagines/administrador/administrar_Menu/agregar.dart';
 import 'package:dish_dash/pagines/administrador/administrar_Menu/eliminar.dart';
 import 'package:dish_dash/pagines/landing/landingpage.dart';
 import 'package:flutter/material.dart';
@@ -179,17 +180,25 @@ void mostrarBotones(BuildContext context, String titulo) {
                       icon: Icons.add,
                       onPressed: () {
                         Navigator.of(context).pop();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AgregarPlatMenu(titulo: titulo),
+                          ),
+                        );
                       },
                     ),
                     SmallDashboardButton(
                       title: 'Eliminar',
                       icon: Icons.remove,
                       onPressed: () {
+                        Navigator.of(context).pop();
                         Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => EliminarPlatMenu(titulo: titulo)),
-                      );
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EliminarPlatMenu(titulo: titulo),
+                          ),
+                        );
                       },
                     ),
                   ],
