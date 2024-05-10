@@ -11,7 +11,7 @@ class AdministrarMenu extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Administrador de menu'),
-        backgroundColor: Colors.deepOrangeAccent,
+        backgroundColor: Color(0xFF005086),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -67,7 +67,7 @@ class AdministrarMenu extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: const BottomAppBar(
-        color: Colors.deepOrangeAccent,
+        color: Color(0xFF005086),
         child: Padding(
           padding: EdgeInsets.all(10.0),
           child: Text(
@@ -169,7 +169,7 @@ void mostrarBotones(BuildContext context, String titulo) {
                   style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 207, 123, 54)),
+                    color: Color(0xFF005086)),
                 ),
                 const SizedBox(height: 20),
                 Row(

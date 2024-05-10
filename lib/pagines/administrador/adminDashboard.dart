@@ -15,7 +15,7 @@ class AdminDashboardPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Admin Dashboard'),
-        backgroundColor: Colors.deepOrangeAccent,
+        backgroundColor: Color(0xFF005086),
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
@@ -73,7 +73,7 @@ class AdminDashboardPage extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.deepOrangeAccent,
+        color: Color(0xFF005086),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Text(
