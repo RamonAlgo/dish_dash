@@ -1,6 +1,7 @@
 import 'package:dish_dash/Clases/model_dades.dart';
 import 'package:dish_dash/firebase_options.dart';
 import 'package:dish_dash/pagina_login.dart';
+import 'package:dish_dash/pagines/administrador/administrar_Menu.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: (PaginaLogin()),
+      home: (AdministrarMenu()),
     );
   }
 }
