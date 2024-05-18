@@ -1,3 +1,4 @@
+import 'package:dish_dash/Clases/Menu.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
@@ -45,29 +46,61 @@ class _AgregarMenuState extends State<AgregarMenu> {
     setState(() {
       _allPlatos = platos;
       _platosEnCarta = _filteredPlatos(platos, _filterMap[_selectedFilter]!);
-      print('Total de platos obtenidos: ${_allPlatos.length}');
-      print('Platos filtrados para $_selectedFilter: ${_platosEnCarta.length}');
     });
   }
 
   Future<void> _fetchFromCollection(String collectionName, List<Map<String, dynamic>> platos) async {
-    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection(collectionName).get();
-    platos.addAll(snapshot.docs
-        .where((doc) => doc.id != 'counter')
-        .map((doc) => doc.data() as Map<String, dynamic>)
-        .toList());
+  QuerySnapshot snapshot = await FirebaseFirestore.instance.collection(collectionName).get();
+  snapshot.docs.where((doc) => doc.id != 'counter').forEach((doc) {
+    Map<String, dynamic> platoData = doc.data() as Map<String, dynamic>;
+    platoData['id'] = doc.id;
+    platos.add(platoData);
+  });
+}
+
+
+void _onSave() async {
+  if (_nombreController.text.isEmpty || _precioController.text.isEmpty) {
+    _showSnackbar('Nombre Menu y Precio son obligatorios');
+    return;
   }
 
-  void _onSave() async {
-    // Aquí puedes agregar la lógica para guardar el Menu en Firestore si es necesario.
+  if (_platosAgregados.length < 3 ||
+      !_platosAgregados.any((plato) => plato['TipoPlato'] == 'Entrants') ||
+      !_platosAgregados.any((plato) => plato['TipoPlato'] == 'PrimersPlats') ||
+      !_platosAgregados.any((plato) => plato['TipoPlato'] == 'Postre')) {
+    _showSnackbar('Debes agregar al menos un plato de cada tipo');
+    return;
   }
+
+  List<String> idsPlatos = _platosAgregados.map((plato) => plato['id'].toString()).toList();
+
+  Menu nuevoMenu = Menu(
+    descripcion: _descripcionController.text,
+    idsPlatos: idsPlatos,
+    nombreMenu: _nombreController.text,
+    precio: double.parse(_precioController.text),
+  );
+
+  DocumentSnapshot counterSnapshot = await FirebaseFirestore.instance.collection('menus').doc('counter').get();
+  int numeroConsulta = counterSnapshot.get('NumeroPlatos') + 1;
+
+  await FirebaseFirestore.instance.collection('menus').doc('counter').update({'NumeroPlatos': numeroConsulta});
+
+  await FirebaseFirestore.instance.collection('menus').doc('Me$numeroConsulta').set(nuevoMenu.toJson());
+
+  _showSnackbar('El menú se ha guardado correctamente.');
+}
 
   void _agregarPlato(Map<String, dynamic> plato) {
-    setState(() {
-      _platosEnCarta.removeWhere((p) => p['TipoPlato'] == plato['TipoPlato']);
-      _platosAgregados.add(plato);
-    });
-  }
+  String platoId = plato['id'].toString();
+
+  setState(() {
+    _platosEnCarta.removeWhere((p) => p['TipoPlato'] == plato['TipoPlato']);
+    _platosAgregados.add({...plato, 'id': platoId});
+  });
+}
+
 
   void _eliminarPlato(Map<String, dynamic> plato) {
     setState(() {
@@ -78,10 +111,14 @@ class _AgregarMenuState extends State<AgregarMenu> {
   }
 
   List<Map<String, dynamic>> _filteredPlatos(List<Map<String, dynamic>> platos, String filter) {
-    var filtered = platos.where((plato) => plato['TipoPlato'] == filter).toList();
-    print('Filtrando platos para $filter: ${filtered.length}');
-    return filtered;
-  } 
+    return platos.where((plato) => plato['TipoPlato'] == filter).toList();
+  }
+
+  void _showSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +187,7 @@ class _AgregarMenuState extends State<AgregarMenu> {
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 10), // Línea de separación debajo del botón Guardar
+                              const SizedBox(height: 10),
                               const Divider(),
                               const SizedBox(height: 10),
                               _buildTextFormField(
@@ -171,7 +208,7 @@ class _AgregarMenuState extends State<AgregarMenu> {
                                 controller: _precioController,
                               ),
                               const SizedBox(height: 10),
-                              const Divider(), // Línea de separación entre Precio y Platos agregados
+                              const Divider(),
                               const SizedBox(height: 10),
                               Expanded(
                                 child: Card(
@@ -211,7 +248,7 @@ class _AgregarMenuState extends State<AgregarMenu> {
                                                       margin: const EdgeInsets.symmetric(vertical: 4.0),
                                                       padding: const EdgeInsets.all(8.0),
                                                       decoration: BoxDecoration(
-                                                        color: const Color.fromRGBO(73, 158, 255, 1),
+                                                        color: const Color.fromARGB(255, 223, 223, 223),
                                                         borderRadius: BorderRadius.circular(10.0),
                                                       ),
                                                       child: Row(
@@ -300,103 +337,111 @@ class _AgregarMenuState extends State<AgregarMenu> {
                                     ),
                                   ),
                                   const Spacer(),
-                                  DropdownButton<String>(
-  value: _selectedFilter,
-  onChanged: (String? newValue) {
-    setState(() {
-      _selectedFilter = newValue!;
-      _platosEnCarta = _filteredPlatos(_allPlatos, _filterMap[_selectedFilter]!);
-      print('Filtro cambiado a $_selectedFilter');
-      print('Platos filtrados para $_selectedFilter: ${_platosEnCarta.length}');
-    });
-  },
-  items: _filterMap.keys.map<DropdownMenuItem<String>>((String value) {
-    return DropdownMenuItem<String>(
-      value: value,
-      child: Text(value),
-    );
-  }).toList(),
-),
-
+                                  Row(
+                                    children: [
+                                      const Text(
+                                        'Filtro:',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF005086),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      DropdownButton<String>(
+                                        value: _selectedFilter,
+                                        onChanged: (String? newValue) {
+                                          setState(() {
+                                            _selectedFilter = newValue!;
+                                            _platosEnCarta = _filteredPlatos(_allPlatos, _filterMap[_selectedFilter]!);
+                                          });
+                                        },
+                                        items: _filterMap.keys.map<DropdownMenuItem<String>>((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               ),
                               const SizedBox(height: 10),
                               const Divider(),
                               const SizedBox(height: 10),
                               Expanded(
-  child: _platosEnCarta.isEmpty
-      ? const Center(
-          child: Text(
-            'Vacio',
-            style: TextStyle(fontSize: 16),
-          ),
-        )
-      : ListView.builder(
-          itemCount: _platosEnCarta.length,
-          itemBuilder: (context, index) {
-            final plato = _platosEnCarta[index];
-            print('Mostrando plato: ${plato['NombrePlato']}');
-            return Container(
-              margin: const EdgeInsets.symmetric(vertical: 4.0),
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                color: const Color.fromRGBO(73, 158, 255, 1),
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Row(
-                children: [
-                  Image.network(
-                    plato['ImageUrl'] ?? '',
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          plato['NombrePlato'] ?? 'Sin nombre',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Text(
-                          plato['Descripcion'] ?? 'Sin descripción',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.white70,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => _agregarPlato(plato),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF005086),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    child: const Text(
-                      'Agregar',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-),
-
+                                child: _platosEnCarta.isEmpty
+                                    ? const Center(
+                                        child: Text(
+                                          'Vacio',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      )
+                                    : ListView.builder(
+                                        itemCount: _platosEnCarta.length,
+                                        itemBuilder: (context, index) {
+                                          final plato = _platosEnCarta[index];
+                                          return Container(
+                                            margin: const EdgeInsets.symmetric(vertical: 4.0),
+                                            padding: const EdgeInsets.all(8.0),
+                                            decoration: BoxDecoration(
+                                              color: const Color.fromARGB(255, 223, 223, 223),
+                                              borderRadius: BorderRadius.circular(10.0),
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Image.network(
+                                                  plato['ImageUrl'] ?? '',
+                                                  width: 50,
+                                                  height: 50,
+                                                  fit: BoxFit.cover,
+                                                  errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+                                                ),
+                                                const SizedBox(width: 10),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        plato['NombrePlato'] ?? 'Sin nombre',
+                                                        style: const TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight: FontWeight.bold,
+                                                          color: Color(0xFF005086),
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        plato['Descripcion'] ?? 'Sin descripción',
+                                                        style: const TextStyle(
+                                                          fontSize: 14,
+                                                          color: Color(0xFF005086),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                ElevatedButton(
+                                                  onPressed: () => _agregarPlato(plato),
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: const Color(0xFF005086),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(20),
+                                                    ),
+                                                  ),
+                                                  child: const Text(
+                                                    'Agregar',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      ),
+                              ),
                             ],
                           ),
                         ),
