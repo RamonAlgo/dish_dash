@@ -9,7 +9,7 @@ import 'package:dish_dash/pagines/primersplats/pagina_primers_plats.dart';
 import 'package:dish_dash/pagines/entrants/pagina_entrants.dart';
 import 'package:provider/provider.dart';
 import 'package:dish_dash/Clases/model_dades.dart';
-import 'package:dish_dash/Components/platoCard.dart'; // Asegúrate de importar el archivo donde está definido PlatoCard
+import 'package:dish_dash/Components/platoCard.dart';
 
 class PaginaInicialClient extends StatelessWidget {
   const PaginaInicialClient({super.key});
@@ -131,8 +131,8 @@ class PaginaInicialClient extends StatelessWidget {
             .collection('meses')
             .doc(currentMonth)
             .collection('platos')
-            .orderBy('cantidad', descending: true) // Ordena por 'cantidad' descendente
-            .limit(6) // Limita la consulta a 6 documentos
+            .orderBy('cantidad', descending: true)
+            .limit(6)
             .get(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) {

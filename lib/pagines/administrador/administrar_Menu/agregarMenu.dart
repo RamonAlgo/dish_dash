@@ -80,17 +80,19 @@ void _onSave() async {
     idsPlatos: idsPlatos,
     nombreMenu: _nombreController.text,
     precio: double.parse(_precioController.text),
+    id: '' 
   );
 
   DocumentSnapshot counterSnapshot = await FirebaseFirestore.instance.collection('menus').doc('counter').get();
   int numeroConsulta = counterSnapshot.get('NumeroPlatos') + 1;
 
+  String idMenu = 'Me$numeroConsulta';
+  nuevoMenu.id = idMenu;
   await FirebaseFirestore.instance.collection('menus').doc('counter').update({'NumeroPlatos': numeroConsulta});
-
-  await FirebaseFirestore.instance.collection('menus').doc('Me$numeroConsulta').set(nuevoMenu.toJson());
-
+  await FirebaseFirestore.instance.collection('menus').doc(idMenu).set(nuevoMenu.toJson());
   _showSnackbar('El menú se ha guardado correctamente.');
 }
+
 
   void _agregarPlato(Map<String, dynamic> plato) {
   String platoId = plato['id'].toString();
