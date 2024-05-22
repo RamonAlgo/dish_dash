@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dish_dash/pagines/begudes/pagina_begudes.dart';
 import 'package:dish_dash/pagines/carrito/rebut_client.dart';
 import 'package:dish_dash/pagines/menus/pagina_menu_client.dart';
@@ -11,6 +12,10 @@ class PaginaInicialClient extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final int currentYear = DateTime.now().year;
+    final String currentMonth = DateTime.now().month.toString().padLeft(2, '0');
+    
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -80,9 +85,39 @@ class PaginaInicialClient extends StatelessWidget {
         ),
         actions: <Widget>[],
       ),
-      body: Center(
-        child: Text('Seleccione una categoría desde el menú superior.',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+      body: FutureBuilder<QuerySnapshot>(
+        future: FirebaseFirestore.instance
+            .collection('estadisticas')
+            .doc(currentYear.toString())
+            .collection('meses')
+            .doc(currentMonth)
+            .collection('platos')
+            .get(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasData && snapshot.data!.docs.isNotEmpty) {
+            List<QueryDocumentSnapshot> documents = snapshot.data!.docs;
+
+            return ListView(
+              children: documents.map((doc) {
+                Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+                return ListTile(
+                  title: Text(doc.id),
+                  subtitle: Text(data.toString()),
+                );
+              }).toList(),
+            );
+          } else {
+            return Center(child: Text('No hay datos disponibles'));
+          }
+        },
       ),
     );
   }
