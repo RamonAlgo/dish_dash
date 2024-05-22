@@ -1,11 +1,8 @@
-import 'package:dish_dash/auth/servei_auth.dart';
-import 'package:dish_dash/pagina_login.dart';
 import 'package:dish_dash/pagines/administrador/administrar_Menu.dart';
 import 'package:dish_dash/pagines/administrador/pagina_envio_emails.dart';
 import 'package:dish_dash/pagines/landing/landingpage.dart';
 import 'package:flutter/material.dart';
 import 'package:dish_dash/pagines/administrador/pagina_Estadistiques.dart';
-import 'package:dish_dash/pagines/administrador/pagina_administrador.dart';
 
 
 class AdminDashboardPage extends StatelessWidget {

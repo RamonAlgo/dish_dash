@@ -170,7 +170,7 @@ class _AgregarPlatMenuState extends State<AgregarPlatMenu> {
       case 'Postres':
         return 'Po';
       default:
-        return 'Un'; // Unknown
+        return 'Un';
     }
   }
 

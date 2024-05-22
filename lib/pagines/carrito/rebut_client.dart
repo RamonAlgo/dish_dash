@@ -1,3 +1,4 @@
+import 'package:dish_dash/Clases/Menu.dart';
 import 'package:dish_dash/Clases/Plat.dart';
 import 'package:dish_dash/Clases/model_dades.dart';
 import 'package:dish_dash/pagines/carrito/paginacomandes.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-
 
 class PaginaCarrito extends StatefulWidget {
   const PaginaCarrito({Key? key}) : super(key: key);
@@ -24,8 +24,8 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Eliminar producte"),
-          content: const Text("Estas segur?"),
+          title: const Text("Eliminar producto"),
+          content: const Text("¿Estás seguro?"),
           actions: <Widget>[
             TextButton(
               child: const Text("No"),
@@ -45,16 +45,43 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
     );
   }
 
+  void mostrarAlertaAntesDeEliminarMenu(Menu menu) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Eliminar menú"),
+          content: const Text("¿Estás seguro?"),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("No"),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: const Text("Sí"),
+              onPressed: () {
+                Provider.of<ModelDades>(context, listen: false)
+                    .reducirCantidadMenu(menu);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final carrito = Provider.of<ModelDades>(context).carritoGlobal;
+    final carrito2 = Provider.of<ModelDades>(context).menusGlobal;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Carrito'),
+        title: const Text('Carrito'),
         actions: [
           IconButton(
-            icon: Icon(Icons.history),
+            icon: const Icon(Icons.history),
             onPressed: () async {
               String mesaId = await obtenerYProcesarEmail();
               Navigator.push(
@@ -67,43 +94,75 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
           ),
         ],
       ),
-      body: carrito.isEmpty
-          ? Center(child: Text('El carrito está vacío'))
+      body: carrito.isEmpty && carrito2.isEmpty
+          ? const Center(child: Text('El carrito está vacío'))
           : ListView.builder(
-              itemCount: carrito.length,
+              itemCount: carrito.length + carrito2.length,
               itemBuilder: (context, index) {
-                final plato = carrito[index];
-                return ListTile(
-                  title: Text(plato.nombrePlato),
-                  subtitle:
-                      Text('Precio: ${plato.precio * plato.cantidad}' + ' €'),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.remove),
-                        onPressed: () {
-                          if (plato.cantidad == 1) {
-                            mostrarAlertaAntesDeEliminar(plato);
-                          } else {
+                if (index < carrito.length) {
+                  final plato = carrito[index];
+                  return ListTile(
+                    title: Text(plato.nombrePlato),
+                    subtitle:
+                        Text('Precio: ${plato.precio * plato.cantidad} €'),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        IconButton(
+                          icon: const Icon(Icons.remove),
+                          onPressed: () {
+                            if (plato.cantidad == 1) {
+                              mostrarAlertaAntesDeEliminar(plato);
+                            } else {
+                              Provider.of<ModelDades>(context, listen: false)
+                                  .reducirCantidad(plato);
+                            }
+                          },
+                        ),
+                        Text('${plato.cantidad}'),
+                        IconButton(
+                          icon: const Icon(Icons.add),
+                          onPressed: () {
                             Provider.of<ModelDades>(context, listen: false)
-                                .reducirCantidad(plato);
-                            print(Provider.of<ModelDades>(context,
-                                listen: false));
-                          }
-                        },
-                      ),
-                      Text('${plato.cantidad}'),
-                      IconButton(
-                        icon: Icon(Icons.add),
-                        onPressed: () {
-                          Provider.of<ModelDades>(context, listen: false)
-                              .aumentarCantidad(plato);
-                        },
-                      ),
-                    ],
-                  ),
-                );
+                                .aumentarCantidad(plato);
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  final menuIndex = index - carrito.length;
+                  final menu = carrito2[menuIndex];
+                  return ListTile(
+                    title: Text(menu.nombreMenu),
+                    subtitle:
+                        Text('Precio: ${menu.precio * menu.cantidad} €'),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        IconButton(
+                          icon: const Icon(Icons.remove),
+                          onPressed: () {
+                            if (menu.cantidad == 1) {
+                              mostrarAlertaAntesDeEliminarMenu(menu);
+                            } else {
+                              Provider.of<ModelDades>(context, listen: false)
+                                  .reducirCantidadMenu(menu);
+                            }
+                          },
+                        ),
+                        Text('${menu.cantidad}'),
+                        IconButton(
+                          icon: const Icon(Icons.add),
+                          onPressed: () {
+                            Provider.of<ModelDades>(context, listen: false)
+                                .aumentarCantidadMenu(menu);
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                }
               },
             ),
       floatingActionButton: Padding(
@@ -119,9 +178,9 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
               ),
-              padding: EdgeInsets.symmetric(vertical: 16.0),
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
             ),
-            child: Text(
+            child: const Text(
               'Confirmar pedido',
               style: TextStyle(color: Colors.white),
             ),
@@ -130,8 +189,6 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
       ),
     );
   }
-
-  
 
   Future<String> obtenerYProcesarEmail() async {
     final User? usuario = FirebaseAuth.instance.currentUser;
@@ -145,22 +202,13 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
     return 'defaultMesaId'; 
   }
 
-  procesarEmail(String email) {
-    List<String> partes = email.split('@');
-
-    if (partes.isNotEmpty) {
-      String parteDeseada = partes[0];
-      return (parteDeseada);
-    } else {}
-  }
-
   void insertarDatos() async {
-  final carrito = Provider.of<ModelDades>(context, listen: false).carritoGlobal;
-  String idmesa = await obtenerYProcesarEmail(); 
+    final carrito = Provider.of<ModelDades>(context, listen: false).carritoGlobal;
+    final carrito2 = Provider.of<ModelDades>(context, listen: false).menusGlobal;
+    String idmesa = await obtenerYProcesarEmail(); 
 
-  DocumentSnapshot snapshot = await firestore.collection('mesas').doc(idmesa).get();
+    DocumentSnapshot snapshot = await firestore.collection('mesas').doc(idmesa).get();
 
-  if (snapshot.exists) {
     final List<Map<String, dynamic>> platosData = carrito.map((plato) {
       return {
         'idPlat': plato.idPlat,
@@ -171,52 +219,57 @@ class _PaginaCarritoState extends State<PaginaCarrito> {
       };
     }).toList();
 
-    firestore.collection('mesas').doc(idmesa).update({
-      'platos': FieldValue.arrayUnion(platosData),
-      'timestamp': Timestamp.now()
-    }).then((_) {
-      Provider.of<ModelDades>(context, listen: false).vaciarCarrito();
-      showAwesomeSnackbar(context, 'Pedido confirmado.', ContentType.success);
-    }).catchError((error) {
-      print('Error al insertar datos: $error');
-      showAwesomeSnackbar(context, 'Error al confirmar pedido: $error', ContentType.failure);
-    });
-  } else {
-    final List<Map<String, dynamic>> platosData = carrito.map((plato) {
+    final List<Map<String, dynamic>> menusData = carrito2.map((menu) {
       return {
-        'idPlat': plato.idPlat,
-        'nom': plato.nombrePlato,
-        'cantitat': plato.cantidad,
-        'preu': plato.precio,
-        'entregado': false
+        'menuId': menu.id, 
+        'Descripcion': menu.descripcion,
+        'IDsPlatos': menu.idsPlatos,
+        'NombreMenu': menu.nombreMenu,
+        'Precio': menu.precio,
+        'Cantidad': menu.cantidad,
+        'Entregado': false
       };
     }).toList();
 
-    firestore.collection('mesas').doc(idmesa).set({
-      'platos': platosData,
-      'mesaId': idmesa,
-      'timestamp': Timestamp.now()
-    }).then((_) {
-      Provider.of<ModelDades>(context, listen: false).vaciarCarrito();
-      showAwesomeSnackbar(context, 'Pedido confirmado.', ContentType.success);
-    }).catchError((error) {
-      print('Error al insertar datos: $error');
-      showAwesomeSnackbar(context, 'Error al confirmar pedido: $error', ContentType.failure);
-    });
+    if (snapshot.exists) {
+      firestore.collection('mesas').doc(idmesa).update({
+        'platos': FieldValue.arrayUnion(platosData),
+        'menus': FieldValue.arrayUnion(menusData),
+        'timestamp': Timestamp.now()
+      }).then((_) {
+        Provider.of<ModelDades>(context, listen: false).vaciarCarrito();
+        showAwesomeSnackbar(context, 'Pedido confirmado.', ContentType.success);
+      }).catchError((error) {
+        print('Error al insertar datos: $error');
+        showAwesomeSnackbar(context, 'Error al confirmar pedido: $error', ContentType.failure);
+      });
+    } else {
+      firestore.collection('mesas').doc(idmesa).set({
+        'platos': platosData,
+        'menus': menusData,
+        'mesaId': idmesa,
+        'timestamp': Timestamp.now()
+      }).then((_) {
+        Provider.of<ModelDades>(context, listen: false).vaciarCarrito();
+        showAwesomeSnackbar(context, 'Pedido confirmado.', ContentType.success);
+      }).catchError((error) {
+        print('Error al insertar datos: $error');
+        showAwesomeSnackbar(context, 'Error al confirmar pedido: $error', ContentType.failure);
+      });
+    }
   }
-}
 
-void showAwesomeSnackbar(BuildContext context, String message, ContentType contentType) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      backgroundColor: Colors.transparent, 
-      elevation: 0,
-      content: AwesomeSnackbarContent(
-        title: contentType == ContentType.success ? 'Éxito' : 'Error',
-        message: message,
-        contentType: contentType,
+  void showAwesomeSnackbar(BuildContext context, String message, ContentType contentType) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.transparent, 
+        elevation: 0,
+        content: AwesomeSnackbarContent(
+          title: contentType == ContentType.success ? 'Éxito' : 'Error',
+          message: message,
+          contentType: contentType,
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }
