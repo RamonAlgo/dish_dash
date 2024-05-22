@@ -1,3 +1,6 @@
+import 'package:dish_dash/auth/servei_auth.dart';
+import 'package:dish_dash/pagina_login.dart';
+import 'package:dish_dash/pagines/administrador/paginaDadesRestaurant.dart';
 import 'package:dish_dash/pagines/administrador/administrar_Menu.dart';
 import 'package:dish_dash/pagines/administrador/pagina_envio_emails.dart';
 import 'package:dish_dash/pagines/landing/landingpage.dart';
@@ -56,13 +59,13 @@ class AdminDashboardPage extends StatelessWidget {
             ),
             SizedBox(width: 20),
             DashboardButton(
-              title: 'PaginaEnvioEmails',
+              title: 'Editar dades',
               icon: Icons.info_rounded,
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => PaginaEnvioEmails()),
+                      builder: (context) => PaginaDadesRestaurant()),
                 );
               },
             ),
