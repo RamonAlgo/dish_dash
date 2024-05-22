@@ -4,7 +4,6 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
-import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
@@ -76,7 +75,7 @@ class _PaginaTPVState extends State<paginaTPV> {
                         onPressed: () => generarTicket(pedido),
                         child: Text('Generar Ticket'),
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.blue,
+                          backgroundColor: Colors.blue,
                         ),
                       ),
                     )
