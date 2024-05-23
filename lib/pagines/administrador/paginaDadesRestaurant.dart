@@ -23,7 +23,7 @@ class _PaginaDadesRestaurantState extends State<PaginaDadesRestaurant> {
     }
 
     try {
-      await FirebaseFirestore.instance.collection('dadesrestaurant').add({
+      await FirebaseFirestore.instance.collection('dadesrestaurant').doc('dades').update({
         'name': _nameController.text.trim(),
         'location': _locationController.text.trim(),
         'nif': _nifController.text.trim(),

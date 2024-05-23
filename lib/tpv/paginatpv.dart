@@ -90,66 +90,75 @@ class _PaginaTPVState extends State<paginaTPV> {
   }
 
   void marcarComoPagado(QueryDocumentSnapshot pedido) {
-  var platos = pedido['platos'] as List<dynamic>;
-  DateTime fechaActual = DateTime.now();
-  String anio = '${fechaActual.year}';
-  String mes = fechaActual.month.toString().padLeft(2, '0');
+    var platos = pedido['platos'] as List<dynamic>;
+    DateTime fechaActual = DateTime.now();
+    String anio = '${fechaActual.year}';
+    String mes = fechaActual.month.toString().padLeft(2, '0');
 
-  WriteBatch batch = _firestore.batch();
-  double totalPedido = 0;
+    WriteBatch batch = _firestore.batch();
+    double totalPedido = 0;
 
-  for (var plat in platos) {
-    var platId = plat['idPlat'];
-    var nomPlat = plat['nom'];
+    for (var plat in platos) {
+      var platId = plat['idPlat'];
+      var nomPlat = plat['nom'];
 
-    var cantidad = plat['cantitat'] as int;
-    var precioTotalPlato = plat['preuTotalPlato'] as double;
-    totalPedido += precioTotalPlato;
+      var cantidad = plat['cantitat'] as int;
+      var precioTotalPlato = plat['preuTotalPlato'] as double;
+      totalPedido += precioTotalPlato;
 
-    DocumentReference platRef = _firestore
+      DocumentReference platRef = _firestore
+          .collection('estadisticas')
+          .doc(anio)
+          .collection('meses')
+          .doc(mes)
+          .collection('platos')
+          .doc(platId);
+
+      batch.set(
+          platRef,
+          {'cantidad': FieldValue.increment(cantidad), 'nom': nomPlat},
+          SetOptions(merge: true));
+    }
+
+    DocumentReference facturacionRef = _firestore
         .collection('estadisticas')
         .doc(anio)
         .collection('meses')
         .doc(mes)
-        .collection('platos')
-        .doc(platId);
+        .collection('facturacion')
+        .doc('total');
+    batch.set(facturacionRef, {'total': FieldValue.increment(totalPedido)},
+        SetOptions(merge: true));
+    batch.delete(_firestore.collection('tpv').doc(pedido.id));
 
-    batch.set(
-      platRef,
-      {
-        'cantidad': FieldValue.increment(cantidad),
-        'nom': nomPlat
-      },
-      SetOptions(merge: true)
-    );
+    batch.commit().then((_) {
+      showAwesomeSnackbar(
+          context,
+          'Pedido marcado como pagado y estadísticas actualizadas. Pedido eliminado de la lista.',
+          ContentType.success);
+    }).catchError((error) {
+      showAwesomeSnackbar(context, 'Error al actualizar estadísticas: $error',
+          ContentType.failure);
+    });
   }
 
-  DocumentReference facturacionRef = _firestore
-      .collection('estadisticas')
-      .doc(anio)
-      .collection('meses')
-      .doc(mes)
-      .collection('facturacion')
-      .doc('total');
-  batch.set(facturacionRef, {'total': FieldValue.increment(totalPedido)},
-      SetOptions(merge: true));
-  batch.delete(_firestore.collection('tpv').doc(pedido.id));
+  Future<Map<String, dynamic>?> _fetchRestaurantData() async {
+    try {
+      DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+          .collection('dadesrestaurant')
+          .doc('dades')
+          .get();
 
-  batch.commit().then((_) {
-    showAwesomeSnackbar(
-      context,
-      'Pedido marcado como pagado y estadísticas actualizadas. Pedido eliminado de la lista.',
-      ContentType.success
-    );
-  }).catchError((error) {
-    showAwesomeSnackbar(
-      context,
-      'Error al actualizar estadísticas: $error',
-      ContentType.failure
-    );
-  });
-}
-
+      if (documentSnapshot.exists) {
+        return documentSnapshot.data() as Map<String, dynamic>?;
+      } else {
+        print("El documento no existe");
+        return null;
+      }
+    } catch (e) {
+      throw Exception('Error al obtener datos: $e');
+    }
+  }
 
   Future<pw.Font> loadCustomFont() async {
     try {
@@ -162,12 +171,20 @@ class _PaginaTPVState extends State<paginaTPV> {
   }
 
   void generarTicket(QueryDocumentSnapshot pedido) async {
+    final restaurantData = await _fetchRestaurantData();
+
+    if (restaurantData == null) {
+      showAwesomeSnackbar(
+          context, 'Error al obtener los datos del restaurante.', ContentType.failure);
+      return;
+    }
+
     final pdf = pw.Document();
-    final customFont = await loadCustomFont(); 
+    final customFont = await loadCustomFont();
 
     var platos = pedido['platos'] as List<dynamic>;
     double total = double.parse(pedido['total'].toString());
-    double baseImponible = total / 1.21;
+    double baseImponible = total / 1.10;
     double iva = total - baseImponible;
     final mesaId = pedido['mesaId']?.replaceAll(RegExp(r'[^0-9]'), '');
     DateTime fechaPedido = DateTime.fromMillisecondsSinceEpoch(
@@ -179,15 +196,15 @@ class _PaginaTPVState extends State<paginaTPV> {
     pdf.addPage(pw.Page(build: (pw.Context context) {
       return pw
           .Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
-        pw.Text('Restaurante -',
+        pw.Text('Restaurante ${restaurantData['name']}',
             style:
                 pw.TextStyle(font: customFont, fontWeight: pw.FontWeight.bold)),
         pw.Text('Fecha: $fechaFormateada',
             style: pw.TextStyle(font: customFont)),
-        pw.Text('Ubicacion'),
-        pw.Text('N.I.F.:  - Tel: '),
+        pw.Text('Ubicación: ${restaurantData['location']}'),
+        pw.Text('N.I.F.: ${restaurantData['nif']} - Tel: ${restaurantData['phone']}'),
         pw.Text('Barcelona'),
-        pw.Text('E-Mail: emaildelrestaurante@restaurante.com'),
+        pw.Text('E-Mail: ${restaurantData['email']}'),
         pw.Text('Mesa: $mesaId',
             style: pw.TextStyle(
                 font: customFont,
@@ -247,8 +264,8 @@ class _PaginaTPVState extends State<paginaTPV> {
           children: [
             pw.Text('Base Imponible: ${baseImponible.toStringAsFixed(2)}€',
                 style: pw.TextStyle(font: customFont)),
-            pw.SizedBox(width: 16), 
-            pw.Text('IVA (21%): ${iva.toStringAsFixed(2)}€',
+            pw.SizedBox(width: 16),
+            pw.Text('IVA (10%): ${iva.toStringAsFixed(2)}€',
                 style: pw.TextStyle(font: customFont)),
           ],
         ),
@@ -269,21 +286,21 @@ class _PaginaTPVState extends State<paginaTPV> {
         filename:
             'Factura-${pedido['mesaId']}-${pedido['fecha'].millisecondsSinceEpoch}.pdf');
   }
-  void showAwesomeSnackbar(BuildContext context, String message, ContentType contentType) {
-  final snackBar = SnackBar(
-    backgroundColor: Colors.transparent,
-    elevation: 0,
-    content: AwesomeSnackbarContent(
-      title: contentType == ContentType.success ? 'Éxito' : 'Error',
-      message: message,
-      contentType: contentType,
-    ),
-  );
 
-  ScaffoldMessenger.of(context)
-    ..hideCurrentSnackBar()
-    ..showSnackBar(snackBar);
+  void showAwesomeSnackbar(
+      BuildContext context, String message, ContentType contentType) {
+    final snackBar = SnackBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      content: AwesomeSnackbarContent(
+        title: contentType == ContentType.success ? 'Éxito' : 'Error',
+        message: message,
+        contentType: contentType,
+      ),
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
+  }
 }
-
-}
-
