@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; 
 import 'package:dish_dash/Clases/Menu.dart';
 import 'package:provider/provider.dart'; 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class PaginaMenuClient extends StatelessWidget {
   const PaginaMenuClient({Key? key}) : super(key: key);
@@ -63,13 +64,11 @@ class PaginaMenuClient extends StatelessWidget {
                         precio: menus[index].precio,
                         id: menus[index].id,
                       ));
-                      final snackBar = SnackBar(
-                        backgroundColor: Color.fromARGB(255, 92, 174, 99),
-                        content: Text('${menus[index].nombreMenu} añadido al carrito'),
-                      );
-                      ScaffoldMessenger.of(context)
-                        ..hideCurrentSnackBar()
-                        ..showSnackBar(snackBar);
+                      showAwesomeSnackbar(
+                            context,
+                            '${menus[index].nombreMenu} añadido al carrito',
+                            ContentType.success,
+                          );
                     },
                   );
                 },
@@ -77,6 +76,19 @@ class PaginaMenuClient extends StatelessWidget {
             );
           }
         },
+      ),
+    );
+  }
+void showAwesomeSnackbar(BuildContext context, String message, ContentType contentType) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        content: AwesomeSnackbarContent(
+          title: contentType == ContentType.success ? 'Éxito' : 'Error',
+          message: message,
+          contentType: contentType,
+        ),
       ),
     );
   }

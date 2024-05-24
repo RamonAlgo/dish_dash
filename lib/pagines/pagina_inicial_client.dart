@@ -10,6 +10,7 @@ import 'package:dish_dash/pagines/entrants/pagina_entrants.dart';
 import 'package:provider/provider.dart';
 import 'package:dish_dash/Clases/model_dades.dart';
 import 'package:dish_dash/Components/platoCard.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class PaginaInicialClient extends StatelessWidget {
   const PaginaInicialClient({super.key});
@@ -175,13 +176,11 @@ class PaginaInicialClient extends StatelessWidget {
                         plato: plato,
                         onAdd: () {
                           Provider.of<ModelDades>(context, listen: false).agregarAlCarrito(plato);
-                          final snackBar = SnackBar(
-                            backgroundColor: Color.fromARGB(255, 92, 174, 99),
-                            content: Text('${plato.nombrePlato} añadido al carrito'),
+                          showAwesomeSnackbar(
+                            context,
+                            '${plato.nombrePlato} añadido al carrito',
+                            ContentType.success,
                           );
-                          ScaffoldMessenger.of(context)
-                            ..hideCurrentSnackBar()
-                            ..showSnackBar(snackBar);
                         },
                       );
                     },
@@ -195,6 +194,20 @@ class PaginaInicialClient extends StatelessWidget {
             return Center(child: Text('No hay datos disponibles'));
           }
         },
+      ),
+    );
+  }
+
+  void showAwesomeSnackbar(BuildContext context, String message, ContentType contentType) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        content: AwesomeSnackbarContent(
+          title: contentType == ContentType.success ? 'Éxito' : 'Error',
+          message: message,
+          contentType: contentType,
+        ),
       ),
     );
   }

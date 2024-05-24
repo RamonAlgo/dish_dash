@@ -150,7 +150,7 @@ class _LandingPageState extends State<LandingPage> {
                 const SizedBox(height: 650),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: const Color.fromARGB(255, 250, 251, 252),
+                    backgroundColor: const Color.fromARGB(255, 250, 251, 252),
                     padding: const EdgeInsets.symmetric(
                         vertical: 15, horizontal: 30),
                   ),
@@ -301,7 +301,7 @@ class _LandingPageState extends State<LandingPage> {
               ),
               suffixIcon: ElevatedButton(
                 style:
-                    ElevatedButton.styleFrom(primary: const Color(0xFF005086)),
+                    ElevatedButton.styleFrom(backgroundColor: const Color(0xFF005086)),
                 onPressed: _saveEmailToFirestore,
                 child:
                     const Text('Enviar', style: TextStyle(color: Colors.white)),

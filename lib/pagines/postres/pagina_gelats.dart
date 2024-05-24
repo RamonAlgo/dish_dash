@@ -4,6 +4,7 @@ import 'package:dish_dash/Clases/model_dades.dart';
 import 'package:dish_dash/Components/platoCard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class PaginaGelats extends StatelessWidget {
   const PaginaGelats ({super.key});
@@ -53,18 +54,29 @@ class PaginaGelats extends StatelessWidget {
                 plato: plato,
                 onAdd: () {
                   Provider.of<ModelDades>(context, listen: false).agregarAlCarrito(plato);
-                  final snackBar = SnackBar(
-                    backgroundColor: Color.fromARGB(255, 92, 174, 99),
-                    content: Text('${plato.nombrePlato} añadido al carrito'),
+                  showAwesomeSnackbar(
+                    context,
+                    '${plato.nombrePlato} añadido al carrito',
+                    ContentType.success,
                   );
-                  ScaffoldMessenger.of(context)
-                    ..hideCurrentSnackBar()
-                    ..showSnackBar(snackBar);
                 },
               );
             },
           );
         },
+      ),
+    );
+  }
+      void showAwesomeSnackbar(BuildContext context, String message, ContentType contentType) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        content: AwesomeSnackbarContent(
+          title: contentType == ContentType.success ? 'Éxito' : 'Error',
+          message: message,
+          contentType: contentType,
+        ),
       ),
     );
   }
